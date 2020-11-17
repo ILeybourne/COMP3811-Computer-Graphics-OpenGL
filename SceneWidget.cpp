@@ -239,7 +239,7 @@ void SceneWidget::walls(float width, float height, float depth, int tessX, int t
             glEnd();
         }
     }
-
+//test
     //West Wall Blue
     glColor3f(0.0, 0.0, 1.0);
     //Coordinates
