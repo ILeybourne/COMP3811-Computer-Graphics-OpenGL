@@ -1,0 +1,3 @@
+A partially built cube with the depth sorting enabled
+-commenting out the depth enabling creates half-baked pictures
+-the order in which you build the walls matters with last called polygons drawn over earlier ones
