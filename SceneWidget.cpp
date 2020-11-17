@@ -23,65 +23,104 @@ void SceneWidget::initializeGL() { // initializeGL()
     glEnable(GL_MULTISAMPLE);
 //    glEnable(GL_LIGHTING);
 //    glEnable(GL_LIGHT0);
-    glClearColor(0.8, 0.3, 0.3, 0.0);
-    float fog_colour[4] = {1, 1, 1, 1};
-
-//    glEnable(GL_FOG);
-//    glFogf(GL_FOG_MODE,GL_EXP2);
-//    glFogfv(GL_FOG_COLOR,fog_colour);
-//    glFogf(GL_FOG_DENSITY,0.05);
-//    glHint(GL_FOG_HINT,GL_NICEST);
-//    glFogf(GL_FOG_START,10);
-//    glFogf(GL_FOG_END,100);
-
-    GLfloat ambient[] = {0.0, 0.0, 0.0, 1};// {1.0, 10.0, 1.0, 0.0};
-    GLfloat diff[] = {1, 1, 1, 1.0};// {1.0, 10.0, 1.0, 0.0};
-    GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
-//    GLfloat shininess[] = {100.0};
+//    glClearColor(0.8, 0.3, 0.3, 0.0);
+//    float fog_colour[4] = {1, 1, 1, 1};
+//
+////    glEnable(GL_FOG);
+////    glFogf(GL_FOG_MODE,GL_EXP2);
+////    glFogfv(GL_FOG_COLOR,fog_colour);
+////    glFogf(GL_FOG_DENSITY,0.05);
+////    glHint(GL_FOG_HINT,GL_NICEST);
+////    glFogf(GL_FOG_START,10);
+////    glFogf(GL_FOG_END,100);
+//
+//    GLfloat ambient[] = {0.10, 0.10, 0.10, 1};// {1.0, 10.0, 1.0, 0.0};
+//    GLfloat diff[] = {1, 0.11, 0.11, 1.0};// {1.0, 10.0, 1.0, 0.0};
+//    GLfloat diff2[] = {0.01, 0.1, 0.1, 1.0};//{1, 1, 1, 0.0};// {1.0, 10.0, 1.0, 0.0};
+//    GLfloat specular[] = {1, 1, 1, 1.0};
+//    GLfloat shininess[] = {10.0};
 //    glShadeModel(GL_SMOOTH);
-    GLfloat lightpos[] = {0, 10, 0, 1.0};
-    GLfloat lightpos2[] = {1, 1, 0};
-//    Set GL_LIGHT_0's position to something like 45 degrees to the 'vertical'. Coordinate (1,1,0) should work nicely in most cases.
-//    Set GL_LIGHT_0's Ambient color to 0,0,0,1
-//    Set GL_LIGHT_0's Diffuse color to 1,1,1,1
-//    Set GL_LIGHT_0's Specular color to 1,1,1,1
-    glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-    GLfloat globAmb[] = {0.2,0.2,0.2,1};
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb);
+//    GLfloat lightpos[] = {0, 10, 0, 0.0};
+//    GLfloat lightpos2[] = {1, 1, 0};
+//    glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+//    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+//    glLightfv(GL_LIGHT0, GL_DIFFUSE, diff);
+//    glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 //    glLightfv(GL_LIGHT0, GL_SHININESS, shininess);
-//    glLightfv(GL_LIGHT1, GL_DIFFUSE, diff);
-    // enable lighting
-    // enable lighting for front
+//    GLfloat globAmb[] = {0.2,0.2,0.2,1};
+//    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globAmb);
+////    glLightfv(GL_LIGHT0, GL_SHININESS, shininess);
+////    glLightfv(GL_LIGHT1, GL_DIFFUSE, diff2);
+//    // enable lighting
+//    // enable lighting for front
 //    glLightModeli( GL_FRONT, GL_TRUE );
-    // material have diffuse and ambient lighting
-//    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
-
-//    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-//    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+//    // material have diffuse and ambient lighting
+////    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
+//
+////    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+////    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
 //    GLfloat cyan[] = {1.0f, .8f, .8f, 1.f};
 //    glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
-//    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-    // enable color
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    // enable light 0
+////    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+//    // enable color
+//    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+//    // enable light 0
+//    glEnable(GL_COLOR_MATERIAL);
+//    glEnable(GL_LIGHTING);
+//    glEnable(GL_LIGHT0);
+////    glEnable(GL_LIGHT1);
+////    GLfloat mat_shin[] = {1000};
+////    GLfloat mat_emiss[] = {0.1, 0, 0, 1};
+////    GLfloat mat_specular[] = {0.11, 0.1, 0.1, 1};
+////    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+////    glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+////    glMaterialfv(GL_FRONT, GL_EMISSION, mat_emiss);
+////    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+////    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shin);
+//    GLfloat white[] = {0.8f, 0.8f, 0.8f, 1.0f};
+//    GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
+//    glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
+//    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+//    GLfloat shininess2[] = {50};
+//    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+    GLfloat light_ambient[] = {0.0, 0.0, 0.0, 1.0};
+    GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light_position[] = {0.0, 10, 0.0, 1.0};
+    GLfloat shininess[] = {100.0};
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+    glLightfv(GL_LIGHT0, GL_SHININESS, shininess);
+    glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    GLfloat shininess2[] = {50};
+    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+    GLfloat cyan[] = {0.0f, .8f, .8f, 1.f};
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, cyan);
+    GLfloat light1_ambient[] = {0.2, 0.2, 0.2, 1.0};
+    GLfloat light1_diffuse[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light1_specular[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light1_position[] = {-2.0, 2.0, 1.0, 1.0};
+    GLfloat spot_direction[] = {-1.0, -1.0, 0.0};
+
+//    glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
+//    glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+//    glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+//    glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+//    glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
+//    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
+//    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
+//
+//    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
+//    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
+//    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
+//
 //    glEnable(GL_LIGHT1);
-//    glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
-//    glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
-    GLfloat mat_emiss[] = {0, 0, 0, 1};
-//    GLfloat mat_specular[] = {1, 1, 1, 1};
-    glMaterialfv(GL_FRONT, GL_EMISSION, mat_emiss);
-//    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
-//    Set the glMaterial Specular colour to 1,1,1,1
-//    Set the glMaterial Emission colour to 0,0,0,1
-    GLfloat mat_shin[] = {};
-//    glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-//    glEnable(GL_NORMALIZE);
 } // initializeGL()
 
 // called every time the widget is resized
@@ -605,7 +644,7 @@ void SceneWidget::paintGL() { // paintGL()
     float width = 10;
     float height = 20;
     float depth = 30;
-    this->walls(10.0, 20.0, 30.0, 10, 10, 10);
+    this->walls(10.0, 20.0, 30.0, 100, 100, 100);
     this->createCube(2.0, 3.0, 2.0, 1.0, 0, 0.0);
     this->createCube(1, 1, 1, -3, 6, -5);
 
