@@ -24,10 +24,11 @@ protected:
     void keyReleaseEvent(QKeyEvent *key);
 
     void walls(float w,float h, float d ,int tX, int tY, int tZ);
+    void createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ);
     void createCube(float w,float h, float d, float x, float y, float z);
     void createSphere(GLdouble radius, GLint slices, GLint stacks);
     void createCylinder(GLdouble base, GLdouble top,GLdouble height, GLint slices, GLint stacks);
-
+    void createSemiCylinder(float rad, float length, int x, int y, int z) ;
 
     double frame;
     float cameraPosition[3] = {0, 5, 0};
