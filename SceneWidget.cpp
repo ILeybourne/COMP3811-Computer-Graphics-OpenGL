@@ -91,7 +91,7 @@ void SceneWidget::initializeGL() { // initializeGL()
     GLfloat light_ambient[] = {0.1, 0.1, 0.1, 0.0};
     GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 0.0};
     GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
-    GLfloat light_position[] = {0.0, 10, 0.0, 1.0};
+    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
     GLfloat shininess[] = {100.0};
 
 //    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -741,57 +741,72 @@ void SceneWidget::createSphere(GLdouble radius, GLint slices, GLint stacks) {
 }
 
 void SceneWidget::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
-    int numberOfSide = 360;
+    int numberOfSide = 100;
     float interiorAngle = (numberOfSide - 2) * (180.0 / numberOfSide);
     float interiorAngleRad = interiorAngle * (M_PI / 180.0);
     glColor3f(1.0, 0.0, 0.0);
     //Coordinates
-    glm::vec3 v1 = {-1.0, 1.0, 1.0};
-    glm::vec3 v2 = {-1.0, -1.0, 1.0};
-    glm::vec3 v3 = {1.0, -1.0, 1.0};
-    glm::vec3 v4 = {1.0, 1.0, 1.0};
+
+    glm::vec3 v1 = {-1.0, 2.0, 1.0};
+    glm::vec3 v2 = {-1.0, 0.0, 1.0};
+    glm::vec3 v3 = {1.0, 0.0, 1.0};
+    glm::vec3 v4 = {1.0, 2.0, 1.0};
+    for (int j = 0; j < length; j++) {
+//        float r =  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+//        float g =  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+//        float b =  static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+//        float g = rand();
+//        float b = rand();
+//        glColor3f(r, g, b);
 
 
-    for (int i = 0; i < numberOfSide / 2 + 1; i++) {
-        glm::vec3 lastv1 = v1;
-        glm::vec3 lastv2 = v2;
-        glm::vec3 lastv3 = v3;
-        glm::vec3 lastv4 = v4;
+        glm::vec3 v1 = {0 +(j), 1.0, 1.0};
+        glm::vec3 v2 = {0+(j), 0.0, 1.0};
+        glm::vec3 v3 = {1.0+(j), 0.0, 1.0};
+        glm::vec3 v4 = {1.0+(j), 1.0, 1.0};
 
-        glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-        if (i % 2 == 0) {
-                    normal = -normal;
-        }
-        glNormal3fv(glm::value_ptr(normal));
-        glBegin(GL_POLYGON);
-        glVertex3f(v1[0], v1[1], v1[2]);
-        glVertex3f(v2[0], v2[1], v2[2]);
-        glVertex3f(v3[0], v3[1], v3[2]);
-        glVertex3f(v4[0], v4[1], v4[2]);
-        glEnd();
 
-        glm::mat4 xrotationMat(1); // Creates a identity matrix
-        xrotationMat = glm::rotate(xrotationMat,  interiorAngleRad, glm::vec3({1, 0, 0}));
+        for (int i = 0; i < numberOfSide / 2 + 1; i++) {
+            glm::vec3 lastv1 = v1;
+            glm::vec3 lastv2 = v2;
+            glm::vec3 lastv3 = v3;
+            glm::vec3 lastv4 = v4;
 
-        v1 = glm::vec3(xrotationMat * glm::vec4(v1, 1.0));
-        v2 = glm::vec3(xrotationMat * glm::vec4(v2, 1.0));
-        v3 = glm::vec3(xrotationMat * glm::vec4(v3, 1.0));
-        v4 = glm::vec3(xrotationMat * glm::vec4(v4, 1.0));
+            glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+            if (i % 2 == 0) {
+                normal = -normal;
+            }
+            glNormal3fv(glm::value_ptr(normal));
+            glBegin(GL_POLYGON);
+            glVertex3f(v1[0], v1[1], v1[2]);
+            glVertex3f(v2[0], v2[1], v2[2]);
+            glVertex3f(v3[0], v3[1], v3[2]);
+            glVertex3f(v4[0], v4[1], v4[2]);
+            glEnd();
 
-        glm::mat4 transform(1);
-        if (i % 2 == 1) {
-            transform = glm::translate(transform, lastv2 - v2);
-        } else {
-            transform = glm::translate(transform, lastv1 - v1);
-        }
+            glm::mat4 xrotationMat(1); // Creates a identity matrix
+            xrotationMat = glm::rotate(xrotationMat, interiorAngleRad, glm::vec3({1, 0, 0}));
 
-        v1 = glm::vec3(transform * glm::vec4(v1, 1.0));
-        v2 = glm::vec3(transform * glm::vec4(v2, 1.0));
-        v3 = glm::vec3(transform * glm::vec4(v3, 1.0));
-        v4 = glm::vec3(transform * glm::vec4(v4, 1.0));
+            v1 = glm::vec3(xrotationMat * glm::vec4(v1, 1.0));
+            v2 = glm::vec3(xrotationMat * glm::vec4(v2, 1.0));
+            v3 = glm::vec3(xrotationMat * glm::vec4(v3, 1.0));
+            v4 = glm::vec3(xrotationMat * glm::vec4(v4, 1.0));
 
+//            if (i != 0 && j >= 1) {
+                glm::mat4 transform(1);
+                if (i % 2 == 1) {
+                    transform = glm::translate(transform, lastv2 - v2);
+                } else {
+                    transform = glm::translate(transform, lastv1 - v1);
+                }
+
+
+                v1 = glm::vec3(transform * glm::vec4(v1, 1.0));
+                v2 = glm::vec3(transform * glm::vec4(v2, 1.0));
+                v3 = glm::vec3(transform * glm::vec4(v3, 1.0));
+                v4 = glm::vec3(transform * glm::vec4(v4, 1.0));
+            }
     }
-
 }
 
 void SceneWidget::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
@@ -967,7 +982,7 @@ void SceneWidget::paintGL() { // paintGL()
 //    this->createCube(2.0, 3.0, 2.0, 1.0, 0, 0.0);
 //    this->createCube(2.0, 3.0, 2.0, 1.0, 15, 0.0);
 //    this->createCube(1, 1, 1, -3, 6, -5);
-    glTranslatef(-3, 3, -5); //move to the desired location
+//    glTranslatef(-3, 3, -5); //move to the desired location
     GLdouble r = 2;
     GLint sl = 40;
     GLint spl = 20;
@@ -977,7 +992,9 @@ void SceneWidget::paintGL() { // paintGL()
 //    this->createTessCube(2, 4, 5, 10, 10, 10);
 //    glTranslatef(0, 3, 0);
 //    this->createCube(2, 4, 5, 0, 0, 0);
-    this->createSemiCylinder(1.0, 1.0, 1, 1, 1);
+    glTranslatef(0, 3, 0);
+//glScaled(0.5,0.5,0.5);
+    this->createSemiCylinder(1.0, 1000.0, 1, 1, 1);
 
     float radius = 1;
 //    duration = ( ( clock() - start )/ (double) CLOCKS_PER_SEC) *24;
@@ -988,8 +1005,8 @@ void SceneWidget::paintGL() { // paintGL()
 //    qDebug() << camX << camZ << frame;
 //    gluLookAt(camX, camHeight - 1, camZ, 3.0, camHeight, 0.0, 0.0, 11.0, 0.0);
 //    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 
+    glLoadIdentity();
 
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
