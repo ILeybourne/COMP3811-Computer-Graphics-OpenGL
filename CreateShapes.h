@@ -8,6 +8,14 @@
 #include <cmath>
 #include <QtGui>
 #include <QtCore/QTime>
+#include <GL/glu.h>
+#include <QGLWidget>
+#include <QtGui>
+#include <QtCore/QTime>
+#include <cmath>
+#include <ctime>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 class SceneWidget : public QGLWidget { //
