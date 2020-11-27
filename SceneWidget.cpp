@@ -12,6 +12,7 @@
 SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
     double frame = 0;
+    shapeCreator = new ShapeCreator();
 //    clock_t start = clock() ;
 
 
@@ -593,7 +594,7 @@ void SceneWidget::createTessCube(float width, float height, float depth, int tes
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
     for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2] -tessZSize; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
             glVertex3f(i + tessXSize, v2[1], k);
@@ -627,7 +628,7 @@ void SceneWidget::createTessCube(float width, float height, float depth, int tes
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
     for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2] -tessZSize; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
             glVertex3f(i + tessXSize, v2[1], k);
@@ -1158,6 +1159,12 @@ void SceneWidget::paintGL() { // paintGL()
     glTranslatef(0, 5, 0);
     createTessCube(1, 1, 1, 10, 10, 10);
     glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 2, 0);
+    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
+    glPopMatrix();
+
     float width = 10;
     float height = 20;
     float depth = 30;

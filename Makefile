@@ -37,7 +37,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = Scene1.0.0
-DISTDIR = /home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/cube_construct/.tmp/Scene1.0.0
+DISTDIR = /home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/Scene/.tmp/Scene1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
 LIBS          = $(SUBLIBS) -lGLU /usr/lib/x86_64-linux-gnu/libQt5OpenGL.so /usr/lib/x86_64-linux-gnu/libQt5Widgets.so /usr/lib/x86_64-linux-gnu/libQt5Gui.so /usr/lib/x86_64-linux-gnu/libQt5Core.so /usr/lib/x86_64-linux-gnu/libGL.so -lpthread   
@@ -53,9 +53,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = Main.cpp \
+		ShapeCreator.cpp \
 		SceneWidget.cpp \
 		Window.cpp 
 OBJECTS       = Main.o \
+		ShapeCreator.o \
 		SceneWidget.o \
 		Window.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -133,8 +135,10 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Scene.pro SceneWidget.h \
+		Scene.pro ShapeCreator.h \
+		SceneWidget.h \
 		Window.h Main.cpp \
+		ShapeCreator.cpp \
 		SceneWidget.cpp \
 		Window.cpp
 QMAKE_TARGET  = Scene
@@ -316,8 +320,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents SceneWidget.h Window.h $(DISTDIR)/
-	$(COPY_FILE) --parents Main.cpp SceneWidget.cpp Window.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ShapeCreator.h SceneWidget.h Window.h $(DISTDIR)/
+	$(COPY_FILE) --parents Main.cpp ShapeCreator.cpp SceneWidget.cpp Window.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -368,14 +372,20 @@ compiler_clean: compiler_moc_predefs_clean
 ####### Compile
 
 Main.o: Main.cpp Window.h \
-		SceneWidget.h
+		SceneWidget.h \
+		ShapeCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Main.o Main.cpp
 
-SceneWidget.o: SceneWidget.cpp SceneWidget.h
+ShapeCreator.o: ShapeCreator.cpp ShapeCreator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ShapeCreator.o ShapeCreator.cpp
+
+SceneWidget.o: SceneWidget.cpp SceneWidget.h \
+		ShapeCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o SceneWidget.o SceneWidget.cpp
 
 Window.o: Window.cpp Window.h \
-		SceneWidget.h
+		SceneWidget.h \
+		ShapeCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
 
 ####### Install

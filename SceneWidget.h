@@ -8,7 +8,15 @@
 #include <cmath>
 #include <QtGui>
 #include <QtCore/QTime>
-
+#include <GL/glu.h>
+#include <QGLWidget>
+#include <QtGui>
+#include <QtCore/QTime>
+#include <cmath>
+#include <ctime>
+#include "ShapeCreator.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class SceneWidget : public QGLWidget { //
 public:
@@ -29,6 +37,8 @@ protected:
     void createSphere(GLdouble radius, GLint slices, GLint stacks);
     void createCylinder(GLdouble base, GLdouble top,GLdouble height, GLint slices, GLint stacks);
     void createSemiCylinder(float rad, float length, int x, int y, int z) ;
+
+    ShapeCreator *shapeCreator;
 
     double frame;
     float cameraPosition[3] = {0, 5, 0};

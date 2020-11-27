@@ -1,6 +1,11 @@
-#include "CreateShapes.h"
+#include "ShapeCreator.h"
 
-void SceneWidget::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+// constructor
+ShapeCreator::ShapeCreator() {// constructor
+}
+// constructor
+
+void ShapeCreator::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
 ////   North Wall White
     //Coordinates
     glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -144,7 +149,7 @@ void SceneWidget::walls(float width, float height, float depth, int tessX, int t
 }
 
 
-void SceneWidget::createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+void ShapeCreator::createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ) {
 
 ////   North Wall White
     //Coordinates
@@ -256,7 +261,7 @@ void SceneWidget::createTessCube(float width, float height, float depth, int tes
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
     for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2] -tessZSize; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
             glVertex3f(i + tessXSize, v2[1], k);
@@ -279,7 +284,7 @@ void SceneWidget::createTessCube(float width, float height, float depth, int tes
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
     for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2] -tessZSize; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
             glVertex3f(i + tessXSize, v2[1], k);
@@ -290,7 +295,7 @@ void SceneWidget::createTessCube(float width, float height, float depth, int tes
     }
 }
 
-void SceneWidget::createCube(float w, float h, float d, float x, float y, float z) {
+void ShapeCreator::createCube(float w, float h, float d, float x, float y, float z) {
     //North Wall White
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
@@ -354,14 +359,14 @@ void SceneWidget::createCube(float w, float h, float d, float x, float y, float 
 }
 
 
-void SceneWidget::createSphere(GLdouble radius, GLint slices, GLint stacks) {
+void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluSphere(quadric, radius, slices, stacks);
 }
 
-void SceneWidget::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
+void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
     int numberOfSide = 100;
     float interiorAngle = (numberOfSide - 2) * (180.0 / numberOfSide);
     float interiorAngleRad = interiorAngle * (M_PI / 180.0);
@@ -419,7 +424,7 @@ void SceneWidget::createSemiCylinder(float rad, float length, int tessX, int tes
     }
 }
 
-void SceneWidget::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
+void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);

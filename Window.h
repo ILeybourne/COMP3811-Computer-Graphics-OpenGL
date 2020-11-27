@@ -13,8 +13,6 @@
 class Window: public QWidget
 	{ 
 	public:
-       
-	
 	// constructor / destructor
 	Window(QWidget *parent);
 	~Window();
