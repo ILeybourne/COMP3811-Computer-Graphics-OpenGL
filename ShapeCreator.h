@@ -33,6 +33,18 @@ public:
     void createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks);
 
     void createSemiCylinder(float rad, float length, int x, int y, int z);
+
+    void createTessTriPlane(float width, float depth, int tessX, int tessZ);
+
+    void heightGenerator(float x, float z);
+
+    static constexpr int planeWidth = 100;
+    static constexpr int planeDepth = 100;
+    float amplitude = 4;
+    int planeXTess = 50;
+    int planeZTess = 50;
+    float heightsGenerated[planeWidth+1][planeDepth+1];
+
 protected:
 
 private:

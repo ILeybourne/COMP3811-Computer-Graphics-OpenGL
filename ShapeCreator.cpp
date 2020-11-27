@@ -2,6 +2,8 @@
 
 // constructor
 ShapeCreator::ShapeCreator() {// constructor
+
+    this->heightGenerator(1,1);
 }
 // constructor
 
@@ -292,6 +294,75 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
             glVertex3f(i, v4[1], k + tessZSize);
             glEnd();
         }
+    }
+}
+
+
+void ShapeCreator::heightGenerator(float x, float z) {
+    float amp = 2;
+    int seedNumber = 1;
+    float height = 1;
+    float width = planeWidth;
+    float depth = planeDepth;
+    for (int i = 0; i < planeXTess + 1; i++) {
+        for (int k = 0; k < planeZTess + 1; k++) {
+            srand(seedNumber + i *10 + k * 3);
+            float randomNumber = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / amplitude));
+
+            heightsGenerated[i][k] = randomNumber;
+//            qDebug() << "ran" << i << k << randomNumbe r;
+        }
+    }
+
+}
+
+
+void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int tessZ) {
+//Yellow floor
+    float height = 1;
+    int heightXCounter = 0;
+    int heightZCounter = 0;
+    glColor3f(0.5, 1.0, 0.0);
+    glm::vec3 v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    glm::vec3 v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    glm::vec3 v3 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    //Normal of rect
+    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    glNormal3fv(glm::value_ptr(normal));
+
+    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
+    float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
+    for (float i = v3[0]; i < v1[0] ; i += tessXSize) {
+        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
+            glm::vec3 vA = {i + tessXSize, heightsGenerated[heightXCounter + 1][heightZCounter + 1], k + tessZSize};
+            glm::vec3 vB = {i + tessXSize, heightsGenerated[heightXCounter + 1][heightZCounter],         k+0};
+            glm::vec3 vC = {      i+0,                heightsGenerated[heightXCounter][heightZCounter], k+0};
+            glm::vec3 vD = {    i+0,                heightsGenerated[heightXCounter][heightZCounter + 1], k + tessZSize};
+            float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            float r2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            float r3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            float r4 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+            normal = glm::normalize(glm::cross(vB - vA, vC - vB));
+            glNormal3fv(glm::value_ptr(normal));
+            glBegin(GL_POLYGON);
+            glVertex3f(vA.x, vA.y, vA.z);
+            glVertex3f(vB.x, vB.y, vB.z);
+            glVertex3f(vC.x, vC.y, vC.z);
+            glEnd();
+            normal = glm::normalize(glm::cross(vC - vA, vD - vC));
+            glNormal3fv(glm::value_ptr(normal));
+            glBegin(GL_POLYGON);
+            glVertex3f(vA.x, vA.y, vA.z);
+            glVertex3f(vC.x, vC.y, vC.z);
+            glVertex3f(vD.x, vD.y, vD.z);
+            glEnd();
+            heightZCounter++;
+//            qDebug() << heightXCounter<<heightZCounter;
+        }
+        heightZCounter = 0;
+        heightXCounter++;
     }
 }
 

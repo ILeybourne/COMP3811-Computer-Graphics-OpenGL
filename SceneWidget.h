@@ -32,18 +32,9 @@ protected:
     void keyPressEvent(QKeyEvent *key);
     void keyReleaseEvent(QKeyEvent *key);
 
-    void walls(float w,float h, float d ,int tX, int tY, int tZ);
-    void createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ);
-    void createCube(float w,float h, float d, float x, float y, float z);
-    void createSphere(GLdouble radius, GLint slices, GLint stacks);
-    void createCylinder(GLdouble base, GLdouble top,GLdouble height, GLint slices, GLint stacks);
-    void createSemiCylinder(float rad, float length, int x, int y, int z) ;
-
-    ShapeCreator *shapeCreator;
-
     double frame;
     float cameraPosition[3] = {0, 5, 0};
-    float light0Position[4] = {0, 9, 0,1};
+    float light0Position[4] = {0, 15, 0,1};
     float cameraUp[3] = {0, 6, 0};
     float radius = 1;
     float turningNumber = 0;
@@ -53,6 +44,9 @@ protected:
     float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] - radius};
     bool jumping = false;
     bool falling = false;
+
+    ShapeCreator *shapeCreator;
+
 private:
     void walls();
 }; // class GLPolygonWidget

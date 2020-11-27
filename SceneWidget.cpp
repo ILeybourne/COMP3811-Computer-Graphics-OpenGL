@@ -250,44 +250,48 @@ void SceneWidget::paintGL() { // paintGL()
     // You must set the matrix mode to model view directly before enabling the depth test
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_DEPTH_TEST); // comment out depth test to observe the result
-
     glPushMatrix();
-    glTranslatef(0, 11, 0);
+    glTranslatef(0, 9, 0);
     shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
     glPopMatrix();
+//    glPushMatrix();
+//    glTranslatef(0, 11, 0);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(3, 9, 0);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(-3, 9, 0);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(0, 9, 3);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
+//    glPushMatrix();
+//    glTranslatef(0, 9, -3);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(0, 5, 0);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(0, 2, 0);
+////    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
+//    glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(3, 9, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
+    shapeCreator->walls(100.0, 100.0, 100.0, 10, 10, 10);
 
-    glPushMatrix();
-    glTranslatef(-3, 9, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 9, 3);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0, 9, -3);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 5, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 2, 0);
-    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    shapeCreator->walls(10.0, 20.0, 30.0, 100, 100, 100);
-
-
+//    glTranslatef(0,1,0);
+    shapeCreator->createTessTriPlane(shapeCreator->planeWidth,shapeCreator->planeDepth,shapeCreator->planeXTess,shapeCreator->planeZTess);
 //    shapeCreator->createCube(2.0, 3.0, 2.0, 1.0, 0, 0.0);
 //    shapeCreator->createCube(2.0, 3.0, 2.0, 1.0, 15, 0.0);
 //    shapeCreator->createCube(1, 1, 1, -3, 6, -5);
@@ -305,11 +309,8 @@ void SceneWidget::paintGL() { // paintGL()
 //    glScaled(0.5, 0.5, 0.5);
 //    shapeCreator->createSemiCylinder(1.0, 1000.0, 10, 10, 10);
 
-    float radius = 1;
 //    duration = ( ( clock() - start )/ (double) CLOCKS_PER_SEC) *24;
-    float camX = sin(frame / 24) * radius;
-    float camZ = cos(frame / 24) * radius;
-    float camHeight = 5;
+
     frame++;
     glLoadIdentity();
 
