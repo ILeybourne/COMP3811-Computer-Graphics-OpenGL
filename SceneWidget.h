@@ -1,5 +1,6 @@
 #ifndef __GL_POLYGON_WIDGET_H__
 #define __GL_POLYGON_WIDGET_H__ 1
+#endif
 
 #include <QGLWidget>
 #include <cstdio>
@@ -56,4 +57,3 @@ private:
     void walls();
 }; // class GLPolygonWidget
 
-#endif
