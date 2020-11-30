@@ -7,12 +7,27 @@
 #include "SceneWidget.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <QGLWidget>
+#include <cstdio>
+#include <ctime>
+#include <cmath>
+#include <QtGui>
+#include <QtCore/QTime>
+#include <GL/glu.h>
+#include <QGLWidget>
+#include <QtGui>
+#include <QtCore/QTime>
+#include <cmath>
+#include <ctime>
+#include "ShapeCreator.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // constructor
 SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
     double frame = 0;
-    shapeCreator = new ShapeCreator();
+    shapeCreator = new ShapeCreator(this);
 } // constructor
 
 // called when OpenGL context is set up
@@ -20,6 +35,9 @@ void SceneWidget::initializeGL() { // initializeGL()
     // set the widget background colour
     glEnable(GL_MULTISAMPLE);
     glEnable(GL_NORMALIZE);
+//    glDisable(GL_TEXTURE_2D);
+    glClearColor(0.8, 0.3, 0.3, 0.0);
+
 //    float fog_colour[4] = {1, 1, 1, 1};
 //    glEnable(GL_FOG);
 //    glFogf(GL_FOG_MODE,GL_EXP2);
@@ -81,7 +99,7 @@ void SceneWidget::initializeGL() { // initializeGL()
 
 
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
+    shapeCreator->imageLoader();
 } // initializeGL()
 
 // called every time the widget is resized
@@ -250,10 +268,10 @@ void SceneWidget::paintGL() { // paintGL()
     // You must set the matrix mode to model view directly before enabling the depth test
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_DEPTH_TEST); // comment out depth test to observe the result
-    glPushMatrix();
-    glTranslatef(0, 9, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
+//    glPushMatrix();
+//    glTranslatef(0, 9, 0);
+//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+//    glPopMatrix();
 //    glPushMatrix();
 //    glTranslatef(0, 11, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
@@ -287,11 +305,19 @@ void SceneWidget::paintGL() { // paintGL()
 //    glTranslatef(0, 2, 0);
 ////    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
 //    glPopMatrix();
+    glPushMatrix();
+//
+    glTranslatef(0,3,-3);
+//
+    shapeCreator->createCube(2,2,2,0,0,0);
+        glPopMatrix();
+
 
     shapeCreator->walls(100.0, 100.0, 100.0, 10, 10, 10);
-
-//    glTranslatef(0,1,0);
     shapeCreator->createTessTriPlane(shapeCreator->planeWidth,shapeCreator->planeDepth,shapeCreator->planeXTess,shapeCreator->planeZTess);
+
+//    shapeCreator->imageLoader();
+//    shapeCreator->drawTextPlane(3,3);
 //    shapeCreator->createCube(2.0, 3.0, 2.0, 1.0, 0, 0.0);
 //    shapeCreator->createCube(2.0, 3.0, 2.0, 1.0, 15, 0.0);
 //    shapeCreator->createCube(1, 1, 1, -3, 6, -5);
@@ -310,14 +336,14 @@ void SceneWidget::paintGL() { // paintGL()
 //    shapeCreator->createSemiCylinder(1.0, 1000.0, 10, 10, 10);
 
 //    duration = ( ( clock() - start )/ (double) CLOCKS_PER_SEC) *24;
-
-    frame++;
+//    glBitmap(64, 64, 0., 0., 60., 60., shapeCreator->image);
+//    glDrawPixels(512,512,GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->image);
+//    frame++;
     glLoadIdentity();
 
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
-
     // flush to screen
     glFlush();
     frame++;

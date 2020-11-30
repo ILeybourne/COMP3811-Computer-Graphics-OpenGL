@@ -1,10 +1,7 @@
-#ifndef __GL_POLYGON_WIDGET_H__
-#define __GL_POLYGON_WIDGET_H__ 1
-#endif
-
+#ifndef SCENE_SceneWidget_H
+#define SCENE_SceneWidget_H
 #include <QGLWidget>
 #include <cstdio>
-//#include <stdin>
 #include <ctime>
 #include <cmath>
 #include <QtGui>
@@ -15,9 +12,9 @@
 #include <QtCore/QTime>
 #include <cmath>
 #include <ctime>
-#include "ShapeCreator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "ShapeCreator.h"
 
 class SceneWidget : public QGLWidget { //
 public:
@@ -51,3 +48,4 @@ private:
     void walls();
 }; // class GLPolygonWidget
 
+#endif

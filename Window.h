@@ -1,6 +1,6 @@
-#ifndef __GL_POLYGON_WINDOW_H__
-#define __GL_POLYGON_WINDOW_H__ 1
-
+#ifndef SCENE_WINDOW_H
+#define SCENE_WINDOW_H
+#include <QGLWidget>
 #include <QGLWidget>
 #include <QMenuBar>
 #include <QSlider>
@@ -8,7 +8,6 @@
 #include <QTimer>
 #include "QSizePolicy"
 #include "SceneWidget.h"
-
 
 class Window: public QWidget
 	{ 

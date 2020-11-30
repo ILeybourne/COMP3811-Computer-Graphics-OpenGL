@@ -24,7 +24,7 @@ void SceneWidget::initializeGL() { // initializeGL()
     glEnable(GL_NORMALIZE);
 //    glEnable(GL_LIGHTING);
 //    glEnable(GL_LIGHT0);
-//    glClearColor(0.8, 0.3, 0.3, 0.0);
+    glClearColor(0.8, 0.3, 0.3, 0.0);
 //    float fog_colour[4] = {1, 1, 1, 1};
 //
 ////    glEnable(GL_FOG);

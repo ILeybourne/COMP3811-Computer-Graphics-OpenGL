@@ -1,6 +1,5 @@
-#ifndef __GL_POLYGON_WIDGET_H__
-#define __GL_POLYGON_WIDGET_H__ 1
-#endif
+#ifndef SCENE_ShapeCreator_H
+#define SCENE_ShapeCreator_H
 
 #include <QGLWidget>
 #include <cstdio>
@@ -18,9 +17,14 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
+const unsigned int N_X_IMAGE = 512;
+const unsigned int N_Y_IMAGE = 512;
+const unsigned int N_COLOR = 3;
+
+
 class ShapeCreator { //
 public:
-    ShapeCreator();
+    ShapeCreator(QWidget *parent);
 
     void walls(float w, float h, float d, int tX, int tY, int tZ);
 
@@ -38,15 +42,41 @@ public:
 
     void heightGenerator(float x, float z);
 
+    void loadTextures();
+
+    void imageLoader();
+
+    void drawTextPlane(float w, float h);
+
+    QWidget parent;
     static constexpr int planeWidth = 100;
     static constexpr int planeDepth = 100;
     float amplitude = 4;
     int planeXTess = 50;
     int planeZTess = 50;
-    float heightsGenerated[planeWidth+1][planeDepth+1];
+    float heightsGenerated[planeWidth + 1][planeDepth + 1];
+
+
+
+
+
+    static constexpr int textNum = 6;
+    int numberOfTextures;
+    //    GLubyte image[N_X_IMAGE][N_Y_IMAGE][N_COLOR];
+    QList<QImage> p_qimage;
+    GLuint MyTexture[6];
+    GLuint singText;
+
+    unsigned int imageWidth[textNum];
+    unsigned int imageHeight[textNum];
+    unsigned int imageSize[textNum];
+    QOpenGLShaderProgram *program = nullptr;
+    QOpenGLBuffer vbo;
 
 protected:
 
 private:
 };
+
+#endif //SCENE_STB_IMAGE_H
 

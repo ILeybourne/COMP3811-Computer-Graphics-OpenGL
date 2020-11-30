@@ -1,4 +1,11 @@
 #include "Window.h"
+#include <QGLWidget>
+#include <QMenuBar>
+#include <QSlider>
+#include <QBoxLayout>
+#include <QTimer>
+#include "QSizePolicy"
+#include "SceneWidget.h"
 
 // constructor / destructor
 Window::Window(QWidget *parent)
