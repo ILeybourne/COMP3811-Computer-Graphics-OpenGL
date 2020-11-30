@@ -33,7 +33,7 @@ SceneWidget::SceneWidget(QWidget *parent)
 // called when OpenGL context is set up
 void SceneWidget::initializeGL() { // initializeGL()
     // set the widget background colour
-    glEnable(GL_MULTISAMPLE);
+//    glEnable(GL_MULTISAMPLE);
     glEnable(GL_NORMALIZE);
 //    glDisable(GL_TEXTURE_2D);
     glClearColor(0.8, 0.3, 0.3, 0.0);
@@ -59,14 +59,14 @@ void SceneWidget::initializeGL() { // initializeGL()
     glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
 //    GLfloat shininess2[] = {50};
 //    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
-    GLfloat light_ambient[] = {0.1, 0.1, 0.1, 0.0};
+    GLfloat light_ambient[] = {0.3, 0.2, 0.25, 0.0};
     GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 0.0};
     GLfloat light_specular[] = {1.0, 1.0, 1.0, 1.0};
     GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
     GLfloat shininess[] = {100.0};
 
-//    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-//    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT0, GL_SHININESS, shininess);
@@ -110,7 +110,7 @@ void SceneWidget::resizeGL(int w, int h) { // resizeGL()
     glLoadIdentity();
     float width = w;
     float height = h;
-    gluPerspective(90, -width / height, 0.01, sqrt(pow(30, 2) + pow(10, 2)) + pow(20, 2));
+    gluPerspective(90, -width / height, 0.01, sqrt(pow(1000, 2) + pow(1000, 2)) + pow(1000, 2));
 } // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
@@ -307,14 +307,22 @@ void SceneWidget::paintGL() { // paintGL()
 //    glPopMatrix();
     glPushMatrix();
 //
-    glTranslatef(0,3,-3);
+    glTranslatef(0, 3, -3);
 //
-    shapeCreator->createCube(2,2,2,0,0,0);
-        glPopMatrix();
+    shapeCreator->createCube(2, 2, 2, 0, 0, 0);
+    glPopMatrix();
+//    glDisable(GL_LIGHTING);
+    glPushMatrix();
+    glTranslatef(0, -500, 0);
+
+    shapeCreator->walls(1000.0, 1000.0, 1000.0, 10, 10, 10);
+    glPopMatrix();
 
 
-    shapeCreator->walls(100.0, 100.0, 100.0, 10, 10, 10);
-    shapeCreator->createTessTriPlane(shapeCreator->planeWidth,shapeCreator->planeDepth,shapeCreator->planeXTess,shapeCreator->planeZTess);
+    glEnable(GL_LIGHTING);
+
+    shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
+                                     shapeCreator->planeZTess);
 
 //    shapeCreator->imageLoader();
 //    shapeCreator->drawTextPlane(3,3);

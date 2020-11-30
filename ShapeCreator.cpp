@@ -39,22 +39,8 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     //Normal of rect
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
-
-//    glBindTexture(GL_TEXTURE_2D, MyTexture[0]);
-//    glBegin(GL_POLYGON);
-//    glNormal3f(0, 0, 1);
-//    glTexCoord2f(0.0f, 0.0f);
-//    glVertex3f(-1.0 * w / 2, 0.0 * h, 1.0);
-//    glTexCoord2f(0.0f, 1.0f);
-//    glVertex3f(-1.0 * w / 2, 1.0 * h, 1.0);
-//    glTexCoord2f(1.0f, 1.0f);
-//    glVertex3f(1.0 * w / 2, 1.0 * h, 1.0);
-//    glTexCoord2f(1.0f, 0.0f);
-//    glVertex3f(1.0 * w / 2, 0.0 * h, 1.0);
-//    glEnd();
-
+    glBindTexture(GL_TEXTURE_2D, MyTexture[0]);
     glColor3f(1.0, 1.0, 1.0);
-
     float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     glBegin(GL_POLYGON);
@@ -86,111 +72,105 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
-    for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
-            glBegin(GL_POLYGON);
-            glVertex3f(v1[0], j, k);
-            glVertex3f(v2[0], j + tessYSize, k);
-            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
-            glVertex3f(v4[0], j, k + tessZSize);
-            glEnd();
-        }
-    }
+
+    glBindTexture(GL_TEXTURE_2D, MyTexture[2]);
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POLYGON);
+    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glEnd();
+
+//    tessYSize = abs(v1[1] - v3[1]) / (tessY);
+//    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
+//    for (float j = v1[1]; j < v3[1]; j += tessYSize) {
+//        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+//            glBegin(GL_POLYGON);
+//            glVertex3f(v1[0], j, k);
+//            glVertex3f(v2[0], j + tessYSize, k);
+//            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+//            glVertex3f(v4[0], j, k + tessZSize);
+//            glEnd();
+//        }
+//    }
 //    South Wall Green
     glColor3f(0.0, 1.0, 0.0);
     //Coordinates
-    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v1 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v2 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v4 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    tessXSize = abs(v1[0] - v3[0]) / (tessX);
-    tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    for (float i = v1[0]; i < v3[0]; i += tessXSize) {
-        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-            glBegin(GL_POLYGON);
-            glVertex3f(i, j, v1[2]);
-            glVertex3f(i + tessXSize, j, v2[2]);
-            glVertex3f(i + tessXSize, j + tessYSize, v3[2]);
-            glVertex3f(i, j + tessYSize, v4[2]);
-            glEnd();
-        }
-    }
+    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POLYGON);
+    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glEnd();
 
     //West Wall Blue
     glColor3f(0.0, 0.0, 1.0);
     //Coordinates
-    v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v2 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    //Normal of rect
-    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-    glNormal3fv(glm::value_ptr(normal));
-
-    tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    tessZSize = abs(v1[1] - v3[1]) / (tessZ);
-    for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
-            glBegin(GL_POLYGON);
-            glVertex3f(v1[0], j, k);
-            glVertex3f(v2[0], j + tessYSize, k);
-            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
-            glVertex3f(v4[0], j, k + tessZSize);
-            glEnd();
-        }
-    }
-
-    //Purple Ceil
-    glColor3f(1.0, 0.0, 1.0);
-    v1 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    v4 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v2 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    //Normal of rect
-    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-    glNormal3fv(glm::value_ptr(normal));
-
-    tessXSize = abs(v1[0] - v3[0]) / (tessX);
-    tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
-            glBegin(GL_POLYGON);
-            glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-            glVertex3f(i + tessXSize, v2[1], k);
-            glVertex3f(i, v3[1], k);
-            glVertex3f(i, v4[1], k + tessZSize);
-            glEnd();
-        }
-    }
-
-    //Yellow floor
-    glColor3f(1.0, 1.0, 0.0);
-    v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v3 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v3 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v4 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    tessXSize = abs(v1[0] - v3[0]) / (tessX);
-    tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
-            glBegin(GL_POLYGON);
-            glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-            glVertex3f(i + tessXSize, v2[1], k);
-            glVertex3f(i, v3[1], k);
-            glVertex3f(i, v4[1], k + tessZSize);
-            glEnd();
-        }
-    }
+    glBindTexture(GL_TEXTURE_2D, MyTexture[3]);
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POLYGON);
+    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glEnd();
+
+    //Purple Ceil
+    glColor3f(1.0, 0.0, 1.0);
+    v4 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    //Normal of rect
+    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    glNormal3fv(glm::value_ptr(normal));
+
+    glBindTexture(GL_TEXTURE_2D, MyTexture[4]);
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POLYGON);
+    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glEnd();
+
+    //Yellow floor
+    glColor3f(1.0, 1.0, 0.0);
+    v3 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    //Normal of rect
+    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    glNormal3fv(glm::value_ptr(normal));
+
+    glBindTexture(GL_TEXTURE_2D, MyTexture[5]);
+    glColor3f(1.0, 1.0, 1.0);
+    glBegin(GL_POLYGON);
+    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glEnd();
 }
 
 
