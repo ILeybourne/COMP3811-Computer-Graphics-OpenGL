@@ -11,7 +11,7 @@ QT += widgets opengl gui
 LIBS += -lGLU
 
 # Input
-HEADERS += ShapeCreator.h SceneWidget.h Window.h stb_image.h
+HEADERS += ShapeCreator.h SceneWidget.h Window.h
 SOURCES += Main.cpp \
            ShapeCreator.cpp \
            SceneWidget.cpp \

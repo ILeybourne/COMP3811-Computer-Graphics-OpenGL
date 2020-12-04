@@ -48,22 +48,23 @@ public:
 
     void drawTextPlane(float w, float h);
 
+    float interpolation(float x, float z, float c);
+
+    float interpolateAt(float x, float z);
+
     QWidget parent;
-    static constexpr int planeWidth = 100;
-    static constexpr int planeDepth = 100;
-    float amplitude = 4;
-    int planeXTess = 50;
-    int planeZTess = 50;
+    static constexpr int planeWidth = 10;
+    static constexpr int planeDepth = 10;
+    float amplitude = 10;
+    int planeXTess = 6;
+    int planeZTess = 6;
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
-
-
-
 
 
     static constexpr int textNum = 6;
     int numberOfTextures;
     //    GLubyte image[N_X_IMAGE][N_Y_IMAGE][N_COLOR];
-    QList<QImage> p_qimage;
+    QList <QImage> p_qimage;
     GLuint MyTexture[6];
     GLuint singText;
 

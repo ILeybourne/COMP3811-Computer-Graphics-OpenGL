@@ -31,8 +31,9 @@ protected:
 
     double frame;
     float cameraPosition[3] = {0, 5, 0};
-    float light0Position[4] = {0, 15, 100,1};
+    float light0Position[4] = {0, 15, 500,1};
     float cameraUp[3] = {0, 6, 0};
+    float fov = 90;
     float radius = 1;
     float turningNumber = 0;
     float yaw = M_PI_2;

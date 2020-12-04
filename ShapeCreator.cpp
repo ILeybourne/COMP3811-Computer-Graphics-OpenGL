@@ -41,13 +41,17 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glNormal3fv(glm::value_ptr(normal));
     glBindTexture(GL_TEXTURE_2D, MyTexture[0]);
     glColor3f(1.0, 1.0, 1.0);
-    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
-    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
+//    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
+//    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     glBegin(GL_POLYGON);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
 //    for (float i = v1[0]; i < v3[0]; i += tessXSize) {
@@ -62,7 +66,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 //    }
 
     //East Wall Red
-    glColor3f(1.0, 0.0, 0.0);
+//    glColor3f(1.0, 0.0, 0.0);
     //Coordinates
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v2 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
@@ -76,10 +80,14 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glBindTexture(GL_TEXTURE_2D, MyTexture[2]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
 //    tessYSize = abs(v1[1] - v3[1]) / (tessY);
@@ -95,7 +103,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 //        }
 //    }
 //    South Wall Green
-    glColor3f(0.0, 1.0, 0.0);
+//    glColor3f(1.0, 1.0, 1.0);
     //Coordinates
     v1 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     v2 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
@@ -108,14 +116,18 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
     //West Wall Blue
-    glColor3f(0.0, 0.0, 1.0);
+//    glColor3f(0.0, 0.0, 1.0);
     //Coordinates
     v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
@@ -128,14 +140,18 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glBindTexture(GL_TEXTURE_2D, MyTexture[3]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
     //Purple Ceil
-    glColor3f(1.0, 0.0, 1.0);
+//    glColor3f(1.0, 0.0, 1.0);
     v4 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v1 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
@@ -147,14 +163,18 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glBindTexture(GL_TEXTURE_2D, MyTexture[4]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
     //Yellow floor
-    glColor3f(1.0, 1.0, 0.0);
+//    glColor3f(1.0, 1.0, 0.0);
     v3 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
@@ -166,10 +186,14 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glBindTexture(GL_TEXTURE_2D, MyTexture[5]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(v1[0], v1[1], v1[2]);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(v2[0], v2[1], v2[2]);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(v3[0], v3[1], v3[2]);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(v4[0], v4[1], v4[2]);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 }
 
@@ -325,26 +349,87 @@ void ShapeCreator::heightGenerator(float x, float z) {
     float amp = 2;
     int seedNumber = 1;
     float height = 1;
-    float width = planeWidth;
-    float depth = planeDepth;
-    for (int i = 0; i < planeXTess + 1; i++) {
-        for (int k = 0; k < planeZTess + 1; k++) {
+    int width = int(planeWidth);
+    int depth = int(planeDepth);
+    float tempHeightsGenerated[planeWidth + 1][planeDepth + 1];
+
+    for (int i = 0; i < width + 1; i++) {
+        for (int k = 0; k < depth + 1; k++) {
             srand(seedNumber + i * 10 + k * 3);
             float randomNumber = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / amplitude));
-
-            heightsGenerated[i][k] = randomNumber;
-//            qDebug() << "ran" << i << k << randomNumbe r;
+            tempHeightsGenerated[i][k] = randomNumber;
         }
     }
 
+    //smooth heights
+    for (int i = 0; i < width + 1; i++) {
+        for (int k = 0; k < depth + 1; k++) {
+            int n1 = i - 1;
+            int n2 = i + 1;
+            int m1 = k - 1;
+            int m2 = k + 1;
+            if (i == 0)
+                n1 = width;
+            if (i == width)
+                n2 = 0;
+            if (k == 0)
+                n1 = depth;
+            if (k == depth)
+                n2 = 0;
+//            int topLeft[2] = {n, m};
+//            int topRight[2] = {n, m};
+//            int bottomLeft[2] = {n, m};
+//            int bottomRight[2] = {n, m};
+            float corners = (tempHeightsGenerated[n1][m1] + tempHeightsGenerated[n1][m2] +
+                             tempHeightsGenerated[n2][m1] + tempHeightsGenerated[n2][m2]) / (4 * 6.0);
+
+            float consecutive = (tempHeightsGenerated[n1][k] + tempHeightsGenerated[n2][k] +
+                                 tempHeightsGenerated[i][m1] + tempHeightsGenerated[i][m2]) / (4 * 3.0);
+
+            float center = tempHeightsGenerated[i][k] / 3.0;
+
+            heightsGenerated[i][k] = corners + consecutive + center;
+//            heightsGenerated[i][k]  = tempHeightsGenerated[i][k] ;
+        }
+    }
+
+
+}
+
+float ShapeCreator::interpolation(float x, float z, float c) {
+    float theta = (c) * M_PI;
+    float cosNorm = (1.0 - cosf(theta)) * 0.5;
+    float v = x * (1.0 - cosNorm) + z * cosNorm;
+    return (x * (1.0 - cosNorm)) + (z * cosNorm);
+}
+
+float ShapeCreator::interpolateAt(float x, float z) {
+    int i = floor(x);
+    int k = floor(z);
+
+    float iFract = x - i;
+    float kFract = z - k;
+
+    float heightAti0k0 = heightsGenerated[i][k];
+    float heightAti0k1 = heightsGenerated[i][k + 1];
+    float heightAti1k0 = heightsGenerated[i + 1][k];
+    float heightAti1k1 = heightsGenerated[i + 1][k + 1];
+
+
+    float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFract);
+
+    float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFract);
+
+    return interpolation(interpolX1, interpolX2, kFract);
 }
 
 
 void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int tessZ) {
-//Yellow floor
     float height = 1;
-    int heightXCounter = 0;
-    int heightZCounter = 0;
+//    int heightXCounter = 0;
+//    int heightZCounter = 0;
+//    int tessXCounter = 0;
+//    int tessZCounter = 0;
     glColor3f(0.5, 1.0, 0.0);
     glm::vec3 v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     glm::vec3 v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -354,38 +439,55 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
-    float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
-            glm::vec3 vA = {i + tessXSize, heightsGenerated[heightXCounter + 1][heightZCounter + 1], k + tessZSize};
-            glm::vec3 vB = {i + tessXSize, heightsGenerated[heightXCounter + 1][heightZCounter], k + 0};
-            glm::vec3 vC = {i + 0, heightsGenerated[heightXCounter][heightZCounter], k + 0};
-            glm::vec3 vD = {i + 0, heightsGenerated[heightXCounter][heightZCounter + 1], k + tessZSize};
-            float r1 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-            float r2 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-            float r3 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-            float r4 = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    float tessXSize = 1.0 / (tessX);
+    float tessZSize = 1.0 / (tessZ);
 
-            normal = glm::normalize(glm::cross(vB - vA, vC - vB));
-            glNormal3fv(glm::value_ptr(normal));
-            glBegin(GL_POLYGON);
-            glVertex3f(vA.x, vA.y, vA.z);
-            glVertex3f(vB.x, vB.y, vB.z);
-            glVertex3f(vC.x, vC.y, vC.z);
-            glEnd();
-            normal = glm::normalize(glm::cross(vC - vA, vD - vC));
-            glNormal3fv(glm::value_ptr(normal));
-            glBegin(GL_POLYGON);
-            glVertex3f(vA.x, vA.y, vA.z);
-            glVertex3f(vC.x, vC.y, vC.z);
-            glVertex3f(vD.x, vD.y, vD.z);
-            glEnd();
-            heightZCounter++;
-//            qDebug() << heightXCounter<<heightZCounter;
+    float thetaSpeed = 2.0;
+    float theta = thetaSpeed * M_PI;
+    float x = (1.0 - cosf(theta)) * 0.5;
+
+
+    for (int i = 0; i < width; i++) {
+        for (int k = 0; k < depth; k++) {
+//    for (int i = 0; i < width; i++) {
+//        for (int k = 0; k < depth; k++) {
+
+            for (float n = 0; n < 1; n += tessXSize) {
+                for (float m = 0; m < 1; m += tessZSize) {
+                    //                    float heightAti0k0 = heightsGenerated[i][k];
+                    //                    float heightAti0k1 = heightsGenerated[i][k + 1];
+                    //                    float heightAti1k0 = heightsGenerated[i + 1][k + 1];
+                    //                    float heightAti1k1 = heightsGenerated[i + 1][k + 1];
+
+
+                    float heightAtn1m1 = interpolateAt(i + n, k + m);
+                    float heightAtn0m0 = interpolateAt(i + n + tessXSize, k + m);
+                    float heightAtn0m1 = interpolateAt(i + n + tessXSize, k + m + tessZSize);
+                    float heightAtn1m0 = interpolateAt(i + n, k + m + tessZSize);
+
+                    glm::vec3 vA = {i + n + tessXSize, heightAtn0m0, k + m};
+                    glm::vec3 vB = {i + n + tessXSize, heightAtn0m1, k + m + tessZSize};
+                    glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
+                    glm::vec3 vD = {i + n, heightAtn1m1, k + m};
+
+                    normal = glm::normalize(glm::cross(vB - vA, vC - vB));
+                    glNormal3fv(glm::value_ptr(-normal));
+                    glBegin(GL_POLYGON);
+                    glVertex3f(vA.x, vA.y, vA.z);
+                    glVertex3f(vB.x, vB.y, vB.z);
+                    glVertex3f(vC.x, vC.y, vC.z);
+                    glEnd();
+
+                    normal = glm::normalize(glm::cross(vC - vA, vD - vC));
+                    glNormal3fv(glm::value_ptr(-normal));
+                    glBegin(GL_POLYGON);
+                    glVertex3f(vA.x, vA.y, vA.z);
+                    glVertex3f(vC.x, vC.y, vC.z);
+                    glVertex3f(vD.x, vD.y, vD.z);
+                    glEnd();
+                }
+            }
         }
-        heightZCounter = 0;
-        heightXCounter++;
     }
 }
 
@@ -616,46 +718,34 @@ void ShapeCreator::imageLoader() {
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
     };
     numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
-    qDebug() << numberOfTextures;
+//    qDebug() << numberOfTextures;
     int nChannels[numberOfTextures];
     glGenTextures(6, MyTexture);
 
     for (int i = 0; i < numberOfTextures; i++) {
         p_qimage.push_back(QImage(skyboxStrings[i]));
-        qDebug() << p_qimage[i].isNull() << "null?";
+//        qDebug() << p_qimage[i].isNull() << "null?";
         imageWidth[i] = p_qimage[i].width();
         imageHeight[i] = p_qimage[i].height();
-        qDebug() << imageWidth[i] << imageHeight[i] << "w h?";
+//        qDebug() << imageWidth[i] << imageHeight[i] << "w h?";
         imageSize[i] = imageWidth[i] * imageHeight[i];
 
         nChannels[i] = 3;
         if (skyboxStrings[i].endsWith("png")) {
-            qDebug() << "4 chan";
+//            qDebug() << "4 chan";
             nChannels[i] = 4;
         }
     }
-    for (int i = 0; i < numberOfTextures; i++) {
-        qDebug() << nChannels[i] << "xhan";
-        qDebug() << imageWidth[i] << "w";
-        qDebug() << imageWidth[i] << "h";
-        qDebug() << imageSize[i] << "s";
-    }
 
-    qDebug() << nChannels[0] << nChannels[1] << nChannels[2] << nChannels[3] << nChannels[4] << nChannels[5];
-    qDebug() << nChannels[0];
     for (int i = 0; i < numberOfTextures; i++) {
-        qDebug() << "first";
         unsigned int w = imageWidth[i];
         unsigned int h = imageHeight[i];
         unsigned int s = imageSize[i];
         GLubyte image1d3Chan[w * h * 3];
-        qDebug() << "second";
 
         GLubyte image1d4Chan[imageWidth[i] * imageHeight[i] * 4];
-        qDebug() << "third";
 
         if (nChannels[i] == 3) {
-            qDebug() << "3 chan";
 
 //            for (unsigned int i_pix = 0; i_pix < size; i_pix++) {
 //        std::div_t part = std::div((int) i_pix, (int) w);
@@ -674,7 +764,6 @@ void ShapeCreator::imageLoader() {
                 image1d3Chan[3 * s - 3 * i_pix - 1] = qBlue(colVal);
             }
         } else {
-            qDebug() << "4channnn";
             for (unsigned int i_pix = 0; i_pix < imageSize[i]; i_pix++) {
                 std::div_t part = std::div((int) i_pix, (int) imageWidth[i]);
                 QRgb colVal = p_qimage[i].pixel(imageWidth[i] - part.rem - 1, part.quot);
@@ -684,7 +773,6 @@ void ShapeCreator::imageLoader() {
                 image1d4Chan[4 * imageSize[i] - 4 * i_pix - 1] = qAlpha(colVal);
             }
         }
-        qDebug() << "end";
 
         glBindTexture(GL_TEXTURE_2D, MyTexture[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -695,7 +783,6 @@ void ShapeCreator::imageLoader() {
         GLint format;
         if (nChannels[i] == 3) {
 
-            qDebug() << "3 chan texturing";
 
             format = GL_RGB;
             glTexImage2D(GL_TEXTURE_2D,

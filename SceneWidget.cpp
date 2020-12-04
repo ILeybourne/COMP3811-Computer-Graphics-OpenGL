@@ -110,7 +110,7 @@ void SceneWidget::resizeGL(int w, int h) { // resizeGL()
     glLoadIdentity();
     float width = w;
     float height = h;
-    gluPerspective(90, -width / height, 0.01, sqrt(pow(1000, 2) + pow(1000, 2)) + pow(1000, 2));
+    gluPerspective(this->fov, -width / height, 0.01, sqrt(pow(1000, 2) + pow(1000, 2)) + pow(1000, 2));
 } // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
@@ -305,25 +305,28 @@ void SceneWidget::paintGL() { // paintGL()
 //    glTranslatef(0, 2, 0);
 ////    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
 //    glPopMatrix();
+
     glPushMatrix();
-//
     glTranslatef(0, 3, -3);
-//
     shapeCreator->createCube(2, 2, 2, 0, 0, 0);
     glPopMatrix();
-//    glDisable(GL_LIGHTING);
+
+    glDisable(GL_LIGHTING);
     glPushMatrix();
     glTranslatef(0, -500, 0);
-
     shapeCreator->walls(1000.0, 1000.0, 1000.0, 10, 10, 10);
     glPopMatrix();
 
-
+//    shapeCreator->walls(10.0, 10.0, 10.0, 10, 10, 10);
     glEnable(GL_LIGHTING);
 
+    glPushMatrix();
+    glScaled(1.0/shapeCreator->planeWidth * 1000, 10, 1.0/shapeCreator->planeDepth * 1000);
+    glTranslatef(-shapeCreator->planeWidth/2.0, -10, -shapeCreator->planeDepth/2.0);
     shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
                                      shapeCreator->planeZTess);
-
+    glPopMatrix();
+    shapeCreator->createSphere(3.0,20,20);
 //    shapeCreator->imageLoader();
 //    shapeCreator->drawTextPlane(3,3);
 //    shapeCreator->createCube(2.0, 3.0, 2.0, 1.0, 0, 0.0);
