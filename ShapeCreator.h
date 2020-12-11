@@ -26,11 +26,13 @@ class ShapeCreator { //
 public:
     ShapeCreator(QWidget *parent);
 
+    void sky(float w, float h, float d, int tX, int tY, int tZ);
+
     void walls(float w, float h, float d, int tX, int tY, int tZ);
 
     void createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ);
 
-    void createCube(float w, float h, float d, float x, float y, float z);
+    void createCube(float w, float h, float d, float x, float y, float z, bool shadow);
 
     void createSphere(GLdouble radius, GLint slices, GLint stacks);
 
@@ -56,8 +58,8 @@ public:
     static constexpr int planeWidth = 10;
     static constexpr int planeDepth = 10;
     float amplitude = 10;
-    int planeXTess = 6;
-    int planeZTess = 6;
+    int planeXTess = 20;
+    int planeZTess = 20;
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
 
 
