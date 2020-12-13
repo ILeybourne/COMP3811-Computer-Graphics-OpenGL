@@ -356,8 +356,6 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 }
 
 
-
-
 void ShapeCreator::createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -675,6 +673,79 @@ void ShapeCreator::drawTextPlane(float w, float h) {
 //    glDisable(GL_TEXTURE_2D);
 }
 
+void ShapeCreator::createFigurine() {
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+//    glColor4b(1.0,1.0,0,1);
+//    glColor3b(1.0,1.0,0);
+    glColor3f(1.0, 1.0, 0);
+
+    glPushMatrix();
+        glScaled(0.5, 0.7, 0.5);
+        createSphere(1, 20, 20);
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0, -1.0 / 0.7 / 4, 0);
+        glPushMatrix();
+            glScaled(0.2, 0.4, 0.2);
+            glRotatef(90,1,0,0);
+            createCylinder(1,1,1,20,20);
+//            createSphere(1, 20, 20);
+
+        glPopMatrix();
+//        glScaled(2,1,1);
+        glTranslatef(0,-0.4,0);
+
+        glPushMatrix();
+        for (float i = 0; i <  18; i++) {
+            int ittDown = 4;
+            int neg = 1;
+            float offset = 0;
+            if (i >= ittDown){
+                neg = -1;
+                offset = 0.4;
+            }
+            glTranslatef(0,-0.05,0);
+            createCube(1. + ((i+1)*(0.05 * neg)) + offset,0.1,1+ ((i+1)*(0.05 * neg)) + offset,0,0,0,0);
+        }
+        glPopMatrix();
+        glPushMatrix();
+        glTranslatef( (1+0.25 )/ 2, -0.2,0);
+    glPushMatrix();
+        glScaled(0.2,0.2,0.2);
+    createSphere(1,20,20);
+
+        glPopMatrix();
+        glPopMatrix();
+//        glTranslatef(0,-0.5,0);
+//        createCube(1.5,0.1,1,0,0,0,0);
+//        glTranslatef(0,-0.1,0);
+//
+//        createCube(1.6,0.1,1,0,0,0,0);
+
+//        createCube(2,1,1,0,0,0,0);
+
+
+    glPopMatrix();
+
+//    glPushMatrix();
+//    glm::vec3 v1 = {-1, 0, 0};
+//    glm::vec3 v2 = {0, 0, -1};
+//    glm::vec3 v3 = {0, -1.5, -1};
+//    glm::vec3 v4 = {-1, -1.5, 0};
+//    //Normal of rect
+//    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+//    glNormal3fv(glm::value_ptr(normal));
+//    glBegin(GL_POLYGON);
+//    glVertex3f(v1[0],v1[1],v1[2]);
+//    glVertex3f(v2[0],v2[1],v2[2]);
+//    glVertex3f(v3[0],v3[1],v3[2]);
+//    glVertex3f(v4[0],v4[1],v4[2]);
+//    glEnd();
+//    glPopMatrix();
+
+}
+
 
 void ShapeCreator::createCube(float w, float h, float d, float x, float y, float z, bool shadow) {
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -683,7 +754,8 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 //    glMatrixMode(GL_TEXTURE_MATRIX);
 //    glLoadIdentity();
     glColor3f(1.0, 1.0, 1.0);
-    if (shadow) glColor3f(0,0,0);
+    if (shadow) glColor4f(0, 0, 0, 0.5);
+
 
 //    glEnable(GL_TEXTURE_2D);
 //    glActiveTexture(GL_TEXTURE0);
@@ -708,7 +780,8 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     //East Wall
     glColor3f(1.0, 0.0, 0.0);
-    if (shadow) glColor3f(0,0,0);
+    if (shadow) glColor4f(0, 0, 0, 0.5);
+
 
     glBegin(GL_POLYGON);
     glNormal3f(1, 0, 0);
@@ -720,7 +793,8 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     //South Wall Green
     glColor3f(0.0, 1.0, 0.0);
-    if (shadow) glColor3f(0,0,0);
+    if (shadow) glColor4f(0, 0, 0, 0.5);
+
 
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, -1);
@@ -732,7 +806,8 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     //West Wall Blue
     glColor3f(0.0, 0.0, 1.0);
-    if (shadow) glColor3f(0,0,0);
+    if (shadow) glColor4f(0, 0, 0, 0.5);
+
 
     glBegin(GL_POLYGON);
     glNormal3f(-1, 0, 0);
@@ -744,7 +819,8 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     //Purple Ceil
     glColor3f(1.0, 0.0, 1.0);
-    if (shadow) glColor3f(0,0,0);
+    if (shadow) glColor4f(0, 0, 0, 0.5);
+
 
     glBegin(GL_POLYGON);
     glNormal3f(0, 1, 0);
@@ -756,7 +832,7 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     //Yellow floor
     glColor3f(1.0, 1.0, 0.0);
-    if (shadow) glColor3f(0,0,0);
+    if (shadow) glColor4f(0, 0, 0, 0.5);
 
     glBegin(GL_POLYGON);
     glNormal3f(0, -1, 0);
@@ -771,7 +847,6 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
 void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
     glBindTexture(GL_TEXTURE_2D, 0);
-
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
@@ -1045,4 +1120,50 @@ void ShapeCreator::imageLoader() {
 
 //    glDisable(GL_TEXTURE_2D);
 
+}
+
+Model getOBJinfo(std::string fp)
+{
+    // 2
+    Model model = {0};
+
+    // 3
+    // Open OBJ file
+    ifstream inOBJ;
+    inOBJ.open(fp);
+    if(!inOBJ.good())
+    {
+        cout << "ERROR OPENING OBJ FILE" << endl;
+        exit(1);
+    }
+
+    // 4
+    // Read OBJ file
+    while(!inOBJ.eof())
+    {
+        // 5
+        std::string line;
+        getline(inOBJ, line);
+        std::string type = line.substr(0,2);
+
+        // 6
+        if(type.compare("v ") == 0)
+            model.positions++;
+        else if(type.compare("vt") == 0)
+            model.texels++;
+        else if(type.compare("vn") == 0)
+            model.normals++;
+        else if(type.compare("f ") == 0)
+            model.faces++;
+    }
+
+    // 7
+    model.vertices = model.faces*3;
+
+    // 8
+    // Close OBJ file
+    inOBJ.close();
+
+    // 9
+    return model;
 }

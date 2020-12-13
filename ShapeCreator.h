@@ -15,7 +15,8 @@
 #include <ctime>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <string>
+#include <iostream>
 
 const unsigned int N_X_IMAGE = 512;
 const unsigned int N_Y_IMAGE = 512;
@@ -54,7 +55,23 @@ public:
 
     float interpolateAt(float x, float z);
 
-    QWidget parent;
+    void createFigurine();
+
+    typedef struct Model
+    {
+        int vertices;
+        int positions;
+        int texels;
+        int normals;
+        int faces;
+    }Model;
+
+    Model getOBJinfo(std::string fp)
+
+
+
+
+        QWidget parent;
     static constexpr int planeWidth = 10;
     static constexpr int planeDepth = 10;
     float amplitude = 10;

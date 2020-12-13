@@ -35,6 +35,8 @@ protected:
 
     void keyReleaseEvent(QKeyEvent *key);
 
+    float *getShadowMatrix(float p[4], float l[4]);
+
     double frame;
     float cameraPosition[3] = {0, 5, 0};
     float light0Position[4] = {0, 15, 500, 1};
