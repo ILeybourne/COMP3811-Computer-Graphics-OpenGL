@@ -1057,69 +1057,6 @@ void ShapeCreator::imageLoader() {
         }
 
     }
-
-
-
-
-
-//
-////    for (unsigned int i_x_pix = 0; i_x_pix < N_X_IMAGE; i_x_pix++) {
-////        for (unsigned int i_y_pix = 0; i_y_pix < N_Y_IMAGE; i_y_pix++) {
-////            QRgb colval = p_qimage->pixel(i_x_pix, i_y_pix);
-////            image[N_Y_IMAGE - 1 - i_y_pix][i_x_pix][0] = qRed(colval);
-////            image[N_Y_IMAGE - 1 - i_y_pix][i_x_pix][1] = qGreen(colval);
-////            image[N_Y_IMAGE - 1 - i_y_pix][i_x_pix][2] = qBlue(colval);
-////        }
-////    }
-//
-
-
-//    QImage *p_qimage2 = new QImage("./textureinternet/wall.jpg");
-//
-//    unsigned int w = p_qimage2->width();
-//    unsigned int h = p_qimage2->height();
-//    unsigned int size = w * h;
-//
-//    if (!p_qimage2->isNull()) {
-//        qDebug() << "image loaded yay";
-//        qDebug() << p_qimage2->width();
-//    }
-//    GLubyte image1d[w * h * 3];
-//
-////    GLubyte image1d[N_X_IMAGE * N_Y_IMAGE * N_COLOR];
-//    qDebug() << size;
-//
-//    for (unsigned int i_pix = 0; i_pix < size; i_pix++) {
-//        std::div_t part = std::div((int) i_pix, (int) w);
-//        QRgb colVal = p_qimage2->pixel(N_X_IMAGE - part.rem - 1, part.quot);
-//        image1d[3 * size - 3 * i_pix - 3] = qRed(colVal);
-//        image1d[3 * size - 3 * i_pix - 2] = qGreen(colVal);
-//        image1d[3 * size - 3 * i_pix - 1] = qBlue(colVal);
-//    }
-//
-//    glEnable(GL_TEXTURE_2D);
-//    glGenTextures(1, &singText);
-////    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, singText);
-//
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT
-//    );
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT
-//    );
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR
-//    );
-//    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR
-//    );
-//
-//    GLint format = GL_RGB;
-//
-//    glTexImage2D(GL_TEXTURE_2D,
-//                 0, format, w, h, 0, format, GL_UNSIGNED_BYTE,
-//                 image1d);
-
-
-//    glDisable(GL_TEXTURE_2D);
-
 }
 
 
@@ -1151,16 +1088,17 @@ bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vert
             glm::vec3 vertex;
             fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
             temp_vertices.push_back(vertex);
+
         } else if (strcmp(lineHeader, "vt") == 0) {
             glm::vec2 uv;
             fscanf(file, "%f %f\n", &uv.x, &uv.y);
             temp_uvs.push_back(uv);
 
-
         } else if (strcmp(lineHeader, "vn") == 0) {
             glm::vec3 normal;
             fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
             temp_normals.push_back(normal);
+
         } else if (strcmp(lineHeader, "f") == 0) {
             std::string vertex1, vertex2, vertex3;
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
@@ -1190,145 +1128,4 @@ bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vert
 
     }
     return true;
-}
-
-ShapeCreator::Model ShapeCreator::getOBJinfo(string fp) {
-    // 2
-    ShapeCreator::Model model = {0};
-
-    // 3
-    // Open OBJ file
-    std::ifstream inOBJ;
-    inOBJ.open(fp);
-    if (!inOBJ.good()) {
-        std::cout << "ERROR OPENING OBJ FILE" << endl;
-        exit(1);
-    }
-
-    // 4
-    // Read OBJ file
-    while (!inOBJ.eof()) {
-        // 5
-        std::string line;
-        getline(inOBJ, line);
-        std::string type = line.substr(0, 2);
-
-        // 6
-        if (type.compare("v ") == 0)
-            model.positions++;
-        else if (type.compare("vt") == 0)
-            model.texels++;
-        else if (type.compare("vn") == 0)
-            model.normals++;
-        else if (type.compare("f ") == 0)
-            model.faces++;
-    }
-
-    // 7
-    model.vertices = model.faces * 3;
-
-    // 8
-    // Close OBJ file
-    inOBJ.close();
-
-    // 9
-    return model;
-}
-
-void
-ShapeCreator::extractOBJdata(string fp, float positions[][3], float texels[][2], float normals[][3],
-                             int faces[][9]) {
-    // Counters
-    int p = 0;
-    int t = 0;
-    int n = 0;
-    int f = 0;
-
-    qDebug() << 1;
-    // Open OBJ file
-    ifstream inOBJ;
-    inOBJ.open(fp);
-    if (!inOBJ.good()) {
-        cout << "ERROR OPENING OBJ FILE" << endl;
-        exit(1);
-    }
-    qDebug() << 2;
-
-    // Read OBJ file
-    while (!inOBJ.eof()) {
-        string line;
-        getline(inOBJ, line);
-        string type = line.substr(0, 2);
-//        qDebug() << "line"  ;
-//        std::cout << "Current path is " << type << '\n';
-
-        // Positions
-        if (type.compare("v ") == 0) {
-            // 1
-            // Copy line for parsing
-            char *l = new char[line.size() + 1];
-            memcpy(l, line.c_str(), line.size() + 1);
-//            qDebug() << "l" ;
-
-            // 2
-            // Extract tokens
-            strtok(l, " ");
-            for (int i = 0; i < 3; i++)
-                positions[p][i] = atof(strtok(NULL, " "));
-
-            // 3
-//            qDebug() << 1 ;
-//            qDebug() << l ;
-
-            // Wrap up
-            delete[] l;
-            p++;
-        }
-
-// Texels
-        else if (type.compare("vt") == 0) {
-            char *l = new char[line.size() + 1];
-            memcpy(l, line.c_str(), line.size() + 1);
-
-            strtok(l, " ");
-            for (int i = 0; i < 2; i++)
-                texels[t][i] = atof(strtok(NULL, " "));
-
-            delete[] l;
-            t++;
-        }
-
-// Normals
-        else if (type.compare("vn") == 0) {
-            char *l = new char[line.size() + 1];
-            memcpy(l, line.c_str(), line.size() + 1);
-
-//            qDebug() << l ;
-            strtok(l, " ");
-            for (int i = 0; i < 3; i++) {
-//                qDebug() << normals[n][i]<< n << i;
-                normals[n][i] = atof(strtok(NULL, " "));
-            }
-//            qDebug()<< "out";
-            delete[] l;
-            n++;
-        }
-
-// Faces
-        else if (type.compare("f ") == 0) {
-            char *l = new char[line.size() + 1];
-            memcpy(l, line.c_str(), line.size() + 1);
-
-            strtok(l, " ");
-            for (int i = 0; i < 9; i++) {
-                faces[f][i] = atof(strtok(NULL, " /"));
-                qDebug() << f << faces[f][i];
-            }
-            delete[] l;
-            f++;
-        }
-    }
-
-    // Close OBJ file
-    inOBJ.close();
 }

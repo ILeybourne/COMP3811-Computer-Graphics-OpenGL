@@ -118,52 +118,28 @@ void SceneWidget::initializeGL() { // initializeGL()
 
 
     ////Load Apple pc info
-    bool res = shapeCreator->getOBJinfo2("/AppleIIe4.obj", shapeCreator->vertices, shapeCreator->uvs, shapeCreator->normals);
-    qDebug()<< res;
+    bool res = shapeCreator->getOBJinfo2("/AppleIIe4.obj", shapeCreator->vertices, shapeCreator->uvs,
+                                         shapeCreator->normals);
+    qDebug() << res;
 
     ////Pc vertex data
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, shapeCreator->vertices.size() * sizeof(glm::vec3), &shapeCreator->vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, shapeCreator->vertices.size() * sizeof(glm::vec3), &shapeCreator->vertices[0],
+                 GL_STATIC_DRAW);
 
     ////Pc normal data
     glGenBuffers(1, &normalbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, shapeCreator->normals.size() * sizeof(glm::vec3), &shapeCreator->normals[0], GL_STATIC_DRAW);
 
 
-//    shadowMatrix1[8] = -1.0 / light1Position[2];
-
-
-//    GLfloat mcyan[] = {0.0f, .8f, .8f, 1.f};
-//    glMaterialfv(GL_FRONT, GL_DIFFUSE, mcyan);
-//    GLfloat light1_ambient[] = {0.2, 0.2, 0.2, 1.0};
-//    GLfloat light1_diffuse[] = {1.0, 1.0, 1.0, 1.0};
-//    GLfloat light1_specular[] = {1.0, 1.0, 1.0, 1.0};
-//    GLfloat light1_position[] = {-2.0, 2.0, 1.0, 1.0};
-//    GLfloat spot_direction[] = {-1.0, -1.0, 0.0};
-
-//    glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
-//    glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
-//    glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
-//    glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
-//    glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
-//    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
-//    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
-//
-//    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
-//    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
-//    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0);
-//
-//    glEnable(GL_LIGHT1);
-
-
+    ////Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+////Load textures
     shapeCreator->imageLoader();
-//    glewInit();
 
-
-//    float rotateCube = 0;
 } // initializeGL()
 
 // called every time the widget is resized
@@ -564,6 +540,52 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_BLEND);
     glPopMatrix();
 
+    ////Apple PC
+    glDisable(GL_CULL_FACE);
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, applePositions2);
+//    glDrawArrays(GL_TRIANGLES, 0, m.vertices);
+    glPushMatrix();
+    glTranslatef(0, 3, 0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(
+            0,                  // attribute
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void *) 0            // array buffer offset
+    );
+    glColor3f(0.5, 1, 1);
+    GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
+    GLfloat shininess2[] = {100};
+
+    ////Material parameters
+    glEnable(GL_COLOR_MATERIAL);
+//    glMaterialfv(GL_FRONT, GL_AMBIENT, mambient);
+//    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glVertexAttribPointer(
+            2,                                // attribute
+            3,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void*)0                          // array buffer offset
+    );
+
+
+    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices.size());
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(2);
+    glPopMatrix();
+    glEnable(GL_CULL_FACE);
+
 
 
 
@@ -662,29 +684,7 @@ void SceneWidget::paintGL() { // paintGL()
 //    glPopMatrix();
 
 
-    ////Apple PC
-    glDisable(GL_CULL_FACE);
-//    glEnableVertexAttribArray(0);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, applePositions2);
-//    glDrawArrays(GL_TRIANGLES, 0, m.vertices);
-    glPushMatrix();
-    glTranslatef(0,3,0);
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(
-            0,                  // attribute
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-    );
-    glColor3f(0.5,1,1);
-    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices.size() );
 
-    glDisableVertexAttribArray(0);
-    glPopMatrix();
-    glEnable(GL_CULL_FACE);
 
 
 //    shapeCreator->createSphere(3.0, 20, 20);
