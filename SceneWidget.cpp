@@ -1,3 +1,5 @@
+//#define GL_GLEXT_PROTOTYPES
+//#include <GL/glew.h>
 #include <GL/glu.h>
 #include <QGLWidget>
 #include <QtGui>
@@ -22,6 +24,8 @@
 #include "ShapeCreator.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
+
 
 // constructor
 SceneWidget::SceneWidget(QWidget *parent)
@@ -32,11 +36,16 @@ SceneWidget::SceneWidget(QWidget *parent)
 
 // called when OpenGL context is set up
 void SceneWidget::initializeGL() { // initializeGL()
-    // set the widget background colour
+    //Enable anti-alias
     glEnable(GL_MULTISAMPLE);
+    //Normalize normals upon transformations
     glEnable(GL_NORMALIZE);
+    // set the widget background colour
     glClearColor(0.8, 0.3, 0.3, 0.0);
 
+    initializeGLFunctions();
+
+    ////Fog
 //    float fog_colour[4] = {1, 1, 1, 1};
 //    glEnable(GL_FOG);
 //    glFogf(GL_FOG_MODE,GL_EXP2);
@@ -48,12 +57,15 @@ void SceneWidget::initializeGL() { // initializeGL()
 
 //    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
 //    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
+
+    ////Light parameters
     GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
     GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
     glLoadIdentity();
     GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
     GLfloat shininess2[] = {100};
 
+    ////Material parameters
     glEnable(GL_COLOR_MATERIAL);
 //    glMaterialfv(GL_FRONT, GL_AMBIENT, mambient);
 //    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
@@ -62,47 +74,62 @@ void SceneWidget::initializeGL() { // initializeGL()
 
 //    GLfloat shininess2[] = {50};
 //    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+
+
+
+
+    GLfloat shininess[] = {100.0};
+    GLfloat shininess3[] = {5.0};
+
+
+    ////Light 0
     GLfloat light_0_ambient[] = {0.3, 0.2, 0.25, 0.0};
     GLfloat light_0_diffuse[] = {1.0, 1.0, 1.0, 0.0};
     GLfloat light_0_specular[] = {1.0, 1.0, 1.0, 1.0};
 //    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
-
-    GLfloat light_1_ambient[] = {0.1, 0.1, 0.1, 0.0};
-    GLfloat light_1_diffuse[] = {1.0, 1.0, 1.0, 0.0};
-    GLfloat light_1_specular[] = {1.0, 1.0, 1.0, 1.0};
-//    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
-    GLfloat shininess[] = {100.0};
-    GLfloat shininess3[] = {5.0};
-
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_0_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_0_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_0_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT0, GL_SHININESS, shininess3);
+    glEnable(GL_LIGHT0);
 
+
+    ////Light 1
+    GLfloat light_1_ambient[] = {0.1, 0.1, 0.1, 0.0};
+    GLfloat light_1_diffuse[] = {1.0, 1.0, 1.0, 0.0};
+    GLfloat light_1_specular[] = {1.0, 1.0, 1.0, 1.0};
+//    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
     glLightfv(GL_LIGHT1, GL_AMBIENT, light_1_ambient);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light_1_diffuse);
     glLightfv(GL_LIGHT1, GL_SPECULAR, light_1_specular);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
     glLightfv(GL_LIGHT1, GL_SHININESS, shininess);
+    glEnable(GL_LIGHT1);
 
     glShadeModel(GL_SMOOTH);
 //    glLightModel(GL_LIGHT_MODEL_AMBIENT, )
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
 
     glEnable(GL_CULL_FACE);
+
+    ////Cull back of faces
     glCullFace(GL_BACK);
 
-//    for (int i = 0; i < 16; i++) {
-//        shadowMatrix1[i] = 0.0;
-//    }
-//    shadowMatrix1[0] = shadowMatrix1[5] = shadowMatrix1[10] = 1.0;
-//    shadowMatrix1[6] = -1.0 / light1Position[0];
-//    shadowMatrix1[7] = -1.0 / light1Position[1];
 
+    ////Load Apple pc info
+    bool res = shapeCreator->getOBJinfo2("/AppleIIe4.obj", shapeCreator->vertices, shapeCreator->uvs, shapeCreator->normals);
+    qDebug()<< res;
 
+    ////Pc vertex data
+    glGenBuffers(1, &vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, shapeCreator->vertices.size() * sizeof(glm::vec3), &shapeCreator->vertices[0], GL_STATIC_DRAW);
+
+    ////Pc normal data
+    glGenBuffers(1, &normalbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
 
 
 //    shadowMatrix1[8] = -1.0 / light1Position[2];
@@ -133,6 +160,9 @@ void SceneWidget::initializeGL() { // initializeGL()
 
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     shapeCreator->imageLoader();
+//    glewInit();
+
+
 //    float rotateCube = 0;
 } // initializeGL()
 
@@ -471,26 +501,28 @@ void SceneWidget::paintGL() { // paintGL()
     shadowMat[11] = 0.0 - light1Position[3] * ground[2];
     shadowMat[15] = dot - light1Position[3] * ground[3];
 
-    glPushMatrix();
-    glTranslatef(0, 3, 0);
-    glRotatef(rotateCube, 0, 1, 0);
-    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
-    glPopMatrix();
 
-    glPushMatrix();
-    glTranslatef(0, 3, 2);
-    glRotatef(rotateCube + M_PI, 0, 1, 0);
-    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
-    glPopMatrix();
+//    ////Cubes
+//    glPushMatrix();
+//    glTranslatef(0, 3, 0);
+//    glRotatef(rotateCube, 0, 1, 0);
+//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(0, 3, 2);
+//    glRotatef(rotateCube + M_PI, 0, 1, 0);
+//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+//    glPopMatrix();
 
 
-
-    glDisable(GL_CULL_FACE);
-    glPushMatrix();
-    glTranslatef(0,4,3);
-    shapeCreator->createFigurine();
-    glPopMatrix();
-    glEnable(GL_CULL_FACE);
+//    ////Figure
+//    glDisable(GL_CULL_FACE);
+//    glPushMatrix();
+//    glTranslatef(0, 4, 3);
+//    shapeCreator->createFigurine();
+//    glPopMatrix();
+//    glEnable(GL_CULL_FACE);
 
 
 //    glColorMask(false,false,false,false);
@@ -498,14 +530,13 @@ void SceneWidget::paintGL() { // paintGL()
 
 //    glDisable(GL_DEPTH_TEST);
 
-    //shadow 2
+    ////shadow 2
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND); //Enable blending.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
 //    glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA);
     float *shadowMatrix;
-
     wall[3] -= 0.01;
     shadowMatrix = getShadowMatrix(wall, light1Position);
     glMultMatrixf(shadowMatrix);
@@ -518,15 +549,11 @@ void SceneWidget::paintGL() { // paintGL()
     glEnable(GL_DEPTH_TEST);
 
 
-    //cube shadow 1
+    ////cube shadow 1
     glPushMatrix();
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND); //Enable blending.
-//    glBlendColor(1.0f, 1.0f, 1.0f, .3);
-//    glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA); //Set blending function.
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-//    glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-//    glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_DST_ALPHA);
     wall[3] += 0.01;
     shadowMatrix = getShadowMatrix(wall, light1Position);
     glMultMatrixf(shadowMatrix);
@@ -617,24 +644,48 @@ void SceneWidget::paintGL() { // paintGL()
 //   shapeCreator->createCube(2, 2, 2, 0, 0, 0);
 //    glPopMatrix();
 
-    glDisable(GL_LIGHTING);
+//    ////Skybox
+//    glDisable(GL_LIGHTING);
+//    glPushMatrix();
+//    glTranslatef(0, -500, 0);
+//    shapeCreator->sky(1000.0, 1000.0, 1000.0, 1, 1, 1);
+//    glPopMatrix();
+//    glEnable(GL_LIGHTING);
 
 
+//    ////Terrain
+//    glPushMatrix();
+//    glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
+//    glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
+//    shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
+//                                     shapeCreator->planeZTess);
+//    glPopMatrix();
+
+
+    ////Apple PC
+    glDisable(GL_CULL_FACE);
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, applePositions2);
+//    glDrawArrays(GL_TRIANGLES, 0, m.vertices);
     glPushMatrix();
-    glTranslatef(0, -500, 0);
+    glTranslatef(0,3,0);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glVertexAttribPointer(
+            0,                  // attribute
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+    );
+    glColor3f(0.5,1,1);
+    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices.size() );
 
-
-    shapeCreator->sky(1000.0, 1000.0, 1000.0, 1, 1, 1);
+    glDisableVertexAttribArray(0);
     glPopMatrix();
-    glEnable(GL_LIGHTING);
+    glEnable(GL_CULL_FACE);
 
-
-    glPushMatrix();
-    glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
-    glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
-    shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
-                                     shapeCreator->planeZTess);
-    glPopMatrix();
 
 //    shapeCreator->createSphere(3.0, 20, 20);
 //    shapeCreator->imageLoader();

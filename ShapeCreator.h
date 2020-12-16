@@ -17,6 +17,11 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <experimental/filesystem>
+
+
+using namespace std;
 
 const unsigned int N_X_IMAGE = 512;
 const unsigned int N_Y_IMAGE = 512;
@@ -57,21 +62,51 @@ public:
 
     void createFigurine();
 
-    typedef struct Model
-    {
+    typedef struct Model {
         int vertices;
         int positions;
         int texels;
         int normals;
         int faces;
-    }Model;
+    } Model;
 
-    Model getOBJinfo(std::string fp)
-
-
+    Model getOBJinfo(std::string fp);
 
 
-        QWidget parent;
+    std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
+    std::vector< glm::vec3 > temp_vertices;
+    std::vector< glm::vec2 > temp_uvs;
+
+    std::vector< glm::vec3 > temp_normals;
+
+    std::vector< glm::vec3 > vertices;
+    std::vector< glm::vec2 > uvs;
+    std::vector< glm::vec3 > normals; // Won't be used at the moment.
+    bool getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vertices,
+                     std::vector <glm::vec2> &out_uvs,
+                     std::vector <glm::vec3> &out_normals);
+
+//
+//    Model apple = {0};
+//    apple.vertices = 9555;
+//    apple.positions = 3088;
+//    apple.texels = 3131;
+//    apple.normals = 1292;
+//    apple.faces = 3185;
+
+    static constexpr  int appleVertices = 9555;
+    static constexpr  int applePositions = 3088;
+    static constexpr  int appleTexels = 3131;
+    static constexpr  int appleNormals = 1292;
+    static constexpr  int appleFaces = 3185;
+
+//    float
+//    float applePositions[3088]= {};
+
+    void extractOBJdata(string fp, float positions[][3], float texels[][2], float normals[][3], int faces[][9]);
+
+
+    QWidget parent;
     static constexpr int planeWidth = 10;
     static constexpr int planeDepth = 10;
     float amplitude = 10;

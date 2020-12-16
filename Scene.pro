@@ -8,7 +8,8 @@ INCLUDEPATH += . /opt/local/include
 
 QT += widgets opengl gui 
 
-LIBS += -lGLU
+LIBS += -lGLU -lstdc++fs
+
 
 # Input
 HEADERS += ShapeCreator.h SceneWidget.h Window.h

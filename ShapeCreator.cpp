@@ -681,42 +681,42 @@ void ShapeCreator::createFigurine() {
     glColor3f(1.0, 1.0, 0);
 
     glPushMatrix();
-        glScaled(0.5, 0.7, 0.5);
-        createSphere(1, 20, 20);
+    glScaled(0.5, 0.7, 0.5);
+    createSphere(1, 20, 20);
     glPopMatrix();
     glPushMatrix();
-        glTranslatef(0, -1.0 / 0.7 / 4, 0);
-        glPushMatrix();
-            glScaled(0.2, 0.4, 0.2);
-            glRotatef(90,1,0,0);
-            createCylinder(1,1,1,20,20);
+    glTranslatef(0, -1.0 / 0.7 / 4, 0);
+    glPushMatrix();
+    glScaled(0.2, 0.4, 0.2);
+    glRotatef(90, 1, 0, 0);
+    createCylinder(1, 1, 1, 20, 20);
 //            createSphere(1, 20, 20);
 
-        glPopMatrix();
+    glPopMatrix();
 //        glScaled(2,1,1);
-        glTranslatef(0,-0.4,0);
+    glTranslatef(0, -0.4, 0);
 
-        glPushMatrix();
-        for (float i = 0; i <  18; i++) {
-            int ittDown = 4;
-            int neg = 1;
-            float offset = 0;
-            if (i >= ittDown){
-                neg = -1;
-                offset = 0.4;
-            }
-            glTranslatef(0,-0.05,0);
-            createCube(1. + ((i+1)*(0.05 * neg)) + offset,0.1,1+ ((i+1)*(0.05 * neg)) + offset,0,0,0,0);
-        }
-        glPopMatrix();
-        glPushMatrix();
-        glTranslatef( (1+0.25 )/ 2, -0.2,0);
     glPushMatrix();
-        glScaled(0.2,0.2,0.2);
-    createSphere(1,20,20);
+    for (float i = 0; i < 18; i++) {
+        int ittDown = 4;
+        int neg = 1;
+        float offset = 0;
+        if (i >= ittDown) {
+            neg = -1;
+            offset = 0.4;
+        }
+        glTranslatef(0, -0.05, 0);
+        createCube(1. + ((i + 1) * (0.05 * neg)) + offset, 0.1, 1 + ((i + 1) * (0.05 * neg)) + offset, 0, 0, 0, 0);
+    }
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef((1 + 0.25) / 2, -0.2, 0);
+    glPushMatrix();
+    glScaled(0.2, 0.2, 0.2);
+    createSphere(1, 20, 20);
 
-        glPopMatrix();
-        glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
 //        glTranslatef(0,-0.5,0);
 //        createCube(1.5,0.1,1,0,0,0,0);
 //        glTranslatef(0,-0.1,0);
@@ -1122,43 +1122,110 @@ void ShapeCreator::imageLoader() {
 
 }
 
-Model getOBJinfo(std::string fp)
-{
+
+bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vertices,
+                               std::vector <glm::vec2> &out_uvs,
+                               std::vector <glm::vec3> &out_normals) {
+
+    string cp = std::experimental::filesystem::current_path();
+    fp = cp.append(fp);
+
+    const char *path = fp.c_str();
+
+    FILE *file = fopen(path, "r");
+    if (file == NULL) {
+        qDebug()<<"Impossible to open the file !";
+        return false;
+    }
+    qDebug()<<"File opened";
+
+    while (1) {
+
+        char lineHeader[128];
+        // read the first word of the line
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break;
+
+        if (strcmp(lineHeader, "v") == 0) {
+            glm::vec3 vertex;
+            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+            temp_vertices.push_back(vertex);
+        } else if (strcmp(lineHeader, "vt") == 0) {
+            glm::vec2 uv;
+            fscanf(file, "%f %f\n", &uv.x, &uv.y);
+            temp_uvs.push_back(uv);
+
+
+        } else if (strcmp(lineHeader, "vn") == 0) {
+            glm::vec3 normal;
+            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+            temp_normals.push_back(normal);
+        } else if (strcmp(lineHeader, "f") == 0) {
+            std::string vertex1, vertex2, vertex3;
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2],
+                                 &normalIndex[2]);
+            if (matches != 9) {
+                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+                return false;
+            }
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]);
+            uvIndices.push_back(uvIndex[0]);
+            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(uvIndex[2]);
+            normalIndices.push_back(normalIndex[0]);
+            normalIndices.push_back(normalIndex[1]);
+            normalIndices.push_back(normalIndex[2]);
+        }
+    }
+
+    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+        unsigned int vertexIndex = vertexIndices[i];
+        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+        out_vertices.push_back(vertex);
+
+    }
+    return true;
+}
+
+ShapeCreator::Model ShapeCreator::getOBJinfo(string fp) {
     // 2
-    Model model = {0};
+    ShapeCreator::Model model = {0};
 
     // 3
     // Open OBJ file
-    ifstream inOBJ;
+    std::ifstream inOBJ;
     inOBJ.open(fp);
-    if(!inOBJ.good())
-    {
-        cout << "ERROR OPENING OBJ FILE" << endl;
+    if (!inOBJ.good()) {
+        std::cout << "ERROR OPENING OBJ FILE" << endl;
         exit(1);
     }
 
     // 4
     // Read OBJ file
-    while(!inOBJ.eof())
-    {
+    while (!inOBJ.eof()) {
         // 5
         std::string line;
         getline(inOBJ, line);
-        std::string type = line.substr(0,2);
+        std::string type = line.substr(0, 2);
 
         // 6
-        if(type.compare("v ") == 0)
+        if (type.compare("v ") == 0)
             model.positions++;
-        else if(type.compare("vt") == 0)
+        else if (type.compare("vt") == 0)
             model.texels++;
-        else if(type.compare("vn") == 0)
+        else if (type.compare("vn") == 0)
             model.normals++;
-        else if(type.compare("f ") == 0)
+        else if (type.compare("f ") == 0)
             model.faces++;
     }
 
     // 7
-    model.vertices = model.faces*3;
+    model.vertices = model.faces * 3;
 
     // 8
     // Close OBJ file
@@ -1166,4 +1233,102 @@ Model getOBJinfo(std::string fp)
 
     // 9
     return model;
+}
+
+void
+ShapeCreator::extractOBJdata(string fp, float positions[][3], float texels[][2], float normals[][3],
+                             int faces[][9]) {
+    // Counters
+    int p = 0;
+    int t = 0;
+    int n = 0;
+    int f = 0;
+
+    qDebug() << 1;
+    // Open OBJ file
+    ifstream inOBJ;
+    inOBJ.open(fp);
+    if (!inOBJ.good()) {
+        cout << "ERROR OPENING OBJ FILE" << endl;
+        exit(1);
+    }
+    qDebug() << 2;
+
+    // Read OBJ file
+    while (!inOBJ.eof()) {
+        string line;
+        getline(inOBJ, line);
+        string type = line.substr(0, 2);
+//        qDebug() << "line"  ;
+//        std::cout << "Current path is " << type << '\n';
+
+        // Positions
+        if (type.compare("v ") == 0) {
+            // 1
+            // Copy line for parsing
+            char *l = new char[line.size() + 1];
+            memcpy(l, line.c_str(), line.size() + 1);
+//            qDebug() << "l" ;
+
+            // 2
+            // Extract tokens
+            strtok(l, " ");
+            for (int i = 0; i < 3; i++)
+                positions[p][i] = atof(strtok(NULL, " "));
+
+            // 3
+//            qDebug() << 1 ;
+//            qDebug() << l ;
+
+            // Wrap up
+            delete[] l;
+            p++;
+        }
+
+// Texels
+        else if (type.compare("vt") == 0) {
+            char *l = new char[line.size() + 1];
+            memcpy(l, line.c_str(), line.size() + 1);
+
+            strtok(l, " ");
+            for (int i = 0; i < 2; i++)
+                texels[t][i] = atof(strtok(NULL, " "));
+
+            delete[] l;
+            t++;
+        }
+
+// Normals
+        else if (type.compare("vn") == 0) {
+            char *l = new char[line.size() + 1];
+            memcpy(l, line.c_str(), line.size() + 1);
+
+//            qDebug() << l ;
+            strtok(l, " ");
+            for (int i = 0; i < 3; i++) {
+//                qDebug() << normals[n][i]<< n << i;
+                normals[n][i] = atof(strtok(NULL, " "));
+            }
+//            qDebug()<< "out";
+            delete[] l;
+            n++;
+        }
+
+// Faces
+        else if (type.compare("f ") == 0) {
+            char *l = new char[line.size() + 1];
+            memcpy(l, line.c_str(), line.size() + 1);
+
+            strtok(l, " ");
+            for (int i = 0; i < 9; i++) {
+                faces[f][i] = atof(strtok(NULL, " /"));
+                qDebug() << f << faces[f][i];
+            }
+            delete[] l;
+            f++;
+        }
+    }
+
+    // Close OBJ file
+    inOBJ.close();
 }

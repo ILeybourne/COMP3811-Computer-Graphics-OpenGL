@@ -2,6 +2,7 @@
 #define SCENE_SceneWidget_H
 
 #include <QGLWidget>
+#include <QGLFunctions>
 #include <cstdio>
 #include <ctime>
 #include <cmath>
@@ -16,8 +17,14 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "ShapeCreator.h"
+//#include <filesystem>
+#include <experimental/filesystem>
 
-class SceneWidget : public QGLWidget { //
+
+using namespace std;
+
+
+class SceneWidget : public QGLWidget, protected QGLFunctions  { //
 public:
     SceneWidget(QWidget *parent);
 
@@ -51,6 +58,18 @@ protected:
     float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] - radius};
     bool jumping = false;
     bool falling = false;
+
+    float applePositions2[48519];
+
+    ShapeCreator::Model m;
+
+    GLuint triangleVBO;
+    GLuint vertexbuffer;
+
+    GLuint normalbuffer;
+
+
+
 
     float rotateCube = 0;
     GLfloat shadowMatrix1[16];
