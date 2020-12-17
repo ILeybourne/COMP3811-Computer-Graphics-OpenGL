@@ -30,6 +30,9 @@ ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
 // constructor
 
 void ShapeCreator::sky(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+//    glActiveTexture(GL_TEXTURE0);
+//    glActiveTexture(GL_TEXTURE1);
+
     glBindTexture(GL_TEXTURE_2D, 0);
 ////   North Wall White
     //Coordinates
@@ -56,6 +59,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
     glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
+//    glActiveTexture(GL_TEXTURE0);
 
 //    for (float i = v1[0]; i < v3[0]; i += tessXSize) {
 //        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
@@ -965,12 +969,10 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
 //    stbi_image_free(data);
 //    glDisable(GL_TEXTURE_2D);
 //}
-
-void ShapeCreator::imageLoader() {
+void ShapeCreator::imageLoader(QStringList sImage) {
     glEnable(GL_TEXTURE_2D);
 
     QString skyboxStrings[6] = {
-//            "./textureinternet/wall.jpg"
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
@@ -978,13 +980,19 @@ void ShapeCreator::imageLoader() {
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
     };
-    numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
+
+//    numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
+//    numberOfTextures = 6;
+    numberOfTextures = sImage.size();
+    qDebug() << numberOfTextures;
+//    qDebug() <<sizeof(sImage) << sizeof(sImage[0])<< numberOfTextures;
+
 //    qDebug() << numberOfTextures;
     int nChannels[numberOfTextures];
-    glGenTextures(6, MyTexture);
+    glGenTextures(numberOfTextures, MyTexture);
 
     for (int i = 0; i < numberOfTextures; i++) {
-        p_qimage.push_back(QImage(skyboxStrings[i]));
+        p_qimage.push_back(QImage(sImage[i]));
 //        qDebug() << p_qimage[i].isNull() << "null?";
         imageWidth[i] = p_qimage[i].width();
         imageHeight[i] = p_qimage[i].height();
@@ -992,7 +1000,7 @@ void ShapeCreator::imageLoader() {
         imageSize[i] = imageWidth[i] * imageHeight[i];
 
         nChannels[i] = 3;
-        if (skyboxStrings[i].endsWith("png")) {
+        if (sImage[i].endsWith("png")) {
 //            qDebug() << "4 chan";
             nChannels[i] = 4;
         }
@@ -1041,10 +1049,9 @@ void ShapeCreator::imageLoader() {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         //    glActiveTexture(GL_TEXTURE0);
+
         GLint format;
         if (nChannels[i] == 3) {
-
-
             format = GL_RGB;
             glTexImage2D(GL_TEXTURE_2D,
                          0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
@@ -1055,15 +1062,12 @@ void ShapeCreator::imageLoader() {
                          0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
                          image1d4Chan);
         }
-
     }
 }
 
-
-bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vertices,
-                               std::vector <glm::vec2> &out_uvs,
-                               std::vector <glm::vec3> &out_normals) {
-
+bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
+                              std::vector<float> &out_uvs,
+                              std::vector<float> &out_normals) {
     string cp = std::experimental::filesystem::current_path();
     fp = cp.append(fp);
 
@@ -1071,33 +1075,45 @@ bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vert
 
     FILE *file = fopen(path, "r");
     if (file == NULL) {
-        qDebug()<<"Impossible to open the file !";
+        qDebug() << "Impossible to open the file !";
         return false;
     }
-    qDebug()<<"File opened";
+    qDebug() << "File opened";
 
     while (1) {
 
         char lineHeader[128];
-        // read the first word of the line
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF)
             break;
 
         if (strcmp(lineHeader, "v") == 0) {
             glm::vec3 vertex;
-            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-            temp_vertices.push_back(vertex);
-
+            float vertex2x;
+            float vertex2y;
+            float vertex2z;
+            fscanf(file, "%f %f %f\n", &vertex2x, &vertex2y, &vertex2z);
+            out_vertices.push_back(vertex2x);
+            out_vertices.push_back(vertex2y);
+            out_vertices.push_back(vertex2z);
         } else if (strcmp(lineHeader, "vt") == 0) {
-            glm::vec2 uv;
-            fscanf(file, "%f %f\n", &uv.x, &uv.y);
-            temp_uvs.push_back(uv);
+            float uv2U;
+            float uv2V;
+//            fscanf(file, "%f %f\n", &uv.x, &uv.y);
+            fscanf(file, "%f %f\n", &uv2U, &uv2V);
+//            temp_uvs.push_back(uv);
+            temp_uvs2.push_back(uv2U);
+            temp_uvs2.push_back(uv2V);
 
         } else if (strcmp(lineHeader, "vn") == 0) {
-            glm::vec3 normal;
-            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-            temp_normals.push_back(normal);
+            float normal2x;
+            float normal2y;
+            float normal2z;
+//            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+            fscanf(file, "%f %f %f\n", &normal2x, &normal2y, &normal2z);
+            temp_normals2.push_back(normal2x);
+            temp_normals2.push_back(normal2y);
+            temp_normals2.push_back(normal2z);
 
         } else if (strcmp(lineHeader, "f") == 0) {
             std::string vertex1, vertex2, vertex3;
@@ -1105,13 +1121,15 @@ bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vert
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
                                  &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2],
                                  &normalIndex[2]);
+
             if (matches != 9) {
                 printf("File can't be read by our simple parser : ( Try exporting with other options\n");
                 return false;
             }
-            vertexIndices.push_back(vertexIndex[0]);
-            vertexIndices.push_back(vertexIndex[1]);
-            vertexIndices.push_back(vertexIndex[2]);
+
+            vertexIndices.push_back(vertexIndex[0] - 1);
+            vertexIndices.push_back(vertexIndex[1] - 1);
+            vertexIndices.push_back(vertexIndex[2] - 1);
             uvIndices.push_back(uvIndex[0]);
             uvIndices.push_back(uvIndex[1]);
             uvIndices.push_back(uvIndex[2]);
@@ -1119,13 +1137,142 @@ bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vert
             normalIndices.push_back(normalIndex[1]);
             normalIndices.push_back(normalIndex[2]);
         }
-    }
-
-    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-        unsigned int vertexIndex = vertexIndices[i];
-        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-        out_vertices.push_back(vertex);
 
     }
+    qDebug() << "Finished loading data";
+
+//    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+//        unsigned int vertexIndex = vertexIndices[i];
+////        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+//        float vertex2x, vertex2y, vertex2z;
+//        vertex2x = temp_vertices2[vertexIndex * 3 + 0];
+//        vertex2y = temp_vertices2[vertexIndex * 3 + 1];
+//        vertex2z = temp_vertices2[vertexIndex * 3 + 2];
+//        out_vertices.push_back(vertex2x);
+//        out_vertices.push_back(vertex2y);
+//        out_vertices.push_back(vertex2z);
+//    }
     return true;
 }
+
+
+//bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
+//                               std::vector <std::array<float, 2>> &out_uvs,
+//                               std::vector <std::array<float, 3>> &out_normals) {
+//
+//    string cp = std::experimental::filesystem::current_path();
+//    fp = cp.append(fp);
+//
+//    const char *path = fp.c_str();
+//
+//    FILE *file = fopen(path, "r");
+//    if (file == NULL) {
+//        qDebug() << "Impossible to open the file !";
+//        return false;
+//    }
+//    qDebug() << "File opened";
+//
+//    while (1) {
+//
+//        char lineHeader[128];
+//        // read the first word of the line
+//        int res = fscanf(file, "%s", lineHeader);
+//        if (res == EOF)
+//            break;
+//
+//        if (strcmp(lineHeader, "v") == 0) {
+//            glm::vec3 vertex;
+//            GLfloat vertex2x;
+//            GLfloat vertex2y;
+//            GLfloat vertex2z;
+////            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
+//            fscanf(file, "%f %f %f\n", &vertex2x, &vertex2y, &vertex2z);
+////            qDebug() << vertex2[0] << vertex2[1] << vertex2[2];
+//            temp_vertices.push_back(vertex);
+//            temp_vertices2.push_back(vertex2x);
+//            temp_vertices2.push_back(vertex2y);
+//            temp_vertices2.push_back(vertex2z);
+//
+//
+//        } else if (strcmp(lineHeader, "vt") == 0) {
+//            glm::vec2 uv;
+//            std::array<float, 2> uv2;
+////            fscanf(file, "%f %f\n", &uv.x, &uv.y);
+//            fscanf(file, "%f %f\n", &uv2[0], &uv2[1]);
+////            temp_uvs.push_back(uv);
+//            temp_uvs2.push_back(uv2);
+//
+//        } else if (strcmp(lineHeader, "vn") == 0) {
+//            glm::vec3 normal;
+//            std::array<float, 3> normal2;
+////            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
+//            fscanf(file, "%f %f %f\n", &normal2[0], &normal2[1], &normal2[2]);
+////            temp_normals.push_back(normal);
+//            temp_normals2.push_back(normal2);
+//
+//        } else if (strcmp(lineHeader, "f") == 0) {
+//            std::string vertex1, vertex2, vertex3;
+//            GLuint vertexIndex[3], uvIndex[3], normalIndex[3];
+//            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+//                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2],
+//                                 &normalIndex[2]);
+//
+//            if (matches != 9) {
+//                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+//                return false;
+//            }
+//
+//            vertexIndices.push_back(vertexIndex[0]);
+//            vertexIndices.push_back(vertexIndex[1]);
+//            vertexIndices.push_back(vertexIndex[2]);
+//            uvIndices.push_back(uvIndex[0]);
+//            uvIndices.push_back(uvIndex[1]);
+//            uvIndices.push_back(uvIndex[2]);
+//            normalIndices.push_back(normalIndex[0]);
+//            normalIndices.push_back(normalIndex[1]);
+//            normalIndices.push_back(normalIndex[2]);
+//        }
+//    }
+//
+//
+////    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+////        unsigned int vertexIndex = vertexIndices[i];
+//////        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
+////        std::array<float, 3> vertex2;
+////        vertex2[0] = temp_vertices2[vertexIndex - 1][0];
+////        vertex2[1] = temp_vertices2[vertexIndex - 1][1];
+////        vertex2[2] = temp_vertices2[vertexIndex - 1][2];
+////        out_vertices.push_back(vertex2);
+////    }
+//
+//
+//
+////    static constexpr int vect3Size = out_vertices.size();
+//
+////    std::copy(v.begin(), v.end(), arr);
+////    glm::vec3 *vector3Array = &out_vertices[0];
+//
+////    for (int i = 0; i <; ++i) {
+////
+////    }
+//
+//    for (unsigned int i = 0; i < uvIndices.size(); i++) {
+//        unsigned int uvIndex = uvIndices[i];
+////        glm::vec2 uv = temp_uvs[uvIndex - 1];
+//        std::array<float, 2> uv2;
+//        uv2[0] = temp_uvs2[uvIndex - 1][0];
+//        uv2[1] = temp_uvs2[uvIndex - 1][1];
+//        out_uvs.push_back(uv2);
+//    }
+//
+//    for (unsigned int i = 0; i < normalIndices.size(); i++) {
+//        unsigned int normalIndex = normalIndices[i];
+////        glm::vec3 normal = temp_normals[normalIndex - 1];
+//        std::array<float, 3> normal2;
+//        normal2[0] = temp_normals2[normalIndex - 1][0];
+//        normal2[1] = temp_normals2[normalIndex - 1][1];
+//        normal2[2] = temp_normals2[normalIndex - 1][2];
+//        out_normals.push_back(normal2);
+//    }
+//    return true;
+//}

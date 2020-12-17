@@ -17,7 +17,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "ShapeCreator.h"
-//#include <filesystem>
 #include <experimental/filesystem>
 
 
@@ -65,17 +64,16 @@ protected:
 
     GLuint triangleVBO;
     GLuint vertexbuffer;
-
     GLuint normalbuffer;
+    GLuint uvbuffer;
 
-
-
+    long unsigned int appleVertNumber;
+    float vertexFloatArray[48519]; // Update if vert number updates
 
     float rotateCube = 0;
     GLfloat shadowMatrix1[16];
 
     ShapeCreator *shapeCreator;
-
 private:
     void walls();
 }; // class GLPolygonWidget

@@ -52,7 +52,7 @@ public:
 
     void loadTextures();
 
-    void imageLoader();
+    void imageLoader(QStringList sImage);
 
     void drawTextPlane(float w, float h);
 
@@ -72,19 +72,34 @@ public:
 
     Model getOBJinfo(std::string fp);
 
+    bool getOBJData(std::string fp,
+                    std::vector<float> &out_vertices,
+                    std::vector<float>
+                    &out_uvs,
+                    std::vector<float> &out_normals
+    );
 
-    std::vector< unsigned int > vertexIndices, uvIndices, normalIndices;
-    std::vector< glm::vec3 > temp_vertices;
-    std::vector< glm::vec2 > temp_uvs;
+    std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
+    std::vector <glm::vec3> temp_vertices;
+    std::vector <glm::vec2> temp_uvs;
+    std::vector <glm::vec3> temp_normals;
+    std::vector<float> temp_vertices2;
+    std::vector <float> temp_uvs2;
+    std::vector <float> temp_normals2;
 
-    std::vector< glm::vec3 > temp_normals;
 
-    std::vector< glm::vec3 > vertices;
-    std::vector< glm::vec2 > uvs;
-    std::vector< glm::vec3 > normals; // Won't be used at the moment.
-    bool getOBJinfo2(std::string fp, std::vector <glm::vec3> &out_vertices,
-                     std::vector <glm::vec2> &out_uvs,
-                     std::vector <glm::vec3> &out_normals);
+    std::vector <std::array<float, 3>> vertices;
+    std::vector <std::array<float, 2>> uvs;
+    std::vector <std::array<float, 3>> normals; // Won't be used at the moment.
+
+    std::vector<GLfloat> vertices3;
+    std::vector<GLfloat> uvs3;
+    std::vector<GLfloat> normals3; // Won't be used at the moment.
+
+
+    bool getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
+                     std::vector <std::array<float, 2>> &out_uvs,
+                     std::vector <std::array<float, 3>> &out_normals);
 
 //
 //    Model apple = {0};
@@ -94,17 +109,11 @@ public:
 //    apple.normals = 1292;
 //    apple.faces = 3185;
 
-    static constexpr  int appleVertices = 9555;
-    static constexpr  int applePositions = 3088;
-    static constexpr  int appleTexels = 3131;
-    static constexpr  int appleNormals = 1292;
-    static constexpr  int appleFaces = 3185;
-
-//    float
-//    float applePositions[3088]= {};
-
-    void extractOBJdata(string fp, float positions[][3], float texels[][2], float normals[][3], int faces[][9]);
-
+    static constexpr int appleVertices = 9555;
+    static constexpr int applePositions = 3088;
+    static constexpr int appleTexels = 3131;
+    static constexpr int appleNormals = 1292;
+    static constexpr int appleFaces = 3185;
 
     QWidget parent;
     static constexpr int planeWidth = 10;
@@ -115,11 +124,11 @@ public:
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
 
 
-    static constexpr int textNum = 6;
+    static constexpr int textNum = 7;
     int numberOfTextures;
-    //    GLubyte image[N_X_IMAGE][N_Y_IMAGE][N_COLOR];
     QList <QImage> p_qimage;
-    GLuint MyTexture[6];
+    GLuint MyTexture[7];
+//    GLuint appleTexture[1];
     GLuint singText;
 
     unsigned int imageWidth[textNum];
