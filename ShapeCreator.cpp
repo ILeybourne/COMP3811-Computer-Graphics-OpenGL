@@ -1187,6 +1187,7 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
 void ShapeCreator::drawTexture(float x, float y, float w, float h,
                                float tx, float ty, float tw, float th) {
     glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
+//    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
 
     GLfloat verts[] = {x, y, x + w, y, x + w, y + h, x, y + h};
     GLfloat tex_coords[] = {tx, ty, tx + tw, ty, tx + tw, ty + th, tx, ty + th};
