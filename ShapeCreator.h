@@ -96,7 +96,7 @@ public:
     std::vector<GLfloat> uvs3;
     std::vector<GLfloat> normals3; // Won't be used at the moment.
     void drawTexture(float x, float y, float w, float h,
-                              float tx, float ty, float tw, float th);
+                              float tx, float ty, float tw, float th, bool blend);
 
     bool getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
                      std::vector <std::array<float, 2>> &out_uvs,

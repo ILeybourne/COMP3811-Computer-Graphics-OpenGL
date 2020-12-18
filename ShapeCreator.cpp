@@ -35,18 +35,18 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
     glBindTexture(GL_TEXTURE_2D, 0);
 ////   North Wall White
+    glColor3f(1.0, 1.0, 1.0);
     //Coordinates
-    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     //Normal of rect
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
+
     glBindTexture(GL_TEXTURE_2D, MyTexture[0]);
     glColor3f(1.0, 1.0, 1.0);
-//    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
-//    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -75,10 +75,10 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     //East Wall Red
 //    glColor3f(1.0, 0.0, 0.0);
     //Coordinates
-    v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    v4 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v4 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v1 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
@@ -111,19 +111,19 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 //            glEnd();
 //        }
 //    }
-//    South Wall Green
-//    glColor3f(1.0, 1.0, 1.0);
+////    South Wall Green
     //Coordinates
-    v1 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v4 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v2 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v3 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v4 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
-
     glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
     glColor3f(1.0, 1.0, 1.0);
+//    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
+//    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -136,14 +136,16 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
     glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
+////
+
 
     //West Wall Blue
 //    glColor3f(0.0, 0.0, 1.0);
     //Coordinates
-    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v3 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v2 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
@@ -165,10 +167,10 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
     //Purple Ceil
 //    glColor3f(1.0, 0.0, 1.0);
-    v2 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    v1 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v2 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
@@ -190,10 +192,10 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
     //Yellow floor
 //    glColor3f(1.0, 1.0, 0.0);
-    v3 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v4 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v3 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
@@ -217,18 +219,19 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 void ShapeCreator::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glBindTexture(GL_TEXTURE_2D, 0);
 ////   North Wall White
+    glColor3f(1.0, 1.0, 1.0);
     //Coordinates
-    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v4 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    glm::vec3 v2 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3  = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+
     //Normal of rect
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
     float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    glColor3f(1.0, 1.0, 1.0);
     for (float i = v1[0]; i < v3[0]; i += tessXSize) {
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
@@ -257,26 +260,27 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(v1[0], j, k);
-            glVertex3f(v2[0], j + tessYSize, k);
-            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
             glVertex3f(v4[0], j, k + tessZSize);
+            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+            glVertex3f(v2[0], j + tessYSize, k);
             glEnd();
         }
     }
 ////    South Wall Green
     glColor3f(0.0, 1.0, 0.0);
     //Coordinates
-    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-
+    v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v4 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v2 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
+//    glBindTexture(GL_TEXTURE_2D, MyTexture[0]);
+    glColor3f(1.0, 1.0, 1.0);
     for (float i = v1[0]; i < v3[0]; i += tessXSize) {
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
@@ -287,6 +291,9 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
             glEnd();
         }
     }
+////
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     //West Wall Blue
     glColor3f(0.0, 0.0, 1.0);
@@ -305,9 +312,9 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(v1[0], j, k);
-            glVertex3f(v4[0], j, k + tessZSize);
-            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
             glVertex3f(v2[0], j + tessYSize, k);
+            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+            glVertex3f(v4[0], j, k + tessZSize);
             glEnd();
         }
     }
@@ -328,9 +335,9 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-            glVertex3f(i + tessXSize, v2[1], k);
-            glVertex3f(i, v3[1], k);
             glVertex3f(i, v4[1], k + tessZSize);
+            glVertex3f(i, v3[1], k);
+            glVertex3f(i + tessXSize, v2[1], k);
             glEnd();
         }
     }
@@ -351,9 +358,9 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-            glVertex3f(i, v4[1], k + tessZSize);
-            glVertex3f(i, v3[1], k);
             glVertex3f(i + tessXSize, v2[1], k);
+            glVertex3f(i, v3[1], k);
+            glVertex3f(i, v4[1], k + tessZSize);
             glEnd();
         }
     }
@@ -365,10 +372,10 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
 
 ////   North Wall White
     //Coordinates
-    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {1.0 * width / 2, 0.0 * height,  -1.0 * depth / 2};
+    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height,  -1.0 * depth / 2};
+    glm::vec3 v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     //Normal of rect
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
@@ -380,9 +387,9 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i, j, v1[2]);
-            glVertex3f(i + tessXSize, j, v2[2]);
-            glVertex3f(i + tessXSize, j + tessYSize, v3[2]);
             glVertex3f(i, j + tessYSize, v4[2]);
+            glVertex3f(i + tessXSize, j + tessYSize, v3[2]);
+            glVertex3f(i + tessXSize, j, v2[2]);
             glEnd();
         }
     }
@@ -391,12 +398,12 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
     glColor3f(1.0, 0.0, 0.0);
     //Coordinates
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v2 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v4 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-    glNormal3fv(glm::value_ptr(normal));
+    glNormal3fv(glm::value_ptr(-normal));
 
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
     float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
@@ -414,10 +421,10 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
     //South Wall Green
     glColor3f(0.0, 1.0, 0.0);
     //Coordinates
-    v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 0.0 * height,1.0 * depth / 2};
+    v4 = {-1.0 * width / 2, 1.0 * height,1.0 * depth / 2};
+    v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+    v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
@@ -453,9 +460,9 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
             glVertex3f(v1[0], j, k);
-            glVertex3f(v2[0], j + tessYSize, k);
-            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
             glVertex3f(v4[0], j, k + tessZSize);
+            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+            glVertex3f(v2[0], j + tessYSize, k);
             glEnd();
         }
     }
@@ -499,9 +506,9 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-            glVertex3f(i + tessXSize, v2[1], k);
-            glVertex3f(i, v3[1], k);
             glVertex3f(i, v4[1], k + tessZSize);
+            glVertex3f(i, v3[1], k);
+            glVertex3f(i + tessXSize, v2[1], k);
             glEnd();
         }
     }
@@ -768,14 +775,10 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 0.0f);glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 1.0f);glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 1.0f);glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
     glEnd();
 //    glBindTexture(GL_TEXTURE_2D, 0);
 //    glDisable(GL_TEXTURE_2D);
@@ -790,9 +793,9 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glBegin(GL_POLYGON);
     glNormal3f(1, 0, 0);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
-    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
-    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
     glEnd();
 
     //South Wall Green
@@ -803,9 +806,9 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, -1);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
-    glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
-    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glEnd();
 
     //West Wall Blue
@@ -816,9 +819,9 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glBegin(GL_POLYGON);
     glNormal3f(-1, 0, 0);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
-    glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
-    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
+    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glEnd();
 
     //Purple Ceil
@@ -829,9 +832,9 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glBegin(GL_POLYGON);
     glNormal3f(0, 1, 0);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
-    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
-    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
     glEnd();
 
     //Yellow floor
@@ -841,9 +844,9 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glBegin(GL_POLYGON);
     glNormal3f(0, -1, 0);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
-    glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
-    glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
+    glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glEnd();
 
 }
@@ -858,6 +861,7 @@ void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
 }
 
 void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
+    //TODO Clean up outside also visible with culling. Triangles in both directions?
     glBindTexture(GL_TEXTURE_2D, 0);
 
     int numberOfSide = 100;
@@ -884,6 +888,13 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
             glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
             if (i % 2 == 0) {
                 normal = -normal;
+                glNormal3fv(glm::value_ptr(normal));
+                glBegin(GL_POLYGON);
+                glVertex3f(v1[0], v1[1], v1[2]);
+                glVertex3f(v4[0], v4[1], v4[2]);
+                glVertex3f(v3[0], v3[1], v3[2]);
+                glVertex3f(v2[0], v2[1], v2[2]);
+                glEnd();
             }
             glNormal3fv(glm::value_ptr(normal));
             glBegin(GL_POLYGON);
@@ -900,6 +911,8 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
             v2 = glm::vec3(xrotationMat * glm::vec4(v2, 1.0));
             v3 = glm::vec3(xrotationMat * glm::vec4(v3, 1.0));
             v4 = glm::vec3(xrotationMat * glm::vec4(v4, 1.0));
+
+
 
 //            if (i != 0 && j >= 1) {
             glm::mat4 transform(1);
@@ -982,7 +995,7 @@ void ShapeCreator::imageLoader(QStringList sImage) {
     int nChannels[numberOfTextures];
     glGenTextures(numberOfTextures, MyTexture);
 
-    qDebug()<< "generation";
+    qDebug() << "generation";
 
     for (int i = 0; i < numberOfTextures; i++) {
         p_qimage.push_back(QImage(sImage[i]));
@@ -1178,33 +1191,39 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
 }
 
 void ShapeCreator::drawTexture(float x, float y, float w, float h,
-                               float tx, float ty, float tw, float th) {
-    glBindTexture(GL_TEXTURE_2D, MyTexture[7]);
+                               float tx, float ty, float tw, float th , bool blend) {
+    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
 //    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor3f(1.0,1.0,1.0);
+    if (blend){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    glColor3f(1.0, 1.0, 1.0);
     GLfloat verts[] = {x, y, x + w, y, x + w, y + h, x, y + h};
     GLfloat tex_coords[] = {tx, ty, tx + tw, ty, tx + tw, ty + th, tx, ty + th};
 
     glm::vec3 v1 = {x, y, 0};
-    glm::vec3 v3 = {x + w, y, 0};
-    glm::vec3 v2 = {x, y + h, 0};
-    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-    ////TODO Normals for screen?
-    GLfloat normCoords[] = {normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z};
+    glm::vec3 v2 = {x + w, y, 0};
+    glm::vec3 v3 = {x, y + h, 0};
 
-    glNormal3fv(glm::value_ptr(normal));
+    ////TODO Normals for screen? Normals Disable atm since screen emits light
+//    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+//    GLfloat normCoords[] = {normal.x, normal.y, normal.z, normal.x, normal.y, normal.z, normal.x, normal.y, normal.z,
+//                            normal.x, normal.y, normal.z, normal.x, normal.y, normal.z, normal.x, normal.y, normal.z};
+//    glNormal3fv(glm::value_ptr(normal));
+//    glEnableClientState(GL_NORMAL_ARRAY);
+
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, verts);
     glTexCoordPointer(2, GL_FLOAT, 0, tex_coords);
-    glNormalPointer(GL_FLOAT, 0, normCoords);
+//    glNormalPointer(GL_FLOAT, 0, normCoords);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
+//    glDisableClientState(GL_NORMAL_ARRAY);
 
-    glDisable(GL_BLEND);
+    if (blend){
+        glDisable(GL_BLEND);
+    }
 }

@@ -18,12 +18,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "ShapeCreator.h"
 #include <experimental/filesystem>
+#include "limits.h"
 
 
 using namespace std;
 
 
-class SceneWidget : public QGLWidget, protected QGLFunctions  { //
+class SceneWidget : public QGLWidget, protected QGLFunctions { //
 public:
     SceneWidget(QWidget *parent);
 
@@ -43,18 +44,18 @@ protected:
 
     float *getShadowMatrix(float p[4], float l[4]);
 
-    double frame;
+    unsigned long long frame;
     float cameraPosition[3] = {0, 5, 0};
     float light0Position[4] = {0, 15, 500, 1};
-    float light1Position[4] = {8, 3, 5, 1};
+    float light1Position[4] = {5, 1, 0, 1};
     float cameraUp[3] = {0, 6, 0};
     float fov = 90;
     float radius = 1;
-    float turningNumber = 0;
+    float turningNumber = M_PI;
     float yaw = M_PI_2;
     float camX = sin(turningNumber) * radius;
     float camZ = cos(turningNumber) * radius;
-    float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] - radius};
+    float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] + radius};
     bool jumping = false;
     bool falling = false;
 

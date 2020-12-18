@@ -36,13 +36,15 @@ SceneWidget::SceneWidget(QWidget *parent)
 
 // called when OpenGL context is set up
 void SceneWidget::initializeGL() { // initializeGL()
-    //Enable anti-alias
+    ////Enable anti-alias
     glEnable(GL_MULTISAMPLE);
-    //Normalize normals upon transformations
+    ////Normalize normals upon transformations (especially scaling)
     glEnable(GL_NORMALIZE);
-    // set the widget background colour
+    ////Set Identitity matrix
+    glLoadIdentity();
+    ////Set Background colour
     glClearColor(0.8, 0.3, 0.3, 0.0);
-
+    ////Access some more GL Functions via QT //TODO ?
     initializeGLFunctions();
 
     ////Fog
@@ -55,30 +57,24 @@ void SceneWidget::initializeGL() { // initializeGL()
 //    glFogf(GL_FOG_START,10);
 //    glFogf(GL_FOG_END,100);
 
-//    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
-//    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
-
-    ////Light parameters
-    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
-    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
-    glLoadIdentity();
-    GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
-    GLfloat shininess2[] = {100};
-
     ////Material parameters
     glEnable(GL_COLOR_MATERIAL);
+//    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
+//    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
 //    glMaterialfv(GL_FRONT, GL_AMBIENT, mambient);
 //    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
+    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
+    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
+    GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
+    GLfloat shininess2[] = {100};
     glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
     glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
-
 //    GLfloat shininess2[] = {50};
 //    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
-
     GLfloat shininess[] = {100.0};
     GLfloat shininess3[] = {5.0};
 
-
+    ////Light parameters
     ////Light 0
     GLfloat light_0_ambient[] = {0.3, 0.2, 0.25, 0.0};
     GLfloat light_0_diffuse[] = {1.0, 1.0, 1.0, 0.0};
@@ -90,7 +86,6 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT0, GL_SHININESS, shininess3);
     glEnable(GL_LIGHT0);
-
 
     ////Light 1
     GLfloat light_1_ambient[] = {0.1, 0.1, 0.1, 0.0};
@@ -105,35 +100,17 @@ void SceneWidget::initializeGL() { // initializeGL()
     glEnable(GL_LIGHT1);
 
     glShadeModel(GL_SMOOTH);
-//    glLightModel(GL_LIGHT_MODEL_AMBIENT, )
     glEnable(GL_LIGHTING);
 
-    glEnable(GL_CULL_FACE);
-
     ////Cull back of faces
+    glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
 
     ////Load Apple pc info
     bool res = shapeCreator->getOBJData("/AppleIIe4.obj", shapeCreator->vertices3, shapeCreator->uvs3,
                                         shapeCreator->normals3);
-    qDebug() << res;
-
-    qDebug() << shapeCreator->vertices3.size() << shapeCreator->uvs3.size();
-
-//    appleVertNumber = shapeCreator->vertices.size() * 3;
-//    static const long unsigned int appleVertNumberConst = appleVertNumber;
-//    qDebug() << vertSize3;
-//    vertexFloatArray[appleVertNumberConst];
-//    for (int i = 0; i < shapeCreator->vertices.size(); i++) {
-//        vertexFloatArray[i * 3 + 0] = shapeCreator->vertices[i][0];
-//        vertexFloatArray[i * 3 + 1] = shapeCreator->vertices[i][1];
-//        vertexFloatArray[i * 3 + 2] = shapeCreator->vertices[i][2];
-//    }
-
 
     QStringList textureStrings = {
-//            "./textureinternet/wall.jpg"
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
@@ -144,35 +121,11 @@ void SceneWidget::initializeGL() { // initializeGL()
             "./textureinternet/mario2.png"
     };
 
-//    QStringList appleTextureString = { "./textureinternet/appleIIe.jpg"};
-
     ////Load textures
     shapeCreator->imageLoader(textureStrings);
 
-//    ////Pc vertex data
-//    glGenBuffers(1, &vertexbuffer);
-//    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-//    glBufferData(GL_ARRAY_BUFFER, shapeCreator->vertices.size() * sizeof(glm::vec3), &shapeCreator->vertices[0],
-//                 GL_STATIC_DRAW);
-//
-////    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
-//    ////Pc uv data
-//    glGenBuffers(1, &uvbuffer);
-//    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-//    glBufferData(GL_ARRAY_BUFFER, shapeCreator->uvs.size() * sizeof(glm::vec2), &shapeCreator->uvs[0],
-//                 GL_STATIC_DRAW);
-//
-//    ////Pc normal data
-//    glGenBuffers(1, &normalbuffer);
-//    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-//    glBufferData(GL_ARRAY_BUFFER, shapeCreator->normals.size() * sizeof(glm::vec3), &shapeCreator->normals[0],
-//                 GL_STATIC_DRAW);
-
-
     ////Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-
-
 } // initializeGL()
 
 // called every time the widget is resized
@@ -183,7 +136,8 @@ void SceneWidget::resizeGL(int w, int h) { // resizeGL()
     glLoadIdentity();
     float width = w;
     float height = h;
-    gluPerspective(this->fov, -width / height, 0.01, sqrt(pow(1000, 2) + pow(1000, 2)) + pow(1000, 2));
+//    glOrtho(30,30,30,30,1,30);
+    gluPerspective(this->fov, width / height, 0.01, sqrt(pow(1000, 2) + pow(1000, 2)) + pow(1000, 2));
 } // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
@@ -196,14 +150,14 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (camX < 0) {
         yaw = (M_PI + yaw);
     }
-    if (key->key() == Qt::Key_E) {
+    if (key->key() == Qt::Key_Q) {
         float newYaw = yaw - M_PI / 2;
         cameraPosition[2] += sin(newYaw) * cameraSpeed;
         cameraDirection[2] += sin(newYaw) * cameraSpeed;
         cameraPosition[0] += cos(newYaw) * cameraSpeed;
         cameraDirection[0] += cos(newYaw) * cameraSpeed;
     }
-    if (key->key() == Qt::Key_Q) {
+    if (key->key() == Qt::Key_E) {
         float newYaw = yaw + M_PI / 2;
         cameraPosition[2] += sin(newYaw) * cameraSpeed;
         cameraDirection[2] += sin(newYaw) * cameraSpeed;
@@ -225,10 +179,10 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         cameraDirection[2] -= sin(yaw) * cameraSpeed;
     }
 
-    if (key->key() == Qt::Key_D) {
+    if (key->key() == Qt::Key_A) {
         turningNumber += turningSpeed;
     }
-    if (key->key() == Qt::Key_A) {
+    if (key->key() == Qt::Key_D) {
         turningNumber -= turningSpeed;
     }
     camX = sin(turningNumber) * radius;
@@ -407,50 +361,55 @@ void SceneWidget::paintGL() { // paintGL()
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_DEPTH_TEST);
 
-//    glPushMatrix();
-//    glTranslatef(0, 9, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//    glPushMatrix();
-//    glTranslatef(0, 11, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    ////Inside
 
-//    glPushMatrix();
-//    glTranslatef(3, 9, 0);
+    ////Lighting testcubes
+    glEnable(GL_LIGHT1);
+    glDisable(GL_LIGHT0);
+    glPushMatrix();
+    glTranslatef(0, 9, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, 11, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
 
-//    glPushMatrix();
-//    glTranslatef(-3, 9, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(3, 9, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
 
-//    glPushMatrix();
-//    glTranslatef(0, 9, 3);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//    glPushMatrix();
-//    glTranslatef(0, 9, -3);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-3, 9, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
 
-//    glPushMatrix();
-//    glTranslatef(0, 5, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, 9, 3);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, 9, -3);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 5, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
 
 //    glPushMatrix();
 //    glTranslatef(0, 2, 0);
 //    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
 //    glPopMatrix();
 
-    glEnable(GL_LIGHT1);
-    glDisable(GL_LIGHT0);
+
     glPushMatrix();
     shapeCreator->walls(50.0, 20.0, 30.0, 50, 50, 50);
     glPopMatrix();
 
+    ////light 1 cube
     glPushMatrix();
     glTranslatef(light1Position[0], light1Position[1], light1Position[2]);
 //    glRotatef(rotateCube,0,1,0);
@@ -501,18 +460,18 @@ void SceneWidget::paintGL() { // paintGL()
     shadowMat[11] = 0.0 - light1Position[3] * ground[2];
     shadowMat[15] = dot - light1Position[3] * ground[3];
 
-//    ////Cubes
-//    glPushMatrix();
-//    glTranslatef(0, 3, 0);
-//    glRotatef(rotateCube, 0, 1, 0);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
-//    glPopMatrix();
-//
-//    glPushMatrix();
-//    glTranslatef(0, 3, 2);
-//    glRotatef(rotateCube + M_PI, 0, 1, 0);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
-//    glPopMatrix();
+    ////Spinning Cubes
+    glPushMatrix();
+    glTranslatef(0, 3, 0);
+    glRotatef(rotateCube, 0, 1, 0);
+    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 3, 2);
+    glRotatef(rotateCube + M_PI, 0, 1, 0);
+    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+    glPopMatrix();
 
 //    ////Figure
 //    glDisable(GL_CULL_FACE);
@@ -554,6 +513,9 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_BLEND);
     glPopMatrix();
 
+    shapeCreator->createSemiCylinder(5,5,3,3,3);
+
+
     glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
     glColor3f(1.0, 1.0, 1.0);
 
@@ -565,26 +527,28 @@ void SceneWidget::paintGL() { // paintGL()
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
 
+
+
     glPushMatrix();
-    glTranslatef(0, 3, 4);
-    glScalef(1,1,1.2);
+    glTranslatef(5, 3, -4);
+    glScalef(1, 1, 1.2);
 
 
     glVertexPointer(3, GL_FLOAT, 0, shapeCreator->vertices3.data());
 //    qDebug() << shapeCreator->uvs3[2] << shapeCreator->uvs3[3];
     glTexCoordPointer(2, GL_FLOAT, 0, shapeCreator->uvs3.data());
 
-    glNormalPointer(GL_FLOAT,0, shapeCreator->normals3.data());
+    glNormalPointer(GL_FLOAT, 0, shapeCreator->normals3.data());
 
 
     glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices3.size() / 3);
 //    glDrawElements(GL_TRIANGLES, shapeCreator->vertexIndices.size(), GL_UNSIGNED_INT, shapeCreator->vertexIndices.data());
     glPushMatrix();
-    glRotatef(180, 0, 1, 0);
-    glRotatef(2, 1, 0, 0);
-    glTranslatef(-2.1, -0.4, 0.61);
-    glScalef(1.8, 1.2, 1);
-    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1);
+//    glRotatef(180, 0, 1, 0);
+    glRotatef(-2, 1, 0, 0);
+    glTranslatef(-1.33 ,-0.4, -0.62);
+    glScalef(1.8, 1.3, 1);
+    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, false);
     glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
     glPopMatrix();
@@ -593,8 +557,6 @@ void SceneWidget::paintGL() { // paintGL()
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
-
-
 
 
 
@@ -714,7 +676,9 @@ void SceneWidget::paintGL() { // paintGL()
 //    duration = ( ( clock() - start )/ (double) CLOCKS_PER_SEC) *24;
 //    glBitmap(64, 64, 0., 0., 60., 60., shapeCreator->image);
 //    glDrawPixels(512,512,GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->image);
-//    frame++;
+    frame++;
+    if (frame == ULLONG_MAX)
+        frame = 0;
 
     glLoadIdentity();
 
