@@ -972,15 +972,6 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
 void ShapeCreator::imageLoader(QStringList sImage) {
     glEnable(GL_TEXTURE_2D);
 
-    QString skyboxStrings[6] = {
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_3_Right-X.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
-    };
-
 //    numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
 //    numberOfTextures = 6;
     numberOfTextures = sImage.size();
@@ -990,6 +981,8 @@ void ShapeCreator::imageLoader(QStringList sImage) {
 //    qDebug() << numberOfTextures;
     int nChannels[numberOfTextures];
     glGenTextures(numberOfTextures, MyTexture);
+
+    qDebug()<< "generation";
 
     for (int i = 0; i < numberOfTextures; i++) {
         p_qimage.push_back(QImage(sImage[i]));
@@ -1001,7 +994,7 @@ void ShapeCreator::imageLoader(QStringList sImage) {
 
         nChannels[i] = 3;
         if (sImage[i].endsWith("png")) {
-//            qDebug() << "4 chan";
+            qDebug() << "4 chan";
             nChannels[i] = 4;
         }
     }
@@ -1186,9 +1179,11 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
 
 void ShapeCreator::drawTexture(float x, float y, float w, float h,
                                float tx, float ty, float tw, float th) {
-    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
+    glBindTexture(GL_TEXTURE_2D, MyTexture[7]);
 //    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
-
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor3f(1.0,1.0,1.0);
     GLfloat verts[] = {x, y, x + w, y, x + w, y + h, x, y + h};
     GLfloat tex_coords[] = {tx, ty, tx + tw, ty, tx + tw, ty + th, tx, ty + th};
 
@@ -1210,4 +1205,6 @@ void ShapeCreator::drawTexture(float x, float y, float w, float h,
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
+
+    glDisable(GL_BLEND);
 }

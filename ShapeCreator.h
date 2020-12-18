@@ -125,10 +125,10 @@ public:
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
 
 
-    static constexpr int textNum = 7;
     int numberOfTextures;
     QList <QImage> p_qimage;
-    GLuint MyTexture[7];
+    static constexpr int textNum = 8;
+    GLuint MyTexture[textNum];
 //    GLuint appleTexture[1];
     GLuint singText;
 

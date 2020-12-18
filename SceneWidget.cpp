@@ -140,7 +140,8 @@ void SceneWidget::initializeGL() { // initializeGL()
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_3_Right-X.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
-            "./textureinternet/appleIIe.jpg"
+            "./textureinternet/appleIIe.jpg",
+            "./textureinternet/mario2.png"
     };
 
 //    QStringList appleTextureString = { "./textureinternet/appleIIe.jpg"};
@@ -589,15 +590,9 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     glDisableClientState(GL_VERTEX_ARRAY); //disable the client states again
     glDisableClientState(GL_NORMAL_ARRAY);
-//    glDisableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-//    glEnable(GL_LIGHTING);
-
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
-//    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[1]);
-//    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[0]);
 
 
 
