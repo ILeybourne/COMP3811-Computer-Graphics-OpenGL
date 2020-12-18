@@ -984,7 +984,7 @@ void ShapeCreator::imageLoader(QStringList sImage) {
 //    numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
 //    numberOfTextures = 6;
     numberOfTextures = sImage.size();
-    qDebug() << numberOfTextures;
+//    qDebug() << numberOfTextures;
 //    qDebug() <<sizeof(sImage) << sizeof(sImage[0])<< numberOfTextures;
 
 //    qDebug() << numberOfTextures;
@@ -1093,17 +1093,18 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             float vertex2y;
             float vertex2z;
             fscanf(file, "%f %f %f\n", &vertex2x, &vertex2y, &vertex2z);
-            out_vertices.push_back(vertex2x);
-            out_vertices.push_back(vertex2y);
-            out_vertices.push_back(vertex2z);
+            temp_vertices2.push_back(vertex2x);
+            temp_vertices2.push_back(vertex2y);
+            temp_vertices2.push_back(vertex2z);
         } else if (strcmp(lineHeader, "vt") == 0) {
             float uv2U;
             float uv2V;
 //            fscanf(file, "%f %f\n", &uv.x, &uv.y);
             fscanf(file, "%f %f\n", &uv2U, &uv2V);
 //            temp_uvs.push_back(uv);
-            temp_uvs2.push_back(uv2U);
-            temp_uvs2.push_back(uv2V);
+            std::array<float, 2> temp = {uv2U, uv2V};
+            temp_uvs2.push_back(temp);
+//            temp_uvs2.push_back(uv2V);
 
         } else if (strcmp(lineHeader, "vn") == 0) {
             float normal2x;
@@ -1126,153 +1127,86 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                 printf("File can't be read by our simple parser : ( Try exporting with other options\n");
                 return false;
             }
-
+            // -1 to 0 index
             vertexIndices.push_back(vertexIndex[0] - 1);
             vertexIndices.push_back(vertexIndex[1] - 1);
             vertexIndices.push_back(vertexIndex[2] - 1);
-            uvIndices.push_back(uvIndex[0]);
-            uvIndices.push_back(uvIndex[1]);
-            uvIndices.push_back(uvIndex[2]);
-            normalIndices.push_back(normalIndex[0]);
-            normalIndices.push_back(normalIndex[1]);
-            normalIndices.push_back(normalIndex[2]);
+            uvIndices.push_back(uvIndex[0] - 1);
+            uvIndices.push_back(uvIndex[1] - 1);
+            uvIndices.push_back(uvIndex[2] - 1);
+            normalIndices.push_back(normalIndex[0] - 1);
+            normalIndices.push_back(normalIndex[1] - 1);
+            normalIndices.push_back(normalIndex[2] - 1);
         }
 
     }
     qDebug() << "Finished loading data";
+    qDebug() << "Finished loading data" << vertexIndices.size() << uvIndices.size();
 
-//    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-//        unsigned int vertexIndex = vertexIndices[i];
-////        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-//        float vertex2x, vertex2y, vertex2z;
-//        vertex2x = temp_vertices2[vertexIndex * 3 + 0];
-//        vertex2y = temp_vertices2[vertexIndex * 3 + 1];
-//        vertex2z = temp_vertices2[vertexIndex * 3 + 2];
-//        out_vertices.push_back(vertex2x);
-//        out_vertices.push_back(vertex2y);
-//        out_vertices.push_back(vertex2z);
-//    }
+
+    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+        unsigned int vertexIndex = vertexIndices[i];
+//        glm::vec3 vertex = temp_vertices[vertexIndex];
+        float vertex2x, vertex2y, vertex2z;
+        vertex2x = temp_vertices2[vertexIndex * 3 + 0];
+        vertex2y = temp_vertices2[vertexIndex * 3 + 1];
+        vertex2z = temp_vertices2[vertexIndex * 3 + 2];
+        out_vertices.push_back(vertex2x);
+        out_vertices.push_back(vertex2y);
+        out_vertices.push_back(vertex2z);
+    }
+
+    for (unsigned int i = 0; i < uvIndices.size(); i++) {
+        unsigned int uvIndex = uvIndices[i];
+        float uv2U, uv2V;
+        uv2U = temp_uvs2[uvIndex][0];
+        uv2V = temp_uvs2[uvIndex][1];
+        out_uvs.push_back(uv2U);
+        out_uvs.push_back(uv2V);
+    }
+
+    for (unsigned int i = 0; i < normalIndices.size(); i++) {
+        unsigned int normalIndex = normalIndices[i];
+//        glm::vec3 normal = temp_normals2[normalIndex];
+        float normal2x, normal2y, normal2z;
+        normal2x = temp_normals2[normalIndex * 3 + 0];
+        normal2y = temp_normals2[normalIndex * 3 + 1];
+        normal2z = temp_normals2[normalIndex * 3 + 2];
+        out_normals.push_back(normal2x);
+        out_normals.push_back(normal2y);
+        out_normals.push_back(normal2z);
+    }
+
+//    qDebug() << uvIndices[12] <<uvIndices[13];
+    qDebug() << uvIndices[1] << uvIndices[2];
+    qDebug() << temp_uvs2[uvIndices[1]][0] << temp_uvs2[uvIndices[1]][1];
+    qDebug() << temp_uvs2[uvIndices[2]][0] << temp_uvs2[uvIndices[2]][1];
     return true;
 }
 
+void ShapeCreator::drawTexture(float x, float y, float w, float h,
+                               float tx, float ty, float tw, float th) {
+    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
 
-//bool ShapeCreator::getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
-//                               std::vector <std::array<float, 2>> &out_uvs,
-//                               std::vector <std::array<float, 3>> &out_normals) {
-//
-//    string cp = std::experimental::filesystem::current_path();
-//    fp = cp.append(fp);
-//
-//    const char *path = fp.c_str();
-//
-//    FILE *file = fopen(path, "r");
-//    if (file == NULL) {
-//        qDebug() << "Impossible to open the file !";
-//        return false;
-//    }
-//    qDebug() << "File opened";
-//
-//    while (1) {
-//
-//        char lineHeader[128];
-//        // read the first word of the line
-//        int res = fscanf(file, "%s", lineHeader);
-//        if (res == EOF)
-//            break;
-//
-//        if (strcmp(lineHeader, "v") == 0) {
-//            glm::vec3 vertex;
-//            GLfloat vertex2x;
-//            GLfloat vertex2y;
-//            GLfloat vertex2z;
-////            fscanf(file, "%f %f %f\n", &vertex.x, &vertex.y, &vertex.z);
-//            fscanf(file, "%f %f %f\n", &vertex2x, &vertex2y, &vertex2z);
-////            qDebug() << vertex2[0] << vertex2[1] << vertex2[2];
-//            temp_vertices.push_back(vertex);
-//            temp_vertices2.push_back(vertex2x);
-//            temp_vertices2.push_back(vertex2y);
-//            temp_vertices2.push_back(vertex2z);
-//
-//
-//        } else if (strcmp(lineHeader, "vt") == 0) {
-//            glm::vec2 uv;
-//            std::array<float, 2> uv2;
-////            fscanf(file, "%f %f\n", &uv.x, &uv.y);
-//            fscanf(file, "%f %f\n", &uv2[0], &uv2[1]);
-////            temp_uvs.push_back(uv);
-//            temp_uvs2.push_back(uv2);
-//
-//        } else if (strcmp(lineHeader, "vn") == 0) {
-//            glm::vec3 normal;
-//            std::array<float, 3> normal2;
-////            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-//            fscanf(file, "%f %f %f\n", &normal2[0], &normal2[1], &normal2[2]);
-////            temp_normals.push_back(normal);
-//            temp_normals2.push_back(normal2);
-//
-//        } else if (strcmp(lineHeader, "f") == 0) {
-//            std::string vertex1, vertex2, vertex3;
-//            GLuint vertexIndex[3], uvIndex[3], normalIndex[3];
-//            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-//                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1], &vertexIndex[2], &uvIndex[2],
-//                                 &normalIndex[2]);
-//
-//            if (matches != 9) {
-//                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
-//                return false;
-//            }
-//
-//            vertexIndices.push_back(vertexIndex[0]);
-//            vertexIndices.push_back(vertexIndex[1]);
-//            vertexIndices.push_back(vertexIndex[2]);
-//            uvIndices.push_back(uvIndex[0]);
-//            uvIndices.push_back(uvIndex[1]);
-//            uvIndices.push_back(uvIndex[2]);
-//            normalIndices.push_back(normalIndex[0]);
-//            normalIndices.push_back(normalIndex[1]);
-//            normalIndices.push_back(normalIndex[2]);
-//        }
-//    }
-//
-//
-////    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-////        unsigned int vertexIndex = vertexIndices[i];
-//////        glm::vec3 vertex = temp_vertices[vertexIndex - 1];
-////        std::array<float, 3> vertex2;
-////        vertex2[0] = temp_vertices2[vertexIndex - 1][0];
-////        vertex2[1] = temp_vertices2[vertexIndex - 1][1];
-////        vertex2[2] = temp_vertices2[vertexIndex - 1][2];
-////        out_vertices.push_back(vertex2);
-////    }
-//
-//
-//
-////    static constexpr int vect3Size = out_vertices.size();
-//
-////    std::copy(v.begin(), v.end(), arr);
-////    glm::vec3 *vector3Array = &out_vertices[0];
-//
-////    for (int i = 0; i <; ++i) {
-////
-////    }
-//
-//    for (unsigned int i = 0; i < uvIndices.size(); i++) {
-//        unsigned int uvIndex = uvIndices[i];
-////        glm::vec2 uv = temp_uvs[uvIndex - 1];
-//        std::array<float, 2> uv2;
-//        uv2[0] = temp_uvs2[uvIndex - 1][0];
-//        uv2[1] = temp_uvs2[uvIndex - 1][1];
-//        out_uvs.push_back(uv2);
-//    }
-//
-//    for (unsigned int i = 0; i < normalIndices.size(); i++) {
-//        unsigned int normalIndex = normalIndices[i];
-////        glm::vec3 normal = temp_normals[normalIndex - 1];
-//        std::array<float, 3> normal2;
-//        normal2[0] = temp_normals2[normalIndex - 1][0];
-//        normal2[1] = temp_normals2[normalIndex - 1][1];
-//        normal2[2] = temp_normals2[normalIndex - 1][2];
-//        out_normals.push_back(normal2);
-//    }
-//    return true;
-//}
+    GLfloat verts[] = {x, y, x + w, y, x + w, y + h, x, y + h};
+    GLfloat tex_coords[] = {tx, ty, tx + tw, ty, tx + tw, ty + th, tx, ty + th};
+
+    glm::vec3 v1 = {x, y, 0};
+    glm::vec3 v3 = {x + w, y, 0};
+    glm::vec3 v2 = {x, y + h, 0};
+    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    ////TODO Normals for screen?
+    GLfloat normCoords[] = {normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z,normal.x,normal.y,normal.z};
+
+    glNormal3fv(glm::value_ptr(normal));
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, verts);
+    glTexCoordPointer(2, GL_FLOAT, 0, tex_coords);
+    glNormalPointer(GL_FLOAT, 0, normCoords);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+}

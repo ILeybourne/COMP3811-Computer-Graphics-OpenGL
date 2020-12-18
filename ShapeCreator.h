@@ -84,7 +84,7 @@ public:
     std::vector <glm::vec2> temp_uvs;
     std::vector <glm::vec3> temp_normals;
     std::vector<float> temp_vertices2;
-    std::vector <float> temp_uvs2;
+    std::vector <std::array<float, 2>> temp_uvs2;
     std::vector <float> temp_normals2;
 
 
@@ -95,7 +95,8 @@ public:
     std::vector<GLfloat> vertices3;
     std::vector<GLfloat> uvs3;
     std::vector<GLfloat> normals3; // Won't be used at the moment.
-
+    void drawTexture(float x, float y, float w, float h,
+                              float tx, float ty, float tw, float th);
 
     bool getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
                      std::vector <std::array<float, 2>> &out_uvs,

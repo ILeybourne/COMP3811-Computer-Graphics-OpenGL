@@ -119,6 +119,8 @@ void SceneWidget::initializeGL() { // initializeGL()
                                         shapeCreator->normals3);
     qDebug() << res;
 
+    qDebug() << shapeCreator->vertices3.size() << shapeCreator->uvs3.size();
+
 //    appleVertNumber = shapeCreator->vertices.size() * 3;
 //    static const long unsigned int appleVertNumberConst = appleVertNumber;
 //    qDebug() << vertSize3;
@@ -374,7 +376,6 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
                 wall[3] * light[3];
 
     shadowMatrix[0] = dot - light[0] * wall[0];
-//    qDebug() << "test" << shadowMatrix[0];
     shadowMatrix[4] = 0.0 - light[0] * wall[1];
     shadowMatrix[8] = 0.0 - light[0] * wall[2];
     shadowMatrix[12] = 0.0 - light[0] * wall[3];
@@ -405,7 +406,6 @@ void SceneWidget::paintGL() { // paintGL()
     glMatrixMode(GL_MODELVIEW);
     glEnable(GL_DEPTH_TEST);
 
-
 //    glPushMatrix();
 //    glTranslatef(0, 9, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
@@ -414,17 +414,17 @@ void SceneWidget::paintGL() { // paintGL()
 //    glTranslatef(0, 11, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
 //    glPopMatrix();
-//
+
 //    glPushMatrix();
 //    glTranslatef(3, 9, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
 //    glPopMatrix();
-//
+
 //    glPushMatrix();
 //    glTranslatef(-3, 9, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
 //    glPopMatrix();
-//
+
 //    glPushMatrix();
 //    glTranslatef(0, 9, 3);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
@@ -433,15 +433,15 @@ void SceneWidget::paintGL() { // paintGL()
 //    glTranslatef(0, 9, -3);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
 //    glPopMatrix();
-//
+
 //    glPushMatrix();
 //    glTranslatef(0, 5, 0);
 //    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
 //    glPopMatrix();
-//
+
 //    glPushMatrix();
 //    glTranslatef(0, 2, 0);
-////    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
+//    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
 //    glPopMatrix();
 
     glEnable(GL_LIGHT1);
@@ -461,10 +461,7 @@ void SceneWidget::paintGL() { // paintGL()
     float ground[4] = {0, 0, -1, 15 - 0.01};
     float wall[4] = {0, 0, -1, 15 - 0.01};
 
-//    float width= ;
-//    float height= ;
-//    float depth= ;
-//
+
 //    glm::vec3 p1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
 //    glm::vec3 p2 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
 //    glm::vec3 p3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
@@ -556,130 +553,52 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_BLEND);
     glPopMatrix();
 
-    GLfloat vertices2[] = {1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1,   // v0,v1,v2,v3 (front)
-                           1, 1, 1, 1, -1, 1, 1, -1, -1, 1, 1, -1,   // v0,v3,v4,v5 (right)
-                           1, 1, 1, 1, 1, -1, -1, 1, -1, -1, 1, 1,   // v0,v5,v6,v1 (top)
-                           -1, 1, 1, -1, 1, -1, -1, -1, -1, -1, -1, 1,   // v1,v6,v7,v2 (left)
-                           -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1,   // v7,v4,v3,v2 (bottom)
-                           1, -1, -1, -1, -1, -1, -1, 1, -1, 1, 1, -1}; // v4,v7,v6,v5 (back)
-
-
-// index array of vertex array for glDrawElements() & glDrawRangeElement()
-    GLubyte indices[] = {0, 1, 2, 2, 3, 0,      // front
-                         4, 5, 6, 6, 7, 4,      // right
-                         8, 9, 10, 10, 11, 8,      // top
-                         12, 13, 14, 14, 15, 12,      // left
-                         16, 17, 18, 18, 19, 16,      // bottom
-                         20, 21, 22, 22, 23, 20};    // back
-
-//        glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
+    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
+    glColor3f(1.0, 1.0, 1.0);
 
     ////Apple PC
     glDisable(GL_CULL_FACE);
+//    glDisable(GL_LIGHTING);
     glEnableClientState(GL_VERTEX_ARRAY);
 //    glEnableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
-//    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
-//    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
 
-    glBindTexture(GL_TEXTURE_2D, 0);
     glPushMatrix();
-    glTranslatef(0, 3, 0);
-    qDebug()<< shapeCreator->vertices3.size();
-    GLfloat arr[shapeCreator->vertices3.size()];
-    std::copy(shapeCreator->vertices3.begin(), shapeCreator->vertices3.end(), arr);
+    glTranslatef(0, 3, 4);
+    glScalef(1,1,1.2);
 
-    qDebug() << "number of verts" << shapeCreator->vertices3.size() / 3;
-//    for (int i = 0; i < shapeCreator->vertices3.size()  / 3; i++) {
-//        qDebug() << arr[i * 3 + 0] << arr[i * 3 + 1] << arr[i * 3 + 2] << " "<< shapeCreator->vertexIndices[i];//<< i * 3 + 2;// << "mine";
-//    }
 
-    glVertexPointer(3, GL_FLOAT, 0, arr);
-//    glTexCoordPointer(2, GL_FLOAT, 0, &shapeCreator->uvs);
+    glVertexPointer(3, GL_FLOAT, 0, shapeCreator->vertices3.data());
+//    qDebug() << shapeCreator->uvs3[2] << shapeCreator->uvs3[3];
+    glTexCoordPointer(2, GL_FLOAT, 0, shapeCreator->uvs3.data());
 
-    qDebug() << "number of indices" << shapeCreator->vertexIndices.size();
-    GLuint arr2[shapeCreator->vertexIndices.size()];
-    std::copy(shapeCreator->vertexIndices.begin(), shapeCreator->vertexIndices.end(), arr2);
-//    for (int i = 0; i < 12; i++) {
-//        qDebug() << arr2[i * 3 + 0] << arr2[i * 3 + 1] << arr2[i * 3 + 2];// << typeid(arr2[0]).name();
-//    }
+    glNormalPointer(GL_FLOAT,0, shapeCreator->normals3.data());
 
-    ////Material parameters
-    glColor3f(0.5, 1, 1);
-    GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
-    GLfloat shininess2[] = {100};
-    glEnable(GL_COLOR_MATERIAL);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
 
-//    glDrawArrays(GL_TRIANGLES, 0, 3 * 12);
-
-    glDrawElements(GL_TRIANGLES, shapeCreator->vertexIndices.size(), GL_UNSIGNED_INT, arr2);
-//    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, indices);
-//    glDrawElements(GL_TRIANGLES, canonicalize() ,);
+    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices3.size() / 3);
+//    glDrawElements(GL_TRIANGLES, shapeCreator->vertexIndices.size(), GL_UNSIGNED_INT, shapeCreator->vertexIndices.data());
+    glPushMatrix();
+    glRotatef(180, 0, 1, 0);
+    glRotatef(2, 1, 0, 0);
+    glTranslatef(-2.1, -0.4, 0.61);
+    glScalef(1.8, 1.2, 1);
+    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
     glPopMatrix();
     glDisableClientState(GL_VERTEX_ARRAY); //disable the client states again
+    glDisableClientState(GL_NORMAL_ARRAY);
+//    glDisableClientState(GL_TEXTURE_COORD_ARRAY_EXT);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-//    glDisableClientState(GL_NORMAL_ARRAY);
-//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-//    glUniform1i(shapeCreator->vertices.size(), 0);
+//    glEnable(GL_LIGHTING);
 
-//    glScalef(0.5,0.5,0.5);
-//    glEnableVertexAttribArray(0);
-//    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-//    glVertexAttribPointer(
-//            0,                  // attribute
-//            3,                  // size
-//            GL_FLOAT,           // type
-//            GL_FALSE,           // normalized?
-//            0,                  // stride
-//            (void *) 0            // array buffer offset
-//    );
-//    glColor3f(0.5, 1, 1);
-//    GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
-//    GLfloat shininess2[] = {100};
-//
-//    ////Material parameters
-////    glEnable(GL_COLOR_MATERIAL);
-////    glMaterialfv(GL_FRONT, GL_AMBIENT, mambient);
-////    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
-////    glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
-////    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
-//
-////    glActiveTexture(GL_TEXTURE0);
-////    glUniform1i(shapeCreator->MyTexture[6], 0);
-//
-//
-//    glEnableVertexAttribArray(1);
-//    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-//    glVertexAttribPointer(
-//            1,                                // attribute
-//            2,                                // size
-//            GL_FLOAT,                         // type
-//            GL_FALSE,                         // normalized?
-//            0,                                // stride
-//            (void *) 0                          // array buffer offset
-//    );
-//
-//
-//    glEnableVertexAttribArray(2);
-//    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-//    glVertexAttribPointer(
-//            2,                                // attribute
-//            3,                                // size
-//            GL_FLOAT,                         // type
-//            GL_TRUE,                         // normalized?
-//            0,                                // stride
-//            (void *) 0                          // array buffer offset
-//    );
-//
-//    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices.size());
-//
-//    glDisableVertexAttribArray(0);
-////    glDisableVertexAttribArray(1);
-//    glDisableVertexAttribArray(2);
-//    glPopMatrix();
     glEnable(GL_CULL_FACE);
-//    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+//    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[1]);
+//    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[0]);
+
 
 
 

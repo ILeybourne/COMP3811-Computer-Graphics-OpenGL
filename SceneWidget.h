@@ -46,7 +46,7 @@ protected:
     double frame;
     float cameraPosition[3] = {0, 5, 0};
     float light0Position[4] = {0, 15, 500, 1};
-    float light1Position[4] = {0, 1, -5, 1};
+    float light1Position[4] = {0, 1, 5, 1};
     float cameraUp[3] = {0, 6, 0};
     float fov = 90;
     float radius = 1;
