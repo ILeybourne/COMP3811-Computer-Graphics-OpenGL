@@ -380,7 +380,6 @@ void SceneWidget::paintGL() { // paintGL()
 //    glTranslatef(0, 2, 0);
 //    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
 //    glPopMatrix();
-//    glPopMatrix();
 
 
     glPushMatrix();
