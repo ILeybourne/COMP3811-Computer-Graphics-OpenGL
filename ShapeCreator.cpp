@@ -279,8 +279,6 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
-//    glBindTexture(GL_TEXTURE_2D, MyTexture[0]);
-    glColor3f(1.0, 1.0, 1.0);
     for (float i = v1[0]; i < v3[0]; i += tessXSize) {
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
@@ -637,12 +635,12 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
                     float heightAtn1m0 = interpolateAt(i + n, k + m + tessZSize);
 
                     glm::vec3 vA = {i + n + tessXSize, heightAtn0m0, k + m};
-                    glm::vec3 vB = {i + n + tessXSize, heightAtn0m1, k + m + tessZSize};
+                    glm::vec3 vD = {i + n + tessXSize, heightAtn0m1, k + m + tessZSize};
                     glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
-                    glm::vec3 vD = {i + n, heightAtn1m1, k + m};
+                    glm::vec3 vB = {i + n, heightAtn1m1, k + m};
 
                     normal = glm::normalize(glm::cross(vB - vA, vC - vB));
-                    glNormal3fv(glm::value_ptr(-normal));
+                    glNormal3fv(glm::value_ptr(normal));
                     glBegin(GL_POLYGON);
                     glVertex3f(vA.x, vA.y, vA.z);
                     glVertex3f(vB.x, vB.y, vB.z);
@@ -650,7 +648,7 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
                     glEnd();
 
                     normal = glm::normalize(glm::cross(vC - vA, vD - vC));
-                    glNormal3fv(glm::value_ptr(-normal));
+                    glNormal3fv(glm::value_ptr(normal));
                     glBegin(GL_POLYGON);
                     glVertex3f(vA.x, vA.y, vA.z);
                     glVertex3f(vC.x, vC.y, vC.z);
@@ -1190,6 +1188,7 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     return true;
 }
 
+////TODO change
 void ShapeCreator::drawTexture(float x, float y, float w, float h,
                                float tx, float ty, float tw, float th , bool blend) {
     glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
