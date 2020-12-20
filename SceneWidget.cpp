@@ -32,6 +32,7 @@ SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
     double frame = 0;
     shapeCreator = new ShapeCreator(this);
+    textureCreator = new TextureCreator(this);
 } // constructor
 
 // called when OpenGL context is set up
@@ -110,24 +111,28 @@ void SceneWidget::initializeGL() { // initializeGL()
     bool res = shapeCreator->getOBJData("/AppleIIe4.obj", shapeCreator->vertices3, shapeCreator->uvs3,
                                         shapeCreator->normals3);
 
-    QStringList textureStrings = {
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_3_Right-X.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
-            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
-            "./textureinternet/appleIIe.jpg",
-            "./textureinternet/mario2.png"
-    };
+    qDebug() << res;
 
-    QStringList textureStrings2 = {
-            "./textureinternet/mario2.png"
-    };
+//    QStringList textureStrings = {
+//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
+//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
+//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
+//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_3_Right-X.jpg",
+//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
+//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
+//            "./textureinternet/appleIIe.jpg",
+//            "./textureinternet/mario2.png"
+//    };
+//
+//    QStringList textureStrings2 = {
+//            "./textureinternet/mario2.png"
+//    };
 
 
             ////Load textures
-    shapeCreator->imageLoader(textureStrings , shapeCreator->MyTexture);
+//    shapeCreator->imageLoader(textureStrings , textureCreator->MyTextures);
+    textureCreator->imageLoader(textureCreator->textureStrings, textureCreator->MyTextures);
+    shapeCreator->textureCreator = textureCreator;
 
     ////Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -447,7 +452,7 @@ void SceneWidget::paintGL() { // paintGL()
     ////Semicylinder
 //    shapeCreator->createSemiCylinder(5,5,3,3,3);
 
-    glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[6]);
     glColor3f(1.0, 1.0, 1.0);
     ////Apple PC
     glDisable(GL_CULL_FACE);
@@ -470,7 +475,7 @@ void SceneWidget::paintGL() { // paintGL()
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33 ,-0.4, -0.62);
     glScalef(1.8, 1.2, 1);
-    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, shapeCreator->MyTexture[1]);
+    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, textureCreator->MyTextures[0]);
     glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
     glPopMatrix();

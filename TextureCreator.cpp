@@ -15,13 +15,28 @@ TextureCreator::TextureCreator(QWidget *parent) {// constructor
 // constructor
 
 void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
+    qDebug() << "start";
+
+
     glEnable(GL_TEXTURE_2D);
 
+    qDebug() << "before";
+    qDebug() << sImage.size();
+    this->numberOfTextures = 0;
+    qDebug() << this->numberOfTextures;
+
     numberOfTextures = sImage.size();
+
+    qDebug() << "after";
+
+
+    qDebug() << numberOfTextures;
 
     int nChannels[numberOfTextures];
 
     glGenTextures(numberOfTextures, texture);
+
+    qDebug() << "generation";
 
     for (int i = 0; i < numberOfTextures; i++) {
         pQImage.push_back(QImage(sImage[i]));
@@ -83,5 +98,6 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
                          image1d4Chan);
         }
     }
+    qDebug() << "finished";
 }
 

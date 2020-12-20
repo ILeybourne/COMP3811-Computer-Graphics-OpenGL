@@ -1,5 +1,5 @@
-#ifndef SCENE_ShapeCreator_H
-#define SCENE_ShapeCreator_H
+#ifndef SCENE_TextureCreator_H
+#define SCENE_TextureCreator_H
 
 #include <QGLWidget>
 #include <cstdio>
@@ -34,10 +34,21 @@ public:
 
     void imageLoader(QStringList sImage, GLuint texture[]);
 
+    QStringList textureStrings = {
+            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
+            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
+            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
+            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_3_Right-X.jpg",
+            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
+            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
+            "./textureinternet/appleIIe.jpg",
+            "./textureinternet/mario2.png"
+    };
 
+    int numberOfTextures = textureStrings.size();
 
-    int numberOfTextures;
     QList <QImage> pQImage;
+
     static constexpr int textNum = 8;
 
     GLuint MyTextures[textNum];
@@ -51,5 +62,5 @@ protected:
 private:
 };
 
-#endif //SCENE_STB_IMAGE_H
+#endif //SCENE_TextureCreator_H
 

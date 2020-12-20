@@ -19,13 +19,14 @@
 #include <iostream>
 #include <fstream>
 #include <experimental/filesystem>
+#include "TextureCreator.h"
 
 
 using namespace std;
 
-const unsigned int N_X_IMAGE = 512;
-const unsigned int N_Y_IMAGE = 512;
-const unsigned int N_COLOR = 3;
+//const unsigned int N_X_IMAGE = 512;
+//const unsigned int N_Y_IMAGE = 512;
+//const unsigned int N_COLOR = 3;
 
 
 class ShapeCreator { //
@@ -54,7 +55,7 @@ public:
 
     void imageLoader(QStringList sImage, GLuint texture[]);
 
-    void drawTextPlane(float w, float h);
+    void drawTextPlane(float w, float h, int index);
 
     float interpolation(float x, float z, float c);
 
@@ -124,18 +125,20 @@ public:
     int planeZTess = 20;
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
 
+    TextureCreator *textureCreator;
 
-    int numberOfTextures;
-    QList <QImage> p_qimage;
-    static constexpr int textNum = 8;
 
-    GLuint MyTexture[textNum];
-
-    unsigned int imageWidth[textNum];
-    unsigned int imageHeight[textNum];
-    unsigned int imageSize[textNum];
-    QOpenGLShaderProgram *program = nullptr;
-    QOpenGLBuffer vbo;
+//    int numberOfTextures;
+//    QList <QImage> p_qimage;
+//    static constexpr int textNum = 8;
+//
+//    GLuint MyTexture[textNum];
+//
+//    unsigned int imageWidth[textNum];
+//    unsigned int imageHeight[textNum];
+//    unsigned int imageSize[textNum];
+//    QOpenGLShaderProgram *program = nullptr;
+//    QOpenGLBuffer vbo;
 
 protected:
 

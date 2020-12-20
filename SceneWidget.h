@@ -60,14 +60,6 @@ protected:
     bool jumping = false;
     bool falling = false;
 
-    float applePositions2[48519];
-
-
-    GLuint triangleVBO;
-    GLuint vertexbuffer;
-    GLuint normalbuffer;
-    GLuint uvbuffer;
-
     long unsigned int appleVertNumber;
     float vertexFloatArray[48519]; // Update if vert number updates
 
@@ -75,7 +67,7 @@ protected:
     GLfloat shadowMatrix1[16];
 
     ShapeCreator *shapeCreator;
-    TextureCr
+    TextureCreator *textureCreator;
 private:
     void walls();
 }; // class GLPolygonWidget

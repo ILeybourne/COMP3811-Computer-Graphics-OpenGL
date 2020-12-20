@@ -12,8 +12,9 @@ LIBS += -lGLU -lstdc++fs
 
 
 # Input
-HEADERS += ShapeCreator.h SceneWidget.h Window.h
+HEADERS += ShapeCreator.h SceneWidget.h Window.h TextureCreator.h
 SOURCES += Main.cpp \
+           TextureCreator.cpp \
            ShapeCreator.cpp \
            SceneWidget.cpp \
            Window.cpp \

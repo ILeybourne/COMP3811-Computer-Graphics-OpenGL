@@ -53,10 +53,12 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = Main.cpp \
+		TextureCreator.cpp \
 		ShapeCreator.cpp \
 		SceneWidget.cpp \
 		Window.cpp 
 OBJECTS       = Main.o \
+		TextureCreator.o \
 		ShapeCreator.o \
 		SceneWidget.o \
 		Window.o
@@ -139,7 +141,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		Scene.pro ShapeCreator.h \
 		SceneWidget.h \
-		Window.h Main.cpp \
+		Window.h \
+		TextureCreator.h Main.cpp \
+		TextureCreator.cpp \
 		ShapeCreator.cpp \
 		SceneWidget.cpp \
 		Window.cpp
@@ -326,8 +330,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ShapeCreator.h SceneWidget.h Window.h $(DISTDIR)/
-	$(COPY_FILE) --parents Main.cpp ShapeCreator.cpp SceneWidget.cpp Window.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ShapeCreator.h SceneWidget.h Window.h TextureCreator.h $(DISTDIR)/
+	$(COPY_FILE) --parents Main.cpp TextureCreator.cpp ShapeCreator.cpp SceneWidget.cpp Window.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -379,19 +383,25 @@ compiler_clean: compiler_moc_predefs_clean
 
 Main.o: Main.cpp Window.h \
 		SceneWidget.h \
-		ShapeCreator.h
+		ShapeCreator.h \
+		TextureCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Main.o Main.cpp
+
+TextureCreator.o: TextureCreator.cpp TextureCreator.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TextureCreator.o TextureCreator.cpp
 
 ShapeCreator.o: ShapeCreator.cpp ShapeCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ShapeCreator.o ShapeCreator.cpp
 
 SceneWidget.o: SceneWidget.cpp SceneWidget.h \
-		ShapeCreator.h
+		ShapeCreator.h \
+		TextureCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o SceneWidget.o SceneWidget.cpp
 
 Window.o: Window.cpp Window.h \
 		SceneWidget.h \
-		ShapeCreator.h
+		ShapeCreator.h \
+		TextureCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
 
 ####### Install
