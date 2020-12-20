@@ -52,7 +52,7 @@ public:
 
     void loadTextures();
 
-    void imageLoader(QStringList sImage);
+    void imageLoader(QStringList sImage, GLuint texture[]);
 
     void drawTextPlane(float w, float h);
 
@@ -96,7 +96,7 @@ public:
     std::vector<GLfloat> uvs3;
     std::vector<GLfloat> normals3; // Won't be used at the moment.
     void drawTexture(float x, float y, float w, float h,
-                              float tx, float ty, float tw, float th, bool blend);
+                              float tx, float ty, float tw, float th, bool blend ,GLuint texture);
 
     bool getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
                      std::vector <std::array<float, 2>> &out_uvs,
@@ -128,9 +128,8 @@ public:
     int numberOfTextures;
     QList <QImage> p_qimage;
     static constexpr int textNum = 8;
+
     GLuint MyTexture[textNum];
-//    GLuint appleTexture[1];
-    GLuint singText;
 
     unsigned int imageWidth[textNum];
     unsigned int imageHeight[textNum];

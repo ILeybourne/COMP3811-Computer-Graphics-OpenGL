@@ -980,7 +980,7 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
 //    stbi_image_free(data);
 //    glDisable(GL_TEXTURE_2D);
 //}
-void ShapeCreator::imageLoader(QStringList sImage) {
+void ShapeCreator::imageLoader(QStringList sImage , GLuint texture[]) {
     glEnable(GL_TEXTURE_2D);
 
 //    numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
@@ -989,9 +989,10 @@ void ShapeCreator::imageLoader(QStringList sImage) {
 //    qDebug() << numberOfTextures;
 //    qDebug() <<sizeof(sImage) << sizeof(sImage[0])<< numberOfTextures;
 
-//    qDebug() << numberOfTextures;
+    qDebug() << numberOfTextures;
     int nChannels[numberOfTextures];
-    glGenTextures(numberOfTextures, MyTexture);
+
+    glGenTextures(numberOfTextures, texture);
 
     qDebug() << "generation";
 
@@ -1047,7 +1048,7 @@ void ShapeCreator::imageLoader(QStringList sImage) {
             }
         }
 
-        glBindTexture(GL_TEXTURE_2D, MyTexture[i]);
+        glBindTexture(GL_TEXTURE_2D, texture[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -1190,8 +1191,8 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
 
 ////TODO change
 void ShapeCreator::drawTexture(float x, float y, float w, float h,
-                               float tx, float ty, float tw, float th , bool blend) {
-    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
+                               float tx, float ty, float tw, float th , bool blend , GLuint texture) {
+    glBindTexture(GL_TEXTURE_2D, texture);
 //    glBindTexture(GL_TEXTURE_2D, MyTexture[1]);
     if (blend){
         glEnable(GL_BLEND);

@@ -121,8 +121,13 @@ void SceneWidget::initializeGL() { // initializeGL()
             "./textureinternet/mario2.png"
     };
 
-    ////Load textures
-    shapeCreator->imageLoader(textureStrings);
+    QStringList textureStrings2 = {
+            "./textureinternet/mario2.png"
+    };
+
+
+            ////Load textures
+    shapeCreator->imageLoader(textureStrings , shapeCreator->MyTexture);
 
     ////Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -459,11 +464,13 @@ void SceneWidget::paintGL() { // paintGL()
     glDrawArrays(GL_TRIANGLES, 0, shapeCreator->vertices3.size() / 3);
 //    glDrawElements(GL_TRIANGLES, shapeCreator->vertexIndices.size(), GL_UNSIGNED_INT, shapeCreator->vertexIndices.data());
 
+    ////PC Screen
+    glDisable(GL_LIGHTING);
     glPushMatrix();
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33 ,-0.4, -0.62);
-    glScalef(1.8, 1.3, 1);
-    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, false);
+    glScalef(1.8, 1.2, 1);
+    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, shapeCreator->MyTexture[1]);
     glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
     glPopMatrix();
@@ -471,6 +478,7 @@ void SceneWidget::paintGL() { // paintGL()
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
 
     ////Outside
     ////Skybox
