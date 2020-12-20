@@ -496,6 +496,7 @@ void SceneWidget::paintGL() { // paintGL()
 
     glDisable(GL_LIGHT1);
     glEnable(GL_LIGHT0);
+
     ////Terrain
 //    glPushMatrix();
 //    glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);

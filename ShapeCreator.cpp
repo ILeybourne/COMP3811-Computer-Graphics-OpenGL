@@ -195,7 +195,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     //Coordinates
     glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v3  = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
 
     //Normal of rect
@@ -343,8 +343,8 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
 ////   North Wall White
     //Coordinates
     glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v4 = {1.0 * width / 2, 0.0 * height,  -1.0 * depth / 2};
-    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height,  -1.0 * depth / 2};
+    glm::vec3 v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     glm::vec3 v2 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     //Normal of rect
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
@@ -391,8 +391,8 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
     //South Wall Green
     glColor3f(0.0, 1.0, 0.0);
     //Coordinates
-    v1 = {-1.0 * width / 2, 0.0 * height,1.0 * depth / 2};
-    v4 = {-1.0 * width / 2, 1.0 * height,1.0 * depth / 2};
+    v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+    v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     //Normal of rect
@@ -632,7 +632,7 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
     }
 }
 
-void ShapeCreator::drawTextPlane(float w, float h , int index) {
+void ShapeCreator::drawTextPlane(float w, float h, int index) {
     glBindTexture(GL_TEXTURE_2D, 0);
     glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[index]);
     glBegin(GL_POLYGON);
@@ -735,10 +735,14 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
-    glTexCoord2f(0.0f, 0.0f);glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
-    glTexCoord2f(1.0f, 0.0f);glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
-    glTexCoord2f(1.0f, 1.0f);glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
-    glTexCoord2f(0.0f, 1.0f);glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 1.0f);
+    glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
     glEnd();
 //    glBindTexture(GL_TEXTURE_2D, 0);
 //    glDisable(GL_TEXTURE_2D);
@@ -914,43 +918,46 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     }
     qDebug() << "File opened";
 
+    ////Loop over all of file until EOF to get of OBJ data
     while (1) {
-
         char lineHeader[128];
         int res = fscanf(file, "%s", lineHeader);
         if (res == EOF)
             break;
 
+        ////If vertex data is found
         if (strcmp(lineHeader, "v") == 0) {
-            glm::vec3 vertex;
-            float vertex2x;
-            float vertex2y;
-            float vertex2z;
-            fscanf(file, "%f %f %f\n", &vertex2x, &vertex2y, &vertex2z);
-            temp_vertices2.push_back(vertex2x);
-            temp_vertices2.push_back(vertex2y);
-            temp_vertices2.push_back(vertex2z);
-        } else if (strcmp(lineHeader, "vt") == 0) {
-            float uv2U;
-            float uv2V;
-//            fscanf(file, "%f %f\n", &uv.x, &uv.y);
-            fscanf(file, "%f %f\n", &uv2U, &uv2V);
-//            temp_uvs.push_back(uv);
-            std::array<float, 2> temp = {uv2U, uv2V};
+            float vertexX;
+            float vertexY;
+            float vertexZ;
+            ///Get vertexs and add to temporary vertex array
+            fscanf(file, "%f %f %f\n", &vertexX, &vertexY, &vertexZ);
+            temp_vertices2.push_back(vertexX);
+            temp_vertices2.push_back(vertexY);
+            temp_vertices2.push_back(vertexZ);
+        }
+            ////If vertex texture data is found add UV coordinates to temporary UV array
+        else if (strcmp(lineHeader, "vt") == 0) {
+            float uvU;
+            float uvV;
+            fscanf(file, "%f %f\n", &uvU, &uvV);
+            std::array<float, 2> temp = {uvU, uvV};
             temp_uvs2.push_back(temp);
-//            temp_uvs2.push_back(uv2V);
 
-        } else if (strcmp(lineHeader, "vn") == 0) {
-            float normal2x;
-            float normal2y;
-            float normal2z;
-//            fscanf(file, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
-            fscanf(file, "%f %f %f\n", &normal2x, &normal2y, &normal2z);
-            temp_normals2.push_back(normal2x);
-            temp_normals2.push_back(normal2y);
-            temp_normals2.push_back(normal2z);
-
-        } else if (strcmp(lineHeader, "f") == 0) {
+        }
+            ////If vertex normal data is found add normal data to temporary normal array
+        else if (strcmp(lineHeader, "vn") == 0) {
+            float normalX;
+            float normalY;
+            float normalZ;
+            fscanf(file, "%f %f %f\n", &normalX, &normalY, &normalZ);
+            tempNormals.push_back(normalX);
+            tempNormals.push_back(normalY);
+            tempNormals.push_back(normalZ);
+        }
+        ////If face data is found add the 3 vertex indices, 3 UV indices and 3 normal indices to correct arrays.
+        ////A face is always made up of triangles as as OBJ file has been triangulated beforehand
+        else if (strcmp(lineHeader, "f") == 0) {
             std::string vertex1, vertex2, vertex3;
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
             int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0], &normalIndex[0],
@@ -975,12 +982,10 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
 
     }
     qDebug() << "Finished loading data";
-    qDebug() << "Finished loading data" << vertexIndices.size() << uvIndices.size();
 
-
+    ////Once all vertex, UV, normal and face data has been obtain sort each data in order stated by face indices
     for (unsigned int i = 0; i < vertexIndices.size(); i++) {
         unsigned int vertexIndex = vertexIndices[i];
-//        glm::vec3 vertex = temp_vertices[vertexIndex];
         float vertex2x, vertex2y, vertex2z;
         vertex2x = temp_vertices2[vertexIndex * 3 + 0];
         vertex2y = temp_vertices2[vertexIndex * 3 + 1];
@@ -989,7 +994,6 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
         out_vertices.push_back(vertex2y);
         out_vertices.push_back(vertex2z);
     }
-
     for (unsigned int i = 0; i < uvIndices.size(); i++) {
         unsigned int uvIndex = uvIndices[i];
         float uv2U, uv2V;
@@ -998,32 +1002,24 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
         out_uvs.push_back(uv2U);
         out_uvs.push_back(uv2V);
     }
-
     for (unsigned int i = 0; i < normalIndices.size(); i++) {
         unsigned int normalIndex = normalIndices[i];
-//        glm::vec3 normal = temp_normals2[normalIndex];
         float normal2x, normal2y, normal2z;
-        normal2x = temp_normals2[normalIndex * 3 + 0];
-        normal2y = temp_normals2[normalIndex * 3 + 1];
-        normal2z = temp_normals2[normalIndex * 3 + 2];
+        normal2x = tempNormals[normalIndex * 3 + 0];
+        normal2y = tempNormals[normalIndex * 3 + 1];
+        normal2z = tempNormals[normalIndex * 3 + 2];
         out_normals.push_back(normal2x);
         out_normals.push_back(normal2y);
         out_normals.push_back(normal2z);
     }
-
-//    qDebug() << uvIndices[12] <<uvIndices[13];
-    qDebug() << uvIndices[1] << uvIndices[2];
-    qDebug() << temp_uvs2[uvIndices[1]][0] << temp_uvs2[uvIndices[1]][1];
-    qDebug() << temp_uvs2[uvIndices[2]][0] << temp_uvs2[uvIndices[2]][1];
     return true;
 }
 
 ////TODO change
 void ShapeCreator::drawTexture(float x, float y, float w, float h,
-                               float tx, float ty, float tw, float th , bool blend , GLuint texture) {
+                               float tx, float ty, float tw, float th, bool blend, GLuint texture) {
     glBindTexture(GL_TEXTURE_2D, texture);
-//    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[1]);
-    if (blend){
+    if (blend) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -1036,23 +1032,22 @@ void ShapeCreator::drawTexture(float x, float y, float w, float h,
     glm::vec3 v3 = {x, y + h, 0};
 
     ////TODO Normals for screen? Normals Disable atm since screen emits light
-//    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-//    GLfloat normCoords[] = {normal.x, normal.y, normal.z, normal.x, normal.y, normal.z, normal.x, normal.y, normal.z,
-//                            normal.x, normal.y, normal.z, normal.x, normal.y, normal.z, normal.x, normal.y, normal.z};
-//    glNormal3fv(glm::value_ptr(normal));
-//    glEnableClientState(GL_NORMAL_ARRAY);
-
+    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    GLfloat normCoords[] = {normal.x, normal.y, normal.z, normal.x, normal.y, normal.z, normal.x, normal.y, normal.z,
+                            normal.x, normal.y, normal.z, normal.x, normal.y, normal.z, normal.x, normal.y, normal.z};
+    glNormal3fv(glm::value_ptr(normal));
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, verts);
     glTexCoordPointer(2, GL_FLOAT, 0, tex_coords);
-//    glNormalPointer(GL_FLOAT, 0, normCoords);
+    glNormalPointer(GL_FLOAT, 0, normCoords);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-//    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
 
-    if (blend){
+    if (blend) {
         glDisable(GL_BLEND);
     }
 }

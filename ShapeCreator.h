@@ -86,7 +86,7 @@ public:
     std::vector <glm::vec3> temp_normals;
     std::vector<float> temp_vertices2;
     std::vector <std::array<float, 2>> temp_uvs2;
-    std::vector <float> temp_normals2;
+    std::vector <float> tempNormals;
 
 
     std::vector <std::array<float, 3>> vertices;
