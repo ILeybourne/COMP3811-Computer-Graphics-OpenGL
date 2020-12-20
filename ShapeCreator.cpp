@@ -634,11 +634,6 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
 
 void ShapeCreator::drawTextPlane(float w, float h , int index) {
     glBindTexture(GL_TEXTURE_2D, 0);
-
-//    this->imageLoader();
-//    glEnable(GL_TEXTURE_2D);
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[0]);
     glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[index]);
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
@@ -651,16 +646,11 @@ void ShapeCreator::drawTextPlane(float w, float h , int index) {
     glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0 * w / 2, 0.0 * h, 1.0);
     glEnd();
-//    glDisable(GL_TEXTURE_2D);
 }
 
 void ShapeCreator::createFigurine() {
     glBindTexture(GL_TEXTURE_2D, 0);
-
-//    glColor4b(1.0,1.0,0,1);
-//    glColor3b(1.0,1.0,0);
     glColor3f(1.0, 1.0, 0);
-
     glPushMatrix();
     glScaled(0.5, 0.7, 0.5);
     createSphere(1, 20, 20);
@@ -908,140 +898,6 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluCylinder(quadric, base, top, height, slices, stacks);
 }
-
-//void ShapeCreator::loadTextures() {
-//    glEnable(GL_TEXTURE_2D);
-//    int width, height, nrChannels;
-//    //Epic_BlueSunset/Epic_BlueSunset_Cam_0_Front+Z
-////    unsigned char *data = stbi_load(
-////            "/home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/Scene/textureinternet/wall.jpg",
-////            &width, &height, &nrChannels, 0);
-//    unsigned char *data = stbi_load(
-//            "/home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/Scene/textureinternet/Epic_BlueSunset/Epic_BlueSunset_Cam_0_Front+Z.png",
-//            &width, &height, &nrChannels, 4);
-//    if (data) {
-//        qDebug() << "text loaded";
-//        qDebug() << data[0] << data[512];
-//        qDebug() << width << height << nrChannels;
-//    } else {
-//        qDebug() << "nope loaded";
-//
-//    }
-//
-//    glGenTextures(1, &textureCreator->MyTextures);
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-//                    GL_REPEAT);    // set texture wrapping to GL_REPEAT (default wrapping method)
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-//
-//    GLint format;
-//    if (nrChannels == 3) {
-//        format = GL_RGB;
-//
-//    } else if (nrChannels == 4) {
-//        format = GL_RGBA;
-//    }
-//    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE,
-//                 data); //data is a gluByte array of your image data
-//    qDebug() << glGetError();
-//
-//    stbi_image_free(data);
-//    glDisable(GL_TEXTURE_2D);
-//}
-
-//void ShapeCreator::imageLoader(QStringList sImage , GLuint texture[]) {
-//    glEnable(GL_TEXTURE_2D);
-//
-////    numberOfTextures = sizeof(skyboxStrings) / sizeof(skyboxStrings[0]);
-////    numberOfTextures = 6;
-//    numberOfTextures = sImage.size();
-////    qDebug() << numberOfTextures;
-////    qDebug() <<sizeof(sImage) << sizeof(sImage[0])<< numberOfTextures;
-//
-//    qDebug() << numberOfTextures;
-//    int nChannels[numberOfTextures];
-//
-//    glGenTextures(numberOfTextures, texture);
-//
-//    qDebug() << "generation";
-//
-//    for (int i = 0; i < numberOfTextures; i++) {
-//        p_qimage.push_back(QImage(sImage[i]));
-////        qDebug() << p_qimage[i].isNull() << "null?";
-//        imageWidth[i] = p_qimage[i].width();
-//        imageHeight[i] = p_qimage[i].height();
-////        qDebug() << imageWidth[i] << imageHeight[i] << "w h?";
-//        imageSize[i] = imageWidth[i] * imageHeight[i];
-//
-//        nChannels[i] = 3;
-//        if (sImage[i].endsWith("png")) {
-//            qDebug() << "4 chan";
-//            nChannels[i] = 4;
-//        }
-//    }
-//
-//    for (int i = 0; i < numberOfTextures; i++) {
-//        unsigned int w = imageWidth[i];
-//        unsigned int h = imageHeight[i];
-//        unsigned int s = imageSize[i];
-//        GLubyte image1d3Chan[w * h * 3];
-//
-//        GLubyte image1d4Chan[imageWidth[i] * imageHeight[i] * 4];
-//
-//        if (nChannels[i] == 3) {
-//
-////            for (unsigned int i_pix = 0; i_pix < size; i_pix++) {
-////        std::div_t part = std::div((int) i_pix, (int) w);
-////        QRgb colVal = p_qimage2->pixel(N_X_IMAGE - part.rem - 1, part.quot);
-////        image1d[3 * size - 3 * i_pix - 3] = qRed(colVal);
-////        image1d[3 * size - 3 * i_pix - 2] = qGreen(colVal);
-////        image1d[3 * size - 3 * i_pix - 1] = qBlue(colVal);
-////    }
-//
-//            for (unsigned int i_pix = 0; i_pix < imageSize[i]; i_pix++) {
-//                std::div_t part = std::div((int) i_pix, (int) imageWidth[i]);
-//
-//                QRgb colVal = p_qimage[i].pixel(w - part.rem - 1, part.quot);
-//                image1d3Chan[3 * s - 3 * i_pix - 3] = qRed(colVal);
-//                image1d3Chan[3 * s - 3 * i_pix - 2] = qGreen(colVal);
-//                image1d3Chan[3 * s - 3 * i_pix - 1] = qBlue(colVal);
-//            }
-//        } else {
-//            for (unsigned int i_pix = 0; i_pix < imageSize[i]; i_pix++) {
-//                std::div_t part = std::div((int) i_pix, (int) imageWidth[i]);
-//                QRgb colVal = p_qimage[i].pixel(imageWidth[i] - part.rem - 1, part.quot);
-//                image1d4Chan[4 * imageSize[i] - 4 * i_pix - 4] = qRed(colVal);
-//                image1d4Chan[4 * imageSize[i] - 4 * i_pix - 3] = qGreen(colVal);
-//                image1d4Chan[4 * imageSize[i] - 4 * i_pix - 2] = qBlue(colVal);
-//                image1d4Chan[4 * imageSize[i] - 4 * i_pix - 1] = qAlpha(colVal);
-//            }
-//        }
-//
-//        glBindTexture(GL_TEXTURE_2D, texture[i]);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//        //    glActiveTexture(GL_TEXTURE0);
-//
-//        GLint format;
-//        if (nChannels[i] == 3) {
-//            format = GL_RGB;
-//            glTexImage2D(GL_TEXTURE_2D,
-//                         0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
-//                         image1d3Chan);
-//        } else {
-//            format = GL_RGBA;
-//            glTexImage2D(GL_TEXTURE_2D,
-//                         0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
-//                         image1d4Chan);
-//        }
-//    }
-//}
 
 bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                               std::vector<float> &out_uvs,
