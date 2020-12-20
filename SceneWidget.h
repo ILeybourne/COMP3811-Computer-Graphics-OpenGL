@@ -17,6 +17,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "ShapeCreator.h"
+#include "TextureCreator.h"
 #include <experimental/filesystem>
 #include "limits.h"
 
@@ -61,7 +62,6 @@ protected:
 
     float applePositions2[48519];
 
-    ShapeCreator::Model m;
 
     GLuint triangleVBO;
     GLuint vertexbuffer;
@@ -75,6 +75,7 @@ protected:
     GLfloat shadowMatrix1[16];
 
     ShapeCreator *shapeCreator;
+    TextureCr
 private:
     void walls();
 }; // class GLPolygonWidget

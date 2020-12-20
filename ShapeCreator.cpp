@@ -30,9 +30,6 @@ ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
 // constructor
 
 void ShapeCreator::sky(float width, float height, float depth, int tessX, int tessY, int tessZ) {
-//    glActiveTexture(GL_TEXTURE0);
-//    glActiveTexture(GL_TEXTURE1);
-
     glBindTexture(GL_TEXTURE_2D, 0);
 ////   North Wall White
     glColor3f(1.0, 1.0, 1.0);
@@ -59,21 +56,8 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
     glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
-//    glActiveTexture(GL_TEXTURE0);
-
-//    for (float i = v1[0]; i < v3[0]; i += tessXSize) {
-//        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-//            glBegin(GL_POLYGON);
-//            glVertex3f(i, j, v1[2]);
-//            glVertex3f(i + tessXSize, j, v2[2]);
-//            glVertex3f(i + tessXSize, j + tessYSize, v3[2]);
-//            glVertex3f(i, j + tessYSize, v4[2]);
-//            glEnd();
-//        }
-//    }
 
     //East Wall Red
-//    glColor3f(1.0, 0.0, 0.0);
     //Coordinates
     v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};

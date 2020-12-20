@@ -444,8 +444,8 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_BLEND);
     glPopMatrix();
 
+    ////Semicylinder
 //    shapeCreator->createSemiCylinder(5,5,3,3,3);
-
 
     glBindTexture(GL_TEXTURE_2D, shapeCreator->MyTexture[6]);
     glColor3f(1.0, 1.0, 1.0);
