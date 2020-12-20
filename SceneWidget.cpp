@@ -30,6 +30,10 @@
 // constructor
 SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
+//    QTimer *timer = new QTimer(this);
+//    connect(timer, SIGNAL(timeout()) , SLOT(update()));
+//    timer->start(1000);
+//
     double frame = 0;
     shapeCreator = new ShapeCreator(this);
     textureCreator = new TextureCreator(this);
@@ -224,7 +228,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         while (cameraPosition[1] > 4) {
             cameraPosition[1] -= 0.2;
             cameraDirection[1] -= 0.3;
-            updateGL();
+//            updateGL();
         }
     }
     if (jumping || falling) {
@@ -239,14 +243,14 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
             cameraDirection[1] += 0.2;
             cameraPosition[1] -= 1.0 / 16;
             cameraDirection[1] -= 1.0 / 16;
-            updateGL();
+//            updateGL();
             jumping = true;
         }
         while (cameraPosition[1] > 5) {
 
             cameraPosition[1] -= 1.0 / 16;
             cameraDirection[1] -= 1.0 / 16;
-            updateGL();
+//            updateGL();
             falling = true;
         }
         cameraPosition[1] = 5;
@@ -257,7 +261,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     qDebug() << "pos" << cameraPosition[0] << cameraPosition[1] << cameraPosition[2];
     qDebug() << "dir" << cameraDirection[0] << cameraDirection[1] << cameraDirection[2] << camZ << camX;
     qDebug() << "yaw" << yaw << fmod((yaw / M_2_PI) * 360, 360);
-    updateGL();
+//    updateGL();
 }
 
 
@@ -266,7 +270,7 @@ void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
         while (cameraPosition[1] < 5) {
             cameraPosition[1] += 0.2;
             cameraDirection[1] += 0.3;
-            updateGL();
+//            updateGL();
         }
         cameraPosition[1] = 5;
         cameraDirection[1] = 5;
@@ -336,6 +340,39 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
     shadowMatrix[15] = dot - light[3] * wall[3];
 
     return shadowMatrix;
+}
+
+void SceneWidget::placeTerrain(){
+    glPushMatrix();
+    glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
+    glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
+    shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
+                                     shapeCreator->planeZTess);
+    glPopMatrix();
+}
+
+void SceneWidget::updateFrameActions(){
+    ////Rotation variable of cubes
+    rotateCube += 0.5;
+
+    ////Update frame number
+    frame++;
+    if (frame == ULLONG_MAX) {
+        frame = 0;
+    }
+
+}
+
+void SceneWidget::getFrameRate() {
+//    QTime currentTime = QTime::currentTime();
+//    QTime duration = currentTime - startTime;
+
+    unsigned long long frameDifference = frame - lastFrameRecorded;
+    qDebug() << frame << lastFrameRecorded;
+    lastFrameRecorded = frame;
+    qDebug() << QTime::currentTime();
+    qDebug() << frameDifference << "fps";
+
 }
 
 // called every time the widget needs painting
@@ -498,12 +535,7 @@ void SceneWidget::paintGL() { // paintGL()
     glEnable(GL_LIGHT0);
 
     ////Terrain
-//    glPushMatrix();
-//    glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
-//    glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
-//    shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
-//                                     shapeCreator->planeZTess);
-//    glPopMatrix();
+    placeTerrain();
 
     glLoadIdentity();
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
@@ -511,8 +543,8 @@ void SceneWidget::paintGL() { // paintGL()
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
     glFlush();
-    frame++;
-    if (frame == ULLONG_MAX)
-        frame = 0;
-    rotateCube += 0.5;
+
+
+    updateFrameActions();
+//    qDebug() << frame;
 } // paintGL()

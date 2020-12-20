@@ -56,12 +56,13 @@ SOURCES       = Main.cpp \
 		TextureCreator.cpp \
 		ShapeCreator.cpp \
 		SceneWidget.cpp \
-		Window.cpp 
+		Window.cpp moc_SceneWidget.cpp
 OBJECTS       = Main.o \
 		TextureCreator.o \
 		ShapeCreator.o \
 		SceneWidget.o \
-		Window.o
+		Window.o \
+		moc_SceneWidget.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -363,8 +364,16 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_SceneWidget.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_SceneWidget.cpp
+moc_SceneWidget.cpp: SceneWidget.h \
+		ShapeCreator.h \
+		TextureCreator.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/Scene/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/Scene -I/home/izzy/Documents/Leeds/Work/Year_3/Computer_Graphics/cw2/tutorial1/Scene -I/opt/local/include -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtOpenGL -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include SceneWidget.h -o moc_SceneWidget.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -377,7 +386,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
@@ -390,7 +399,8 @@ Main.o: Main.cpp Window.h \
 TextureCreator.o: TextureCreator.cpp TextureCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TextureCreator.o TextureCreator.cpp
 
-ShapeCreator.o: ShapeCreator.cpp ShapeCreator.h
+ShapeCreator.o: ShapeCreator.cpp ShapeCreator.h \
+		TextureCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ShapeCreator.o ShapeCreator.cpp
 
 SceneWidget.o: SceneWidget.cpp SceneWidget.h \
@@ -403,6 +413,9 @@ Window.o: Window.cpp Window.h \
 		ShapeCreator.h \
 		TextureCreator.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
+
+moc_SceneWidget.o: moc_SceneWidget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_SceneWidget.o moc_SceneWidget.cpp
 
 ####### Install
 

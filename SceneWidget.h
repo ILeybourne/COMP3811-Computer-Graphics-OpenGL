@@ -8,6 +8,10 @@
 #include <cmath>
 #include <QtGui>
 #include <QtCore/QTime>
+#include <QTimer>
+#include <QApplication>
+#include <QObject>
+
 #include <GL/glu.h>
 #include <QGLWidget>
 #include <QtGui>
@@ -26,6 +30,7 @@ using namespace std;
 
 
 class SceneWidget : public QGLWidget, protected QGLFunctions { //
+Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
 
@@ -39,13 +44,17 @@ protected:
     // called every time the widget needs painting
     void paintGL();
 
+    void updateFrameActions();
+
     void keyPressEvent(QKeyEvent *key);
 
     void keyReleaseEvent(QKeyEvent *key);
 
+
     float *getShadowMatrix(float p[4], float l[4]);
 
     unsigned long long frame;
+    unsigned long long lastFrameRecorded;
     float cameraPosition[3] = {0, 5, 0};
     float light0Position[4] = {0, 15, -500, 1};
     float light1Position[4] = {0, 1, -5, 1};
@@ -66,10 +75,17 @@ protected:
     float rotateCube = 0;
     GLfloat shadowMatrix1[16];
 
+
     ShapeCreator *shapeCreator;
     TextureCreator *textureCreator;
+
+public slots:
+    void getFrameRate();
+
+
 private:
     void walls();
+    void placeTerrain();
 }; // class GLPolygonWidget
 
 #endif

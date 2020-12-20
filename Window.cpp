@@ -45,6 +45,11 @@ Window::Window(QWidget *parent)
     float frameRate = 1000 / 60;
     frameTimer->setInterval(frameRate);
     frameTimer->start();
+
+    QTimer *secondTimer = new QTimer(this);
+    QObject::connect(secondTimer, SIGNAL(timeout()), sceneWidget, SLOT(getFrameRate()));
+    secondTimer->setInterval(1000);
+    secondTimer->start();
 } // constructor
 
 Window::~Window() { // destructor
