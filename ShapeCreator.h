@@ -80,42 +80,32 @@ public:
                     std::vector<float> &out_normals
     );
 
-    std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
+//    std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
     std::vector <glm::vec3> temp_vertices;
     std::vector <glm::vec2> temp_uvs;
     std::vector <glm::vec3> temp_normals;
-    std::vector<float> temp_vertices2;
-    std::vector <std::array<float, 2>> temp_uvs2;
-    std::vector <float> tempNormals;
+//    std::vector<float> temp_vertices2;
+//    std::vector <std::array<float, 2>> temp_uvs2;
+//    std::vector <float> tempNormals;
 
 
     std::vector <std::array<float, 3>> vertices;
     std::vector <std::array<float, 2>> uvs;
     std::vector <std::array<float, 3>> normals; // Won't be used at the moment.
 
-    std::vector<GLfloat> vertices3;
-    std::vector<GLfloat> uvs3;
-    std::vector<GLfloat> normals3; // Won't be used at the moment.
+    std::vector<GLfloat> verticesPC;
+    std::vector<GLfloat> uvsPC;
+    std::vector<GLfloat> normalsPC;
+
+    std::vector<GLfloat> verticesGeisha;
+    std::vector<GLfloat> uvsGeisha;
+    std::vector<GLfloat> normalsGeisha;
+
+
     void drawTexture(float x, float y, float w, float h,
                               float tx, float ty, float tw, float th, bool blend ,GLuint texture);
 
-    bool getOBJinfo2(std::string fp, std::vector <std::array<float, 3>> &out_vertices,
-                     std::vector <std::array<float, 2>> &out_uvs,
-                     std::vector <std::array<float, 3>> &out_normals);
 
-//
-//    Model apple = {0};
-//    apple.vertices = 9555;
-//    apple.positions = 3088;
-//    apple.texels = 3131;
-//    apple.normals = 1292;
-//    apple.faces = 3185;
-
-    static constexpr int appleVertices = 9555;
-    static constexpr int applePositions = 3088;
-    static constexpr int appleTexels = 3131;
-    static constexpr int appleNormals = 1292;
-    static constexpr int appleFaces = 3185;
 
     QWidget parent;
     static constexpr int planeWidth = 10;

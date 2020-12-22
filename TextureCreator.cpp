@@ -14,15 +14,18 @@ TextureCreator::TextureCreator(QWidget *parent) {// constructor
 }
 // constructor
 
+void TextureCreator::swapActiveTexture(int textureNumber){
+    if (textureNumber <= GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS && textureNumber >= 0){
+        glActiveTexture(GL_TEXTURE0 + textureNumber);
+//        qDebug() << "unit changed";
+    }else{
+        qDebug() << "Error active texture number is out of bounds!";
+    }
+
+}
+
 void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
-    qDebug() << "start";
-
-
-    glEnable(GL_TEXTURE_2D);
-
-    qDebug() << "before";
     qDebug() << sImage.size();
-    this->numberOfTextures = 0;
     qDebug() << this->numberOfTextures;
 
     numberOfTextures = sImage.size();
@@ -33,6 +36,9 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
     qDebug() << numberOfTextures;
 
     int nChannels[numberOfTextures];
+    unsigned int imageWidth[constNumberOfTextures];
+    unsigned int imageHeight[constNumberOfTextures];
+    unsigned int imageSize[constNumberOfTextures];
 
     glGenTextures(numberOfTextures, texture);
 
@@ -56,9 +62,7 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
         unsigned int h = imageHeight[i];
         unsigned int s = imageSize[i];
         GLubyte image1d3Chan[w * h * 3];
-
         GLubyte image1d4Chan[imageWidth[i] * imageHeight[i] * 4];
-
         if (nChannels[i] == 3) {
             for (unsigned int i_pix = 0; i_pix < imageSize[i]; i_pix++) {
                 std::div_t part = std::div((int) i_pix, (int) imageWidth[i]);
@@ -97,6 +101,7 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
                          0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
                          image1d4Chan);
         }
+        qDebug() << i;
     }
     qDebug() << "finished";
 }

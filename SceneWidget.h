@@ -57,7 +57,7 @@ protected:
     unsigned long long lastFrameRecorded;
     float cameraPosition[3] = {0, 5, 0};
     float light0Position[4] = {0, 15, -500, 1};
-    float light1Position[4] = {0, 1, -5, 1};
+    float light1Position[4] = {0, 1, -10, 1};
     float cameraUp[3] = {0, 6, 0};
     float fov = 90;
     float radius = 1;
@@ -68,6 +68,9 @@ protected:
     float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] + radius};
     bool jumping = false;
     bool falling = false;
+
+    GLuint geishaFrameBuffer;
+
 
     long unsigned int appleVertNumber;
     float vertexFloatArray[48519]; // Update if vert number updates
@@ -86,6 +89,14 @@ public slots:
 private:
     void walls();
     void placeTerrain();
+
+    void drawPC();
+
+    void testLight();
+
+    void drawShadows();
+
+    void drawGeisha();
 }; // class GLPolygonWidget
 
 #endif

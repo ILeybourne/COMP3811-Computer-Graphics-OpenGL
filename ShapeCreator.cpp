@@ -18,6 +18,7 @@ ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
 // constructor
 
 void ShapeCreator::sky(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+//    textureCreator->swapActiveTexture(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 ////   North Wall White
     glColor3f(1.0, 1.0, 1.0);
@@ -30,7 +31,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[0]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[0]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -56,7 +57,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     glNormal3fv(glm::value_ptr(normal));
 
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[2]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[2]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -92,7 +93,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[1]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[1]);
     glColor3f(1.0, 1.0, 1.0);
 //    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
 //    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
@@ -122,7 +123,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[3]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[3]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -147,7 +148,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[4]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[4]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -172,7 +173,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[5]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[5]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -634,7 +635,7 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
 
 void ShapeCreator::drawTextPlane(float w, float h, int index) {
     glBindTexture(GL_TEXTURE_2D, 0);
-    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[index]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[index]);
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
     glTexCoord2f(0.0f, 0.0f);
@@ -907,6 +908,14 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                               std::vector<float> &out_uvs,
                               std::vector<float> &out_normals) {
     string cp = std::experimental::filesystem::current_path();
+
+    std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
+
+
+    std::vector<float> temp_vertices2;
+    std::vector <std::array<float, 2>> temp_uvs2;
+    std::vector <float> tempNormals;
+
     fp = cp.append(fp);
 
     const char *path = fp.c_str();
