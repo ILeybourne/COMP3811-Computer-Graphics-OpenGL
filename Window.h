@@ -1,40 +1,51 @@
 #ifndef SCENE_WINDOW_H
 #define SCENE_WINDOW_H
+
 #include <QGLWidget>
 #include <QGLWidget>
 #include <QMenuBar>
 #include <QSlider>
+#include <QLabel>
+#include <QComboBox>
 #include <QBoxLayout>
 #include <QTimer>
 #include "QSizePolicy"
 #include "SceneWidget.h"
 
-class Window: public QWidget
-	{ 
-	public:
-	// constructor / destructor
-	Window(QWidget *parent);
-	~Window();
+class Window : public QWidget {
+Q_OBJECT
+public:
+    // constructor / destructor
+    Window(QWidget *parent);
 
-	// visual hierarchy
-	// menu bar
-	QMenuBar *menuBar;
-		// file menu
-		QMenu *fileMenu;
-			// quit action
-			QAction *actionQuit;
+    ~Window();
 
-	// window layout
-	QBoxLayout *windowLayout;
+    // visual hierarchy
+    // menu bar
+    QMenuBar *menuBar;
+    // file menu
+    QMenu *fileMenu;
+    // quit action
+    QAction *actionQuit;
 
-	// beneath that, the main widget
-	SceneWidget *sceneWidget;
+    // window layout
+    QBoxLayout *windowLayout;
+
+    // beneath that, the main widget
+    SceneWidget *sceneWidget;
     QGLWidget *wid;
-	// and a slider for the number of vertices
-	QSlider *nVerticesSlider;
+    // and a slider for the number of vertices
+    QSlider *nVerticesSlider;
+    QComboBox *screenTextureSelection;
 
-	// resets all the interface elements
-	void ResetInterface();
-	}; 
-	
+    QLabel *screenTextureSelectionLabel;
+
+    // resets all the interface elements
+    void ResetInterface();
+
+public slots:
+    void closeWindow();
+
+};
+
 #endif

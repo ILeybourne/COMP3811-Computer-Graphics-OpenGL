@@ -97,6 +97,8 @@ private:
     void drawShadows();
 
     void drawGeisha();
+
+    void drawFire();
 }; // class GLPolygonWidget
 
 #endif

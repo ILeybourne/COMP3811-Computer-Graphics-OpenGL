@@ -561,6 +561,35 @@ void SceneWidget::drawGeisha() {
     glEnable(GL_CULL_FACE);
 }
 
+void SceneWidget::drawFire() {
+    glDisable(GL_LIGHTING);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
+    glPushMatrix();
+    int fireNum = frame % 20 + (6 + 3);
+    float fireWidth = 10;
+    float fireHeight = 20;
+
+    glPushMatrix();
+    glTranslatef(light1Position[0] - fireWidth/2 , -fireHeight/8, light1Position[2]);
+    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
+    glPopMatrix();
+
+    ////Second fire
+//    glPushMatrix();
+//    glTranslatef(light1Position[0] - fireWidth/2 , -fireHeight/8, light1Position[2]);
+//    glRotatef(90, 0, 1, 0);
+//    glTranslatef(-5, 0, 5);
+//    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
+//    glPopMatrix();
+
+    glPopMatrix();
+    glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+}
+
 // called every time the widget needs painting
 void SceneWidget::paintGL() { // paintGL()
     ////Clear screen
@@ -597,12 +626,12 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
     glPopMatrix();
 
+
     drawShadows();
 
     ////Semicylinder
 //    shapeCreator->createSemiCylinder(5,5,3,3,3);
 
-//    textureCreator->swapActiveTexture(1);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     ////Draw PC
@@ -611,6 +640,8 @@ void SceneWidget::paintGL() { // paintGL()
     ////Draw Geisha
     drawGeisha();
 
+    ////Draw Fire
+    drawFire();
 
 //    textureCreator->swapActiveTexture(0);
     ////Outside
@@ -621,36 +652,7 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->sky(1000.0, 1000.0, 1000.0, 1, 1, 1);
     glPopMatrix();
 
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
 
-    glPushMatrix();
-    int fireNum = frame % 20 + (6 + 3);
-//    glRotatef(45, 0, 1, 0);
-    float fireWidth = 10;
-    float fireHeight = 20;
-    glPushMatrix();
-    glTranslatef(light1Position[0] - fireWidth/2 , -fireHeight/8, light1Position[2]);
-
-    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
-    glPopMatrix();
-
-//    glTranslatef(-5, 0, 5);
-//    glRotatef(90, 0, 1, 0);
-//    glTranslatef(-5, -1, 5);
-//
-////    glTranslatef(5, 0, -5);
-//
-//    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
-//    glPopMatrix();
-    glPopMatrix();
-    glPopMatrix();
-
-
-    glDisable(GL_BLEND);
-
-    glEnable(GL_CULL_FACE);
 
 
     glEnable(GL_LIGHTING);
