@@ -27,6 +27,8 @@ void TextureCreator::swapActiveTexture(int textureNumber) {
 void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
     numberOfTextures = sImage.size();
 
+    qDebug() << numberOfTextures << "num";
+
     ////TODO Clean up variables
     int nChannels[numberOfTextures];
     unsigned int imageWidth[constNumberOfTextures];
@@ -37,6 +39,7 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
 
     for (int i = 0; i < numberOfTextures; i++) {
         pQImage.push_back(QImage(sImage[i]));
+        qDebug() << pQImage[i].isNull() << "null?";
         imageWidth[i] = pQImage[i].width();
         imageHeight[i] = pQImage[i].height();
         imageSize[i] = imageWidth[i] * imageHeight[i];
@@ -60,6 +63,7 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
             glTexImage2D(GL_TEXTURE_2D,
                          0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
                          pQImage[i].constBits());
+            qDebug() << "GL_RGB" << i;
         } else {
             pQImage[i] = pQImage[i].mirrored(false,true).convertToFormat(QImage::Format_RGBA8888);
 
@@ -67,7 +71,11 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
             glTexImage2D(GL_TEXTURE_2D,
                          0, format, imageWidth[i], imageHeight[i], 0, format, GL_UNSIGNED_BYTE,
                          pQImage[i].constBits());
+
+            qDebug() << "GL_RGBA" << i;
+
         }
+        qDebug() << i ;
     }
 }
 

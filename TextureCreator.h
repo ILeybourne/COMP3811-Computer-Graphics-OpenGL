@@ -34,7 +34,7 @@ public:
 
     void imageLoader(QStringList sImage, GLuint texture[]);
 
-    QStringList skyBoxTextureStrings = {
+    QStringList textureStrings = {
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
             "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
@@ -64,37 +64,10 @@ public:
             "./textureinternet/fire/fire_00093.png",
             "./textureinternet/fire/fire_00094.png",
             "./textureinternet/fire/fire_00095.png",
+            "./textureinternet/Marc_Dekamps.ppm",
+            "./textureinternet/Mercator-projection.ppm"
     };
 
-    QStringList objTextureStrings = {
-
-            "./textureinternet/appleIIe.jpg",
-            "./textureinternet/mario2.png",
-            "./textureinternet/pruebas_geisha.jpg",
-    };
-
-    QStringList fireTextureStrings = {
-            "./textureinternet/fire/fire_00076.png",
-            "./textureinternet/fire/fire_00077.png",
-            "./textureinternet/fire/fire_00078.png",
-            "./textureinternet/fire/fire_00079.png",
-            "./textureinternet/fire/fire_00080.png",
-            "./textureinternet/fire/fire_00081.png",
-            "./textureinternet/fire/fire_00082.png",
-            "./textureinternet/fire/fire_00083.png",
-            "./textureinternet/fire/fire_00084.png",
-            "./textureinternet/fire/fire_00085.png",
-            "./textureinternet/fire/fire_00086.png",
-            "./textureinternet/fire/fire_00087.png",
-            "./textureinternet/fire/fire_00088.png",
-            "./textureinternet/fire/fire_00089.png",
-            "./textureinternet/fire/fire_00090.png",
-            "./textureinternet/fire/fire_00091.png",
-            "./textureinternet/fire/fire_00092.png",
-            "./textureinternet/fire/fire_00093.png",
-            "./textureinternet/fire/fire_00094.png",
-            "./textureinternet/fire/fire_00095.png",
-    };
 
     int skyBoxZPlusIndex = 0;  // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
     int skyboxZNegIndex = 1;   // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
@@ -125,17 +98,17 @@ public:
     int Fire18Index = 26;      // "./textureinternet/fire/fire_00093.png",
     int Fire19Index = 27;      // "./textureinternet/fire/fire_00094.png",
     int Fire20Index = 28;      // "./textureinternet/fire/fire_00095.png",
+    int marcIndex = 29;      // "./textureinternet/fire/fire_00095.png",
+    int mapIndex = 30;      // "./textureinternet/fire/fire_00095.png",
 
     int numberOfTextures;
 
     QList<QImage> pQImage;
 
-    static constexpr int constNumberOfTextures = 6 + 3 + 20;
-    static constexpr int objTextNum = 3;
-    static constexpr int fireTextNum = 20;
+    //6 skybox, 3 object (with mario), 20 fire, 2 marc
+    static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2;
 
     GLuint textures[constNumberOfTextures];
-
 
     void swapActiveTexture(int textureNumber);
 

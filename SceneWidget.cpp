@@ -131,7 +131,7 @@ void SceneWidget::initializeGL() { // initializeGL()
     ////Load textures
 //    shapeCreator->imageLoader(textureStrings , textureCreator->MyTextures);
     textureCreator->swapActiveTexture(0);
-    textureCreator->imageLoader(textureCreator->skyBoxTextureStrings, textureCreator->textures);
+    textureCreator->imageLoader(textureCreator->textureStrings, textureCreator->textures);
 
 //    glActiveTexture(GL_TEXTURE6 );
 //    textureCreator->swapActiveTexture(1);
@@ -602,6 +602,8 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
 
+    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,textureCreator->textures[29]);
+
     glPushMatrix();
     shapeCreator->walls(50.0, 20.0, 30.0, 50, 50, 50);
     glPopMatrix();
@@ -661,6 +663,8 @@ void SceneWidget::paintGL() { // paintGL()
     glBindTexture(GL_TEXTURE_2D, 0);
     ////Terrain
     placeTerrain();
+
+    glDrawPixels(textureCreator->pQImage[30].width(),textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, textureCreator->pQImage[30].bits());
 
     glLoadIdentity();
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
