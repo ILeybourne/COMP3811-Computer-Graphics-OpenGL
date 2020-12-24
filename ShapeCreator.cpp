@@ -913,8 +913,8 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
 
 
     std::vector<float> temp_vertices2;
-    std::vector <std::array<float, 2>> temp_uvs2;
-    std::vector <float> tempNormals;
+    std::vector<std::array<float, 2>> temp_uvs2;
+    std::vector<float> tempNormals;
 
     fp = cp.append(fp);
 
@@ -964,8 +964,8 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             tempNormals.push_back(normalY);
             tempNormals.push_back(normalZ);
         }
-        ////If face data is found add the 3 vertex indices, 3 UV indices and 3 normal indices to correct arrays.
-        ////A face is always made up of triangles as as OBJ file has been triangulated beforehand
+            ////If face data is found add the 3 vertex indices, 3 UV indices and 3 normal indices to correct arrays.
+            ////A face is always made up of triangles as as OBJ file has been triangulated beforehand
         else if (strcmp(lineHeader, "f") == 0) {
             std::string vertex1, vertex2, vertex3;
             unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
@@ -1022,6 +1022,85 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
         out_normals.push_back(normal2z);
     }
     return true;
+}
+
+void ShapeCreator::createTorus(float innerRadius, float outerRadius, int sides, int rings) {
+    float eta, theta, eta2, theta2;
+    float diffEta = (M_PI * 2) / sides;
+    float diffTheta = (M_PI * 2) / rings;
+//    vector<std::array<float, 3>> vertexBuffer;
+    float vertexBuffer2[sides * rings * 3];
+    int count = 0;
+    for (int i = 0; i < rings; i++) {
+        theta = diffTheta * i;
+        for (int j = 0; j < sides; j++) {
+            eta = diffEta * j;
+            //main vertex
+            glm::vec3 v1;
+            //vertex adjacent on next ring
+            glm::vec3 v2;
+            //vertex on next ring and next side
+            glm::vec3 v3;
+            //vertex on main ring and next side
+            glm::vec3 v4;
+            //The four vertices can be used to draw a plane
+
+            int i2= i + 1;
+            int j2 = j + 1;
+
+            if (i == rings - 1)
+                i2 = 0;
+
+            if (j == sides - 1)
+                j2 = 0;
+
+            theta2 = diffTheta * i2;
+            eta2 = diffEta * j2;
+
+            //x
+             v1.x = cos(theta) * (outerRadius + cos(eta) * innerRadius);
+            //y
+             v1.y = sin(theta) * (outerRadius + cos(eta) * innerRadius);
+            //z
+             v1.z= sin(eta) * innerRadius;
+
+             //x
+             v2.x = cos(theta2) * (outerRadius + cos(eta) * innerRadius);
+            //y
+             v2.y = sin(theta2) * (outerRadius + cos(eta) * innerRadius);
+            //z
+             v2.z= sin(eta) * innerRadius;
+
+             //x
+             v3.x = cos(theta2) * (outerRadius + cos(eta2) * innerRadius);
+            //y
+             v3.y = sin(theta2) * (outerRadius + cos(eta2) * innerRadius);
+            //z
+             v3.z= sin(eta2) * innerRadius;
+
+             //x
+             v4.x = cos(theta) * (outerRadius + cos(eta2) * innerRadius);
+            //y
+             v4.y = sin(theta) * (outerRadius + cos(eta2) * innerRadius);
+            //z
+             v4.z= sin(eta2) * innerRadius;
+
+            glBegin(GL_POLYGON);
+            glVertex3f(v1.x, v1.y, v1.z);
+            glVertex3f(v2.x, v2.y, v2.z);
+            glVertex3f(v3.x, v3.y, v3.z);
+            glVertex3f(v4.x, v4.y, v4.z);
+            glEnd();
+
+//            //x
+//            vertexBuffer2[(i * sides * 3) + j * 3 + 0] = cos(theta) * (outerRadius + cos(eta) * innerRadius);
+//            //y
+//            vertexBuffer2[(i * sides * 3) + j * 3 + 1] = sin(theta) * (outerRadius + cos(eta) * innerRadius);
+//            //z
+//            vertexBuffer2[(i * sides * 3) + j * 3 + 2] = sin(eta) * innerRadius;
+//
+        }
+    }
 }
 
 ////TODO change

@@ -572,7 +572,7 @@ void SceneWidget::drawFire() {
     float fireHeight = 20;
 
     glPushMatrix();
-    glTranslatef(light1Position[0] - fireWidth/2 , -fireHeight/8, light1Position[2]);
+    glTranslatef(light1Position[0] - fireWidth / 2, -fireHeight / 8, light1Position[2]);
     shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
     glPopMatrix();
 
@@ -602,7 +602,7 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
 
-    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,textureCreator->textures[29]);
+//    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,textureCreator->textures[29]);
 
     glPushMatrix();
     shapeCreator->walls(50.0, 20.0, 30.0, 50, 50, 50);
@@ -645,6 +645,12 @@ void SceneWidget::paintGL() { // paintGL()
     ////Draw Fire
     drawFire();
 
+    glPushMatrix();
+//    glScalef(3, 3, 3);
+    shapeCreator->createTorus(3, 5, 50, 5);
+    glPopMatrix();
+
+
 //    textureCreator->swapActiveTexture(0);
     ////Outside
     ////Skybox
@@ -655,8 +661,6 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
 
 
-
-
     glEnable(GL_LIGHTING);
     glDisable(GL_LIGHT1);
     glEnable(GL_LIGHT0);
@@ -664,7 +668,8 @@ void SceneWidget::paintGL() { // paintGL()
     ////Terrain
     placeTerrain();
 
-    glDrawPixels(textureCreator->pQImage[30].width(),textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, textureCreator->pQImage[30].bits());
+    ////Draw image pixels
+//    glDrawPixels(textureCreator->pQImage[30].width(),textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, textureCreator->pQImage[30].bits());
 
     glLoadIdentity();
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],

@@ -130,8 +130,9 @@ public:
 //    QOpenGLShaderProgram *program = nullptr;
 //    QOpenGLBuffer vbo;
 
-protected:
+    void createTorus(float innerRadius, float outerRadius, int sides, int rings);
 
+protected:
 private:
 };
 
