@@ -904,6 +904,17 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
     gluCylinder(quadric, base, top, height, slices, stacks);
 }
 
+void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops) {
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    GLUquadric *quadric = gluNewQuadric();
+    gluQuadricDrawStyle(quadric, GLU_FILL);
+    gluQuadricNormals(quadric, GLU_SMOOTH);
+//    gluCylinder(quadric, base, top, height, slices, stacks);
+    gluDisk(quadric, inner, outer, slices, loops);
+
+}
+
 bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                               std::vector<float> &out_uvs,
                               std::vector<float> &out_normals) {
@@ -1024,15 +1035,91 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     return true;
 }
 
-void ShapeCreator::createGyro(){
+void ShapeCreator::createGyro() {
+    float frameRad = 4;
+    float frameWidth = 0.2;
     glPushMatrix();
-    createTorus(4,1,50,50);
+    glRotatef(90,0,1,0);
+    ////Frame
+    createTorus(frameRad, frameWidth, 50, 50);
+    ////Bearing1
+    glPushMatrix();
+    glTranslatef(frameRad - frameWidth - 0.2, 0, 0);
+    glRotatef(90, 0, 1, 0);
+    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    glPopMatrix();
+    ////Bearing2
+    glPushMatrix();
+    glTranslatef(-frameRad + frameWidth, 0, 0);
+    glRotatef(90, 0, 1, 0);
+    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    glPopMatrix();
+    ////Gimbal1
+    glPushMatrix();
+    float gimbal1Rad = frameRad - (frameWidth) * 2 - 0.1;
+    glRotatef(gimbal1Turning, 1, 0, 0);
+    createTorus(gimbal1Rad, 0.2, 50, 50);
+    ////Bearing3
+    glPushMatrix();
+    glTranslatef(0, gimbal1Rad - frameWidth, 0);
+    glRotatef(90, 1, 0, 0);
+    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    glPopMatrix();
+    ////Bearing4
+    glPushMatrix();
+    glTranslatef(0, -gimbal1Rad + frameWidth + 0.2, 0);
+    glRotatef(90, 1, 0, 0);
+    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+    float gimbal2Rad = gimbal1Rad - (frameWidth) * 2 - 0.1;
+    glRotatef(gimbal1Turning, 0, 1, 0);
+    createTorus(gimbal2Rad, 0.2, 50, 50);
+    glPushMatrix();
+    ////Axle
+    glPushMatrix();
+    glTranslatef(-gimbal2Rad + frameWidth - 0.1, 0, 0);
+    glRotatef(90, 0, 1, 0);
+    createCylinder(0.1, 0.1, gimbal2Rad * 2, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+    ////Gyro
+    glRotatef(gyroTurning, 1, 0, 0);
+
+    glRotatef(90, 0, 1, 0);
+    float gyroHeight = 0.8;
+    int gyroSlices = 10;
+    glTranslatef(0, 0, -gyroHeight/2);
+    glRotatef(180,0,1,0);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
+    glRotatef(180,0,1,0);
+//    glTranslatef(0, 0, 0.4);
+    glTranslatef(0, 0, gyroHeight);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
+    glTranslatef(0, 0, -gyroHeight);
+    createCylinder(gimbal2Rad - 0.5, gimbal2Rad - 0.5, gyroHeight, gyroSlices, gyroSlices);
+
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0,-frameRad-frameWidth,0);
+    glRotatef(90,1,0,0);
+    glPushMatrix();
+    glRotatef(180,1,0,0);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
+    glPopMatrix();
+    createCylinder(gimbal2Rad - 0.5, frameRad - 0.5, gyroHeight, gyroSlices, gyroSlices);
+    glTranslatef(0 ,0,gyroHeight);
+    createDisk(0, frameRad - 0.5, gyroSlices, 10);
     glPopMatrix();
 }
 
-void ShapeCreator::createTorus( float outerRadius ,float innerRadius, int sides, int rings) {
-    glBindTexture(GL_TEXTURE_2D,0);
-    glColor3f(1,0,0);
+void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, int rings) {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glColor3f(1, 0, 0);
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
     float diffTheta = (M_PI * 2) / rings;
@@ -1053,7 +1140,7 @@ void ShapeCreator::createTorus( float outerRadius ,float innerRadius, int sides,
             glm::vec3 v4;
             //The four vertices can be used to draw a plane
 
-            int i2= i + 1;
+            int i2 = i + 1;
             int j2 = j + 1;
 
             if (i == rings - 1)
@@ -1066,32 +1153,32 @@ void ShapeCreator::createTorus( float outerRadius ,float innerRadius, int sides,
             eta2 = diffEta * j2;
 
             //x
-             v1.x = cos(theta) * (outerRadius + cos(eta) * innerRadius);
+            v1.x = cos(theta) * (outerRadius + cos(eta) * innerRadius);
             //y
-             v1.y = sin(theta) * (outerRadius + cos(eta) * innerRadius);
+            v1.y = sin(theta) * (outerRadius + cos(eta) * innerRadius);
             //z
-             v1.z= sin(eta) * innerRadius;
+            v1.z = sin(eta) * innerRadius;
 
-             //x
-             v2.x = cos(theta2) * (outerRadius + cos(eta) * innerRadius);
+            //x
+            v2.x = cos(theta2) * (outerRadius + cos(eta) * innerRadius);
             //y
-             v2.y = sin(theta2) * (outerRadius + cos(eta) * innerRadius);
+            v2.y = sin(theta2) * (outerRadius + cos(eta) * innerRadius);
             //z
-             v2.z= sin(eta) * innerRadius;
+            v2.z = sin(eta) * innerRadius;
 
-             //x
-             v3.x = cos(theta2) * (outerRadius + cos(eta2) * innerRadius);
+            //x
+            v3.x = cos(theta2) * (outerRadius + cos(eta2) * innerRadius);
             //y
-             v3.y = sin(theta2) * (outerRadius + cos(eta2) * innerRadius);
+            v3.y = sin(theta2) * (outerRadius + cos(eta2) * innerRadius);
             //z
-             v3.z= sin(eta2) * innerRadius;
+            v3.z = sin(eta2) * innerRadius;
 
-             //x
-             v4.x = cos(theta) * (outerRadius + cos(eta2) * innerRadius);
+            //x
+            v4.x = cos(theta) * (outerRadius + cos(eta2) * innerRadius);
             //y
-             v4.y = sin(theta) * (outerRadius + cos(eta2) * innerRadius);
+            v4.y = sin(theta) * (outerRadius + cos(eta2) * innerRadius);
             //z
-             v4.z= sin(eta2) * innerRadius;
+            v4.z = sin(eta2) * innerRadius;
 
             glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
             glNormal3fv(glm::value_ptr(normal));

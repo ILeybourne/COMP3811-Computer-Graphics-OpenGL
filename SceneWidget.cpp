@@ -368,7 +368,9 @@ void SceneWidget::placeTerrain() {
 void SceneWidget::updateFrameActions() {
     ////Rotation variable of cubes
     rotateCube += 0.5;
-
+    shapeCreator->gimbal1Turning += M_PI_2;
+    shapeCreator->gimbal2Turning += 1;
+    shapeCreator->gyroTurning += 1.618033988749895 * 2;
     ////Update frame number
     frame++;
     if (frame == ULLONG_MAX) {
@@ -645,20 +647,21 @@ void SceneWidget::paintGL() { // paintGL()
     ////Draw Geisha
     drawGeisha();
 
+    ///Draw Gyro
     glPushMatrix();
     glDisable(GL_CULL_FACE);
-    glTranslatef(2,5,0);
-//    glScalef(3, 3, 3);
-//    shapeCreator->createTorus(3, 5, 50, 5);
+    glTranslatef(2, 5, 0);
+    glRotatef(shapeCreator->gyroTurning, 0, 1, 0);
+    glTranslatef(2, 0, 0);
+    glScalef(0.2, 0.2, 0.2);
     shapeCreator->createGyro();
     glEnable(GL_CULL_FACE);
-
     glPopMatrix();
 
     ////Draw Fire
     for (float i = 0; i < 10; i++) {
         glPushMatrix();
-        glTranslatef(0,0,(i)/10);
+        glTranslatef(0, 0, (i) / 10);
 //        glScalef(1/i,1/i,1/i);
         drawFire();
         glPopMatrix();

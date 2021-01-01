@@ -133,8 +133,13 @@ public:
     void createTorus(float innerRadius, float width, int sides, int rings);
     void createGyro();
 
+    float gimbal1Turning = 0;
+    float gimbal2Turning = 0;
+    float gyroTurning = 0;
+
 protected:
 private:
+    void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
 };
 
 #endif //SCENE_STB_IMAGE_H
