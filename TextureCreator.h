@@ -101,6 +101,8 @@ public:
     int marcIndex = 29;      // "./textureinternet/fire/fire_00095.png",
     int mapIndex = 30;      // "./textureinternet/fire/fire_00095.png",
 
+    int selectedIndex = 0;
+
     int numberOfTextures;
 
     QList<QImage> pQImage;

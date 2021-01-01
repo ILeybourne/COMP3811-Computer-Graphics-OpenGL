@@ -81,9 +81,10 @@ protected:
 
     ShapeCreator *shapeCreator;
     TextureCreator *textureCreator;
-
+    QWidget *window;
 public slots:
     void getFrameRate();
+    void changeScreenTexture(int i);
 
 
 private:
@@ -99,6 +100,7 @@ private:
     void drawGeisha();
 
     void drawFire();
+
 }; // class GLPolygonWidget
 
 #endif

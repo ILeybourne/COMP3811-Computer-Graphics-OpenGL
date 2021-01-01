@@ -44,6 +44,13 @@ Window::Window(QWidget *parent)
     nVerticesSlider = new QSlider(Qt::Horizontal);
 
     screenTextureSelection = new QComboBox();
+    QList<QString> stringsList;
+    stringsList.append("Sky");
+    stringsList.append("Marc");
+    stringsList.append("Map");
+    screenTextureSelection->addItems(stringsList);
+    int i;
+    QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged( int)), sceneWidget, SLOT(changeScreenTexture(int)));
     screenTextureSelectionLabel = new QLabel(this);
     screenTextureSelectionLabel->setText("Screen Image:");
     screenTextureSelectionLabel->setBuddy(screenTextureSelection);

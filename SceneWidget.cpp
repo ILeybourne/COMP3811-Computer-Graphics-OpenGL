@@ -19,6 +19,7 @@ SceneWidget::SceneWidget(QWidget *parent)
 //    connect(timer, SIGNAL(timeout()) , SLOT(update()));
 //    timer->start(1000);
 //
+    window = parent;
     double frame = 0;
     shapeCreator = new ShapeCreator(this);
     textureCreator = new TextureCreator(this);
@@ -379,6 +380,20 @@ void SceneWidget::updateFrameActions() {
 
 }
 
+void SceneWidget::changeScreenTexture(int i) {
+    qDebug() << "you are connected" << i;
+    if (i == 0){
+        textureCreator->selectedIndex=textureCreator->skyBoxZPlusIndex;
+    }
+    if (i ==1){
+        textureCreator->selectedIndex=textureCreator->marcIndex;
+
+    }
+    if (i==2){
+        textureCreator->selectedIndex=textureCreator->mapIndex;
+    }
+}
+
 void SceneWidget::getFrameRate() {
 //    QTime currentTime = QTime::currentTime();
 //    QTime duration = currentTime - startTime;
@@ -416,7 +431,7 @@ void SceneWidget::drawPC() {
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33, -0.4, -0.62);
     glScalef(1.8, 1.2, 1);
-    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, textureCreator->textures[1]);
+    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, textureCreator->textures[textureCreator->selectedIndex]);
     glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
     glPopMatrix();

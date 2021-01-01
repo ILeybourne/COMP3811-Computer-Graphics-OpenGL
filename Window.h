@@ -38,6 +38,7 @@ public:
     QSlider *nVerticesSlider;
     QComboBox *screenTextureSelection;
 
+
     QLabel *screenTextureSelectionLabel;
 
     // resets all the interface elements
