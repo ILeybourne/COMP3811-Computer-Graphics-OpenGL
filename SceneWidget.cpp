@@ -54,13 +54,14 @@ void SceneWidget::initializeGL() { // initializeGL()
 //    glMaterialfv(GL_FRONT, GL_AMBIENT, mambient);
 //    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
     GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
-    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
-    GLfloat mspec[] = {0.f, .8f, .8f, 0.0f};
-    GLfloat shininess2[] = {100};
+    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    GLfloat mspec[] = {0.1, 0.1, 0.1, 1.0f};
+//    GLfloat shininess2[] = {100};
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
-//    GLfloat shininess2[] = {50};
 //    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+    GLfloat shininess2[] = {50};
+    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
     GLfloat shininess[] = {100.0};
     GLfloat shininess3[] = {5.0};
 
@@ -68,7 +69,7 @@ void SceneWidget::initializeGL() { // initializeGL()
     ////Light 0
     GLfloat light_0_ambient[] = {0.3, 0.2, 0.25, 0.0};
     GLfloat light_0_diffuse[] = {1.0, 1.0, 1.0, 0.0};
-    GLfloat light_0_specular[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat light_0_specular[] = {1, 1, 1, 0.0};
 //    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_0_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_0_diffuse);
@@ -80,7 +81,9 @@ void SceneWidget::initializeGL() { // initializeGL()
     ////Light 1
     GLfloat light_1_ambient[] = {0.1, 0.1, 0.1, 0.0};
     GLfloat light_1_diffuse[] = {1.0, 1.0, 1.0, 0.0};
-    GLfloat light_1_specular[] = {1.0, 1.0, 1.0, 1.0};
+//    GLfloat light_1_specular[] = {1.0, 1.0, 1.0, 0.0};
+    GLfloat light_1_specular[] = {1, 1, 1, 0.0};
+
 //    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
     glLightfv(GL_LIGHT1, GL_AMBIENT, light_1_ambient);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light_1_diffuse);
@@ -642,13 +645,26 @@ void SceneWidget::paintGL() { // paintGL()
     ////Draw Geisha
     drawGeisha();
 
-    ////Draw Fire
-    drawFire();
-
     glPushMatrix();
+    glDisable(GL_CULL_FACE);
+    glTranslatef(2,5,0);
 //    glScalef(3, 3, 3);
-    shapeCreator->createTorus(3, 5, 50, 5);
+//    shapeCreator->createTorus(3, 5, 50, 5);
+    shapeCreator->createGyro();
+    glEnable(GL_CULL_FACE);
+
     glPopMatrix();
+
+    ////Draw Fire
+    for (float i = 0; i < 10; i++) {
+        glPushMatrix();
+        glTranslatef(0,0,(i)/10);
+//        glScalef(1/i,1/i,1/i);
+        drawFire();
+        glPopMatrix();
+    }
+
+
 
 
 //    textureCreator->swapActiveTexture(0);

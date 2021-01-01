@@ -1024,7 +1024,15 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     return true;
 }
 
-void ShapeCreator::createTorus(float innerRadius, float outerRadius, int sides, int rings) {
+void ShapeCreator::createGyro(){
+    glPushMatrix();
+    createTorus(4,1,50,50);
+    glPopMatrix();
+}
+
+void ShapeCreator::createTorus( float outerRadius ,float innerRadius, int sides, int rings) {
+    glBindTexture(GL_TEXTURE_2D,0);
+    glColor3f(1,0,0);
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
     float diffTheta = (M_PI * 2) / rings;
@@ -1085,6 +1093,8 @@ void ShapeCreator::createTorus(float innerRadius, float outerRadius, int sides, 
             //z
              v4.z= sin(eta2) * innerRadius;
 
+            glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+            glNormal3fv(glm::value_ptr(normal));
             glBegin(GL_POLYGON);
             glVertex3f(v1.x, v1.y, v1.z);
             glVertex3f(v2.x, v2.y, v2.z);
