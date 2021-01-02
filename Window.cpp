@@ -28,20 +28,21 @@ Window::Window(QWidget *parent)
 
     // create main widget
     sceneWidget = new SceneWidget(this);
-
     //8 factor multisampling
     QGLFormat format;
     format.setSamples(8);
     sceneWidget->setFormat(format);
     sceneWidget->setFocusPolicy(Qt::StrongFocus);
+
     windowLayout->addWidget(sceneWidget);
     windowLayout->setMenuBar(menuBar);
+
 
 //    sceneWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 //    sceneWidget->setFixedSize(400, 400);
 
     // create slider
-    nVerticesSlider = new QSlider(Qt::Horizontal);
+    rotationSlider = new QSlider(Qt::Horizontal);
 
     screenTextureSelection = new QComboBox();
     QList<QString> stringsList;
@@ -51,6 +52,8 @@ Window::Window(QWidget *parent)
     screenTextureSelection->addItems(stringsList);
     int i;
     QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged( int)), sceneWidget, SLOT(changeScreenTexture(int)));
+//    QObject::connect(screenTextureSelection, SIGNAL(hasFocus( bool)), screenTextureSelection->clearFocus(), SLOT());
+    QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged( int)), this, SLOT(resetFocus()));
     screenTextureSelectionLabel = new QLabel(this);
     screenTextureSelectionLabel->setText("Screen Image:");
     screenTextureSelectionLabel->setBuddy(screenTextureSelection);
@@ -59,8 +62,28 @@ Window::Window(QWidget *parent)
     selectionLayout->addWidget(screenTextureSelectionLabel,10);
     selectionLayout->addWidget(screenTextureSelection,90);
 
+    rotationSliderLabel = new QLabel(this);
+    rotationSliderLabel->setFixedHeight(20);
+    rotationSliderLabel->setText("Rotation Speed:");
 
-    windowLayout->addWidget(nVerticesSlider);
+    QBoxLayout *sliderLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
+    sliderLayout->addWidget(rotationSliderLabel);
+    sliderLayout->addWidget(rotationSlider);
+
+
+    fpsLabel = new QLabel(this);
+    fpsLabel->setFixedHeight(20);
+
+
+    rotationSlider->sliderReleased();
+
+    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setRotationSpeed()));
+    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
+    rotationSlider->setSliderPosition(10);
+
+
+    windowLayout->addLayout(sliderLayout);
+    windowLayout->addWidget(fpsLabel);
     windowLayout->addLayout(selectionLayout);
 //    windowLayout->addWidget(screenTextureSelection);
 //    windowLayout->addWidget(screenTextureSelectionLabel);
@@ -74,17 +97,39 @@ Window::Window(QWidget *parent)
 
     QTimer *secondTimer = new QTimer(this);
     QObject::connect(secondTimer, SIGNAL(timeout()), sceneWidget, SLOT(getFrameRate()));
+    QObject::connect(secondTimer, SIGNAL(timeout()), this, SLOT(updateFpsLabel()));
+    updateFpsLabel();
     secondTimer->setInterval(1000);
     secondTimer->start();
 } // constructor
+
+void Window::updateFpsLabel() {
+    QString fps = QString::number(sceneWidget->frameDifference);
+    qDebug() << "test" << fps << sceneWidget->frameDifference;
+    fpsLabel->setText(fps + " fps");
+}
+
+void Window::setRotationSpeed(){
+    int pos =rotationSlider->sliderPosition();
+    qDebug() << pos;
+    sceneWidget->turnTableRotationSpeed = pos/10;
+}
 
 void Window::closeWindow() {
     qDebug() << "closing";
     this->close();
 }
 
+void Window::resetFocus() {
+    rotationSlider->clearFocus();
+    screenTextureSelection->clearFocus();
+    fpsLabel->clearFocus();
+    screenTextureSelectionLabel->clearFocus();
+    sceneWidget->setFocus();
+}
+
 Window::~Window() { // destructor
-    delete nVerticesSlider;
+    delete rotationSlider;
     delete sceneWidget;
     delete windowLayout;
     delete actionQuit;
@@ -94,10 +139,10 @@ Window::~Window() { // destructor
 
 // resets all the interface elements
 void Window::ResetInterface() { // ResetInterface()
-    nVerticesSlider->setMinimum(3);
-    nVerticesSlider->setMaximum(30);
+    rotationSlider->setMinimum(3);
+    rotationSlider->setMaximum(30);
     //don't use the slider for now
-    //	nVerticesSlider->setValue(thePolygon->nVertices);
+    //	rotationSlider->setValue(thePolygon->nVertices);
     // now force refresh
     sceneWidget->update();
     update();

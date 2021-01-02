@@ -33,6 +33,10 @@ class SceneWidget : public QGLWidget, protected QGLFunctions { //
 Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
+    unsigned long long frameDifference;
+    ShapeCreator *shapeCreator;
+    float turnTableRotationSpeed = 1;
+
 
 protected:
     // called when OpenGL context is set up
@@ -79,11 +83,11 @@ protected:
     GLfloat shadowMatrix1[16];
 
 
-    ShapeCreator *shapeCreator;
     TextureCreator *textureCreator;
     QWidget *window;
+
 public slots:
-    void getFrameRate();
+    unsigned long long getFrameRate();
     void changeScreenTexture(int i);
 
 

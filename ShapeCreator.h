@@ -117,6 +117,8 @@ public:
 
     TextureCreator *textureCreator;
 
+    float turnTableRotation = 0;
+
 
 //    int numberOfTextures;
 //    QList <QImage> p_qimage;
@@ -136,10 +138,13 @@ public:
     float gimbal1Turning = 0;
     float gimbal2Turning = 0;
     float gyroTurning = 0;
-
+    void createPopulatedDesk();
+    void createEdgeCylinder(float radius, float height, float slices, float stacks);
+    void drawPC();
 protected:
 private:
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
+    void createDesk();
 };
 
 #endif //SCENE_STB_IMAGE_H

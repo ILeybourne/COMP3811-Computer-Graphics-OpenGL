@@ -61,7 +61,7 @@ static const uint qt_meta_data_SceneWidget[] = {
        3,    1,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
-    QMetaType::Void,
+    QMetaType::ULongLong,
     QMetaType::Void, QMetaType::Int,    4,
 
        0        // eod
@@ -73,7 +73,8 @@ void SceneWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         auto *_t = static_cast<SceneWidget *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->getFrameRate(); break;
+        case 0: { unsigned long long _r = _t->getFrameRate();
+            if (_a[0]) *reinterpret_cast< unsigned long long*>(_a[0]) = std::move(_r); }  break;
         case 1: _t->changeScreenTexture((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }

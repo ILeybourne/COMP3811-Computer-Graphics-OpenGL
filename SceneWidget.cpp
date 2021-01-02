@@ -372,6 +372,7 @@ void SceneWidget::updateFrameActions() {
     shapeCreator->gimbal1Turning += M_PI_2;
     shapeCreator->gimbal2Turning += 1;
     shapeCreator->gyroTurning += 1.618033988749895 * 2;
+    shapeCreator->turnTableRotation += turnTableRotationSpeed;
     ////Update frame number
     frame++;
     if (frame == ULLONG_MAX) {
@@ -394,15 +395,19 @@ void SceneWidget::changeScreenTexture(int i) {
     }
 }
 
-void SceneWidget::getFrameRate() {
+unsigned long long SceneWidget::getFrameRate() {
 //    QTime currentTime = QTime::currentTime();
 //    QTime duration = currentTime - startTime;
 
-    unsigned long long frameDifference = frame - lastFrameRecorded;
+    frameDifference = frame - lastFrameRecorded;
     qDebug() << frame << lastFrameRecorded;
     lastFrameRecorded = frame;
     qDebug() << QTime::currentTime();
     qDebug() << frameDifference << "fps";
+
+//    this->parentWidget()->
+
+    return frameDifference;
 }
 
 void SceneWidget::drawPC() {
@@ -657,21 +662,21 @@ void SceneWidget::paintGL() { // paintGL()
     glBindTexture(GL_TEXTURE_2D, 0);
 
     ////Draw PC
-    drawPC();
+//    drawPC();
 
     ////Draw Geisha
     drawGeisha();
 
     ///Draw Gyro
-    glPushMatrix();
-    glDisable(GL_CULL_FACE);
-    glTranslatef(2, 5, 0);
-    glRotatef(shapeCreator->gyroTurning, 0, 1, 0);
-    glTranslatef(2, 0, 0);
-    glScalef(0.2, 0.2, 0.2);
-    shapeCreator->createGyro();
-    glEnable(GL_CULL_FACE);
-    glPopMatrix();
+//    glPushMatrix();
+//    glDisable(GL_CULL_FACE);
+//    glTranslatef(2, 5, 0);
+//    glRotatef(shapeCreator->gyroTurning, 0, 1, 0);
+//    glTranslatef(2, 0, 0);
+//    glScalef(0.2, 0.2, 0.2);
+//    shapeCreator->createGyro();
+//    glEnable(GL_CULL_FACE);
+//    glPopMatrix();
 
     ////Draw Fire
     for (float i = 0; i < 10; i++) {
@@ -682,6 +687,9 @@ void SceneWidget::paintGL() { // paintGL()
         glPopMatrix();
     }
 
+//    shapeCreator->createDesk();
+
+    shapeCreator->createPopulatedDesk();
 
 
 

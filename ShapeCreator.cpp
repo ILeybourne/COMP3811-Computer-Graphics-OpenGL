@@ -190,6 +190,7 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 }
 
 void ShapeCreator::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+    glDisable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
 ////   North Wall White
     glColor3f(1.0, 1.0, 1.0);
@@ -231,12 +232,16 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
-            glBegin(GL_POLYGON);
-            glVertex3f(v1[0], j, k);
-            glVertex3f(v4[0], j, k + tessZSize);
-            glVertex3f(v3[0], j + tessYSize, k + tessZSize);
-            glVertex3f(v2[0], j + tessYSize, k);
-            glEnd();
+            //Render wall that isn't doorway
+            if (!(k > (v3[2] / 6) * 2 && k < (v1[2] / 6) * 2 && j <= height / 2)) {
+                glBegin(GL_POLYGON);
+                glVertex3f(v1[0], j, k);
+                glVertex3f(v4[0], j, k + tessZSize);
+                glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+                glVertex3f(v2[0], j + tessYSize, k);
+                glEnd();
+            }
+
         }
     }
 ////    South Wall Green
@@ -335,6 +340,8 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
             glEnd();
         }
     }
+    glEnable(GL_CULL_FACE);
+
 }
 
 
@@ -1039,7 +1046,7 @@ void ShapeCreator::createGyro() {
     float frameRad = 4;
     float frameWidth = 0.2;
     glPushMatrix();
-    glRotatef(90,0,1,0);
+    glRotatef(90, 0, 1, 0);
     ////Frame
     createTorus(frameRad, frameWidth, 50, 50);
     ////Bearing1
@@ -1089,10 +1096,10 @@ void ShapeCreator::createGyro() {
     glRotatef(90, 0, 1, 0);
     float gyroHeight = 0.8;
     int gyroSlices = 10;
-    glTranslatef(0, 0, -gyroHeight/2);
-    glRotatef(180,0,1,0);
+    glTranslatef(0, 0, -gyroHeight / 2);
+    glRotatef(180, 0, 1, 0);
     createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
-    glRotatef(180,0,1,0);
+    glRotatef(180, 0, 1, 0);
 //    glTranslatef(0, 0, 0.4);
     glTranslatef(0, 0, gyroHeight);
     createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
@@ -1105,16 +1112,126 @@ void ShapeCreator::createGyro() {
     glPopMatrix();
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(0,-frameRad-frameWidth,0);
-    glRotatef(90,1,0,0);
+    glTranslatef(0, -frameRad - frameWidth, 0);
+    glRotatef(90, 1, 0, 0);
     glPushMatrix();
-    glRotatef(180,1,0,0);
+    glRotatef(180, 1, 0, 0);
     createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
     glPopMatrix();
     createCylinder(gimbal2Rad - 0.5, frameRad - 0.5, gyroHeight, gyroSlices, gyroSlices);
-    glTranslatef(0 ,0,gyroHeight);
+    glTranslatef(0, 0, gyroHeight);
     createDisk(0, frameRad - 0.5, gyroSlices, 10);
     glPopMatrix();
+}
+
+void ShapeCreator::createDesk() {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glColor3f(1, 0, 0);
+
+    glPushMatrix();
+    glTranslatef(5, 0, 2);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-5, 0, 2);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(5, 0, -2);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-5, 0, -2);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, 4, 0);
+    createCube(10 + 2, 0.25, 4 + 2, 0, 0, 0, 0);
+    glPopMatrix();
+}
+
+void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks) {
+    glPushMatrix();
+    glTranslatef(0, height, 0);
+    glRotatef(90, 1, 0, 0);
+    glPushMatrix();
+    glRotatef(180, 1, 0, 0);
+    createDisk(0, rad, slices, stacks);
+    glPopMatrix();
+    createCylinder(rad, rad, height, slices, stacks);
+    glTranslatef(0, 0, height);
+    createDisk(0, rad, slices, stacks);
+    glPopMatrix();
+}
+
+void ShapeCreator::createPopulatedDesk() {
+
+    glPushMatrix();
+    glScalef(1, 0.5, 1);
+    createDesk();
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-2.5, 3 + (0.25 * 0.5) - 0.001, 0);
+    glPushMatrix();
+    glTranslatef(0, -1, 0);
+    glRotatef(turnTableRotation, 0, 1, 0);
+    createEdgeCylinder(2.5, 0.5, 10, 10);
+    glPopMatrix();
+    glTranslatef(0, 0.5, 0);
+    glScalef(0.2, 0.2, 0.2);
+    glPushMatrix();
+    glRotatef(turnTableRotation, 0, 1, 0);
+    glTranslatef(0, 0, 7);
+    createGyro();
+    glPopMatrix();
+    glPopMatrix();
+
+    glPushMatrix();
+//    glTranslatef(0, 3 , 0);
+    glTranslatef(1.5, 3 + 0.25, 1);
+    glScalef(0.5, 0.5, 0.5);
+    drawPC();
+    glPopMatrix();
+
+}
+
+void ShapeCreator::drawPC() {
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 1]);
+    glColor3f(1.0, 1.0, 1.0);
+    glColor4f(1.0, 1.0, 1.0, 1.0);
+    ////Apple PC
+    glDisable(GL_CULL_FACE);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
+    glPushMatrix();
+//    glTranslatef(5, 3, -4);
+//    glScalef(1, 1, 10);
+
+    glVertexPointer(3, GL_FLOAT, 0, verticesPC.data());
+    glTexCoordPointer(2, GL_FLOAT, 0, uvsPC.data());
+    glNormalPointer(GL_FLOAT, 0, normalsPC.data());
+    glDrawArrays(GL_TRIANGLES, 0, verticesPC.size() / 3);
+//    glDrawElements(GL_TRIANGLES, shapeCreator->vertexIndices.size(), GL_UNSIGNED_INT, shapeCreator->vertexIndices.data());
+
+
+    ////PC Screen
+    glDisable(GL_LIGHTING);
+    glPushMatrix();
+    glRotatef(-2, 1, 0, 0);
+    glTranslatef(-1.33, -0.4, -0.62);
+    glScalef(1.8, 1.2, 1);
+    drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, textureCreator->textures[textureCreator->selectedIndex]);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    glPopMatrix();
+    glDisableClientState(GL_VERTEX_ARRAY); //disable the client states again
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+
 }
 
 void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, int rings) {

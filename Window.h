@@ -35,17 +35,25 @@ public:
     SceneWidget *sceneWidget;
     QGLWidget *wid;
     // and a slider for the number of vertices
-    QSlider *nVerticesSlider;
+    QSlider *rotationSlider;
     QComboBox *screenTextureSelection;
 
 
     QLabel *screenTextureSelectionLabel;
+
+    QLabel *fpsLabel;
+    QLabel *rotationSliderLabel;
+
+    int test;
 
     // resets all the interface elements
     void ResetInterface();
 
 public slots:
     void closeWindow();
+    void updateFpsLabel();
+    void setRotationSpeed();
+    void resetFocus();
 
 };
 
