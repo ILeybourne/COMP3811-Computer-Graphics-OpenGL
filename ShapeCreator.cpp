@@ -206,7 +206,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    for (float i = v1[0]; i < v3[0]; i += tessXSize) {
+    for (float i = v1[0]; i < v3[0]- tessXSize; i += tessXSize) {
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i, j, v1[2]);
@@ -231,9 +231,9 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
     float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2]- tessZSize; k += tessZSize) {
             //Render wall that isn't doorway
-            if (!(k > (v3[2] / 6) * 2 && k < (v1[2] / 6) * 2 && j <= height / 2)) {
+            if (!(k > (v3[2] / 10) * 4 && k < (v1[2] / 10) * 4 && j <= height / 2)) {
                 glBegin(GL_POLYGON);
                 glVertex3f(v1[0], j, k);
                 glVertex3f(v4[0], j, k + tessZSize);
@@ -257,7 +257,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    for (float i = v1[0]; i < v3[0]; i += tessXSize) {
+    for (float i = v1[0]; i < v3[0] - tessXSize; i += tessXSize) {
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i, j, v1[2]);
@@ -285,7 +285,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
     tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2]- tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(v1[0], j, k);
             glVertex3f(v2[0], j + tessYSize, k);
@@ -307,7 +307,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]; i += tessXSize) {
+    for (float i = v3[0]; i < v1[0]- tessXSize; i += tessXSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
@@ -330,7 +330,39 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]; i += tessXSize) {
+    for (float i = v3[0]; i < v1[0]- tessXSize; i += tessXSize) {
+        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+            glBegin(GL_POLYGON);
+            glVertex3f(i + tessXSize, v1[1], k + tessZSize);
+            glVertex3f(i + tessXSize, v2[1], k);
+            glVertex3f(i, v3[1], k);
+            glVertex3f(i, v4[1], k + tessZSize);
+            glEnd();
+        }
+    }
+    glEnable(GL_CULL_FACE);
+
+}
+
+////TODO DISABLE LIGHT 1
+void ShapeCreator::createTunnel(float width, float height , float depth, int tessX, int tessY, int tessZ){
+    glPushMatrix();
+    glScalef(1,1.5,1.5);
+    createSemiCylinder(depth,width,tessX,tessY,tessZ);
+    glPopMatrix();
+
+    //Yellow floor
+    glColor3f(1.0, 1.0, 0.0);
+    glm::vec3 v1 = {1.0 * width , 0.0 * height, 1.0 * depth / 2};
+    glm::vec3 v2 = {1.0 * width , 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3 = {0* width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {0* width / 2, 0.0 * height, 1.0 * depth / 2};
+    //Normal of rect
+    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    glNormal3fv(glm::value_ptr(normal));
+    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
+    float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
+    for (float i = v3[0]; i < v1[0]- tessXSize; i += tessXSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
@@ -372,7 +404,7 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         }
     }
 
-    //East Wall Red
+    ////East Wall Red
     glColor3f(1.0, 0.0, 0.0);
     //Coordinates
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -834,9 +866,16 @@ void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
 
 void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
     //TODO Clean up outside also visible with culling. Triangles in both directions?
+    glDisable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
-
+    glPushMatrix();
     int numberOfSide = 100;
+//    int numberOfSide = rad;
+//    if(numberOfSide % 2 == 1){
+//        numberOfSide +=1;
+//    }
+    glTranslatef(0,0,rad/4);
+
     float interiorAngle = (numberOfSide - 2) * (180.0 / numberOfSide);
     float interiorAngleRad = interiorAngle * (M_PI / 180.0);
     glColor3f(1.0, 0.0, 0.0);
@@ -846,8 +885,8 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
     glm::vec3 v3 = {1.0, 0.0, 1.0};
     glm::vec3 v4 = {1.0, 2.0, 1.0};
     for (int j = 0; j < length; j++) {
-        glm::vec3 v1 = {0 + (j), 1.0, 1.0};
-        glm::vec3 v2 = {0 + (j), 0.0, 1.0};
+        glm::vec3 v1 = {0 + (j), 1.0,   1.0};
+        glm::vec3 v2 = {0 + (j), 0.0,   1.0};
         glm::vec3 v3 = {1.0 + (j), 0.0, 1.0};
         glm::vec3 v4 = {1.0 + (j), 1.0, 1.0};
 
@@ -900,6 +939,9 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
             v4 = glm::vec3(transform * glm::vec4(v4, 1.0));
         }
     }
+    glEnable(GL_CULL_FACE);
+    glPopMatrix();
+
 }
 
 void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
@@ -1163,6 +1205,51 @@ void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, flo
     createDisk(0, rad, slices, stacks);
     glPopMatrix();
 }
+
+void ShapeCreator::createGeisha(bool black) {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    ////Draw geisha
+    if(black){
+        glColor3f(0, 0, 0);
+    }else{
+        glColor3f(1, 1, 1);
+        glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 3]);
+    }
+
+    glDisable(GL_CULL_FACE);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    if (!black){
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glTexCoordPointer(2, GL_FLOAT, 0, uvsGeisha.data());
+    }
+    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
+    glPushMatrix();
+    glScalef(0.1, 0.1, 0.1);
+    glTranslatef(0, 7, 0);
+//    glRotatef(rotateCube, 0, 1, 0);
+    glVertexPointer(3, GL_FLOAT, 0, verticesGeisha.data());
+    glNormalPointer(GL_FLOAT, 0, normalsGeisha.data());
+    glDrawArrays(GL_TRIANGLES, 0, verticesGeisha.size() / 3);
+    glPopMatrix();
+    glDisableClientState(GL_VERTEX_ARRAY);
+    if (!black){
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    }
+    glDisableClientState(GL_NORMAL_ARRAY); //enable normal array
+    glEnable(GL_CULL_FACE);
+}
+
+void ShapeCreator::createStickGeisha(bool black) {
+
+    glTranslatef(0,0,0);
+    createGeisha( black);
+    glPushMatrix();
+    glRotatef(90,1,0,0);
+    glTranslatef(0.1,0,-2);
+    createCylinder(0.1,0.1,5,50,50);
+    glPopMatrix();
+}
+
 
 void ShapeCreator::createPopulatedDesk() {
 

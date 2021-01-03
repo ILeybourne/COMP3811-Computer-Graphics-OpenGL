@@ -56,7 +56,7 @@ void SceneWidget::initializeGL() { // initializeGL()
 //    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
     GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
     GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 1.0f};
-    GLfloat mspec[] = {0.1, 0.1, 0.1, 1.0f};
+    GLfloat mspec[] = {1, 1, 1, 1.0f};
 //    GLfloat shininess2[] = {100};
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
@@ -165,7 +165,7 @@ void SceneWidget::resizeGL(int w, int h) { // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
     qDebug() << key;
-    const float cameraSpeed = 0.1f; // adjust accordingly
+    const float cameraSpeed = 0.1f;
     const float turningSpeed = 0.05f;
     //Keep yaw between -pi/2 and pi/2
     qDebug() << camX;
@@ -212,11 +212,11 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (camX != 0) {
         yaw = atan(camZ / camX);
     } else {
-        if (camZ == 1) {
-            yaw = M_PI_2;
-        } else {
-            yaw = 3 * M_PI_2;
-        }
+//        if (camZ == 1) {
+//            yaw = M_PI_2;
+//        } else {
+//            yaw = 3 * M_PI_2;
+//        }
     }
     if (key->key() == Qt::Key_R) {
         cameraPosition[1] += 0.2;
@@ -373,6 +373,8 @@ void SceneWidget::updateFrameActions() {
     shapeCreator->gimbal2Turning += 1;
     shapeCreator->gyroTurning += 1.618033988749895 * 2;
     shapeCreator->turnTableRotation += turnTableRotationSpeed;
+    geishaPosition[2] -= 0.0001;
+    geishaRotation += 1;
     ////Update frame number
     frame++;
     if (frame == ULLONG_MAX) {
@@ -491,7 +493,7 @@ void SceneWidget::testLight() {
 }
 
 void SceneWidget::drawShadows() {
-    float wall[4] = {0, 0, -1, 15 - 0.2};
+    float wall[4] = {0, 0, -1, (roomDepth/2) - 0.2};
 
     //    ////shadow 2
 //    glPushMatrix();
@@ -542,18 +544,8 @@ void SceneWidget::drawShadows() {
     wall[3] += 0.02;
     float *shadowMatrix = getShadowMatrix(wall, light1Position);
     glMultMatrixf(shadowMatrix);
-//    glScalef(1,1,0);
-    glScalef(0.1, 0.1, 0.1);
-    glTranslatef(0, 7, 0);
-    glRotatef(rotateCube, 0, 1, 0);
-    glVertexPointer(3, GL_FLOAT, 0, shapeCreator->verticesGeisha.data());
-//    glTexCoordPointer(2, GL_FLOAT, 0, shapeCreator->uvsGeisha.data());
-    glNormalPointer(GL_FLOAT, 0, shapeCreator->normalsGeisha.data());
-    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->verticesGeisha.size() / 3);
+    drawGeisha(true);
     glPopMatrix();
-    glDisableClientState(GL_VERTEX_ARRAY);
-//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY); //enable normal array
     glEnable(GL_LIGHTING);
 
 //    glEnable(GL_DEPTH_TEST);
@@ -561,29 +553,12 @@ void SceneWidget::drawShadows() {
 //    glDisable(GL_BLEND);
 }
 
-void SceneWidget::drawGeisha() {
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    ////Draw geisha
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 3]);
-    glDisable(GL_CULL_FACE);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
+void SceneWidget::drawGeisha(bool black) {
     glPushMatrix();
-    glScalef(0.1, 0.1, 0.1);
-    glTranslatef(0, 7, 0);
-    glRotatef(rotateCube, 0, 1, 0);
-    glVertexPointer(3, GL_FLOAT, 0, shapeCreator->verticesGeisha.data());
-    glTexCoordPointer(2, GL_FLOAT, 0, shapeCreator->uvsGeisha.data());
-    glNormalPointer(GL_FLOAT, 0, shapeCreator->normalsGeisha.data());
-    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->verticesGeisha.size() / 3);
+    glTranslatef(geishaPosition[0],geishaPosition[1],geishaPosition[2]);
+    glRotatef(geishaRotation,0,1,0);
+    shapeCreator->createStickGeisha(black);
     glPopMatrix();
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY); //enable normal array
-    glEnable(GL_CULL_FACE);
 }
 
 void SceneWidget::drawFire() {
@@ -630,8 +605,9 @@ void SceneWidget::paintGL() { // paintGL()
 //    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,textureCreator->textures[29]);
 
     glPushMatrix();
-    shapeCreator->walls(50.0, 20.0, 30.0, 50, 50, 50);
+    shapeCreator->walls(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
+
 
     ////light 1 cube
     glPushMatrix();
@@ -665,8 +641,12 @@ void SceneWidget::paintGL() { // paintGL()
 //    drawPC();
 
     ////Draw Geisha
-    drawGeisha();
-
+//    drawGeisha();
+    glPushMatrix();
+//    glTranslatef(geishaPosition[0],geishaPosition[1],geishaPosition[2]);
+//    shapeCreator->createStickGeisha(false);
+    drawGeisha(false);
+    glPopMatrix();
     ///Draw Gyro
 //    glPushMatrix();
 //    glDisable(GL_CULL_FACE);
@@ -678,18 +658,20 @@ void SceneWidget::paintGL() { // paintGL()
 //    glEnable(GL_CULL_FACE);
 //    glPopMatrix();
 
-    ////Draw Fire
-    for (float i = 0; i < 10; i++) {
-        glPushMatrix();
-        glTranslatef(0, 0, (i) / 10);
-//        glScalef(1/i,1/i,1/i);
-        drawFire();
-        glPopMatrix();
-    }
 
-//    shapeCreator->createDesk();
 
+
+////TODO LIGGHT2
+    glPushMatrix();
+    glTranslatef(roomWidth/2,0,0);
+    glPushMatrix();
+    glTranslatef(20,0,20);
+    glRotatef(180,0,1,0);
+    ////Draw desk
     shapeCreator->createPopulatedDesk();
+    glPopMatrix();
+    shapeCreator->createTunnel(roomWidth,roomHeight,roomDepth+10,50,50,50);
+    glPopMatrix();
 
 
 
@@ -710,6 +692,16 @@ void SceneWidget::paintGL() { // paintGL()
     ////Terrain
     placeTerrain();
 
+
+    ////Inside
+    /// Draw Fire (LAST!!!)
+    for (float i = 0; i < 10; i++) {
+        glPushMatrix();
+        glTranslatef(0, 0, (i) / 10);
+//        glScalef(1/i,1/i,1/i);
+        drawFire();
+        glPopMatrix();
+    }
     ////Draw image pixels
 //    glDrawPixels(textureCreator->pQImage[30].width(),textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, textureCreator->pQImage[30].bits());
 
@@ -718,6 +710,8 @@ void SceneWidget::paintGL() { // paintGL()
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
+
+
 
     glFlush();
     updateFrameActions();

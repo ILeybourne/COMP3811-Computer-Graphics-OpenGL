@@ -79,11 +79,16 @@ Window::Window(QWidget *parent)
 
     QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setRotationSpeed()));
     QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
+    rotationSlider->setFocusPolicy(Qt::NoFocus);
+    screenTextureSelection->setFocusPolicy(Qt::NoFocus);
+    screenTextureSelectionLabel->setFocusPolicy(Qt::NoFocus);
+    fpsLabel->setFocusPolicy(Qt::NoFocus);;
+    rotationSliderLabel->setFocusPolicy(Qt::NoFocus);;
     rotationSlider->setSliderPosition(10);
 
 
-    windowLayout->addLayout(sliderLayout);
     windowLayout->addWidget(fpsLabel);
+    windowLayout->addLayout(sliderLayout);
     windowLayout->addLayout(selectionLayout);
 //    windowLayout->addWidget(screenTextureSelection);
 //    windowLayout->addWidget(screenTextureSelectionLabel);

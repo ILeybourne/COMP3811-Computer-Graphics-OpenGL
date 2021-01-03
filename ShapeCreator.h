@@ -141,10 +141,16 @@ public:
     void createPopulatedDesk();
     void createEdgeCylinder(float radius, float height, float slices, float stacks);
     void drawPC();
+    void createGeisha(bool black);
+    void createStickGeisha(bool black);
+    void createTunnel(float width, float height , float depth, int tessX, int tessY, int tessZ);
+
+
 protected:
 private:
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
     void createDesk();
+
 };
 
 #endif //SCENE_STB_IMAGE_H
