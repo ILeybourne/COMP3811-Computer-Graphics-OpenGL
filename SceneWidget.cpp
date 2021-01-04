@@ -390,7 +390,6 @@ void SceneWidget::changeScreenTexture(int i) {
     }
     if (i ==1){
         textureCreator->selectedIndex=textureCreator->marcIndex;
-
     }
     if (i==2){
         textureCreator->selectedIndex=textureCreator->mapIndex;

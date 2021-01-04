@@ -206,7 +206,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    for (float i = v1[0]; i < v3[0]- tessXSize; i += tessXSize) {
+    for (float i = v1[0]; i < v3[0] - tessXSize; i += tessXSize) {
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i, j, v1[2]);
@@ -231,7 +231,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
     float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]- tessZSize; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] ; k += tessZSize) {
             //Render wall that isn't doorway
             if (!(k > (v3[2] / 10) * 4 && k < (v1[2] / 10) * 4 && j <= height / 2)) {
                 glBegin(GL_POLYGON);
@@ -285,7 +285,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
     tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]- tessZSize; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] ; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(v1[0], j, k);
             glVertex3f(v2[0], j + tessYSize, k);
@@ -307,7 +307,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]- tessXSize; i += tessXSize) {
+    for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
@@ -330,7 +330,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
     tessXSize = abs(v1[0] - v3[0]) / (tessX);
     tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]- tessXSize; i += tessXSize) {
+    for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
@@ -345,24 +345,24 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 }
 
 ////TODO DISABLE LIGHT 1
-void ShapeCreator::createTunnel(float width, float height , float depth, int tessX, int tessY, int tessZ){
+void ShapeCreator::createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glPushMatrix();
-    glScalef(1,1.5,1.5);
-    createSemiCylinder(depth,width,tessX,tessY,tessZ);
+    glScalef(1, 1.5, 1.5);
+    createSemiCylinder(depth, width, tessX, tessY, tessZ);
     glPopMatrix();
 
     //Yellow floor
     glColor3f(1.0, 1.0, 0.0);
-    glm::vec3 v1 = {1.0 * width , 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v2 = {1.0 * width , 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v3 = {0* width / 2, 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v4 = {0* width / 2, 0.0 * height, 1.0 * depth / 2};
+    glm::vec3 v1 = {1.0 * width, 0.0 * height, 1.0 * depth / 2};
+    glm::vec3 v2 = {1.0 * width, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3 = {0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     //Normal of rect
     glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
     float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    for (float i = v3[0]; i < v1[0]- tessXSize; i += tessXSize) {
+    for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
@@ -627,6 +627,17 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
     float theta = thetaSpeed * M_PI;
     float x = (1.0 - cosf(theta)) * 0.5;
 
+    glColor3f(1, 1, 1);
+
+//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->grassIndex + 1);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    GLfloat mLowSpec[] = {0.1, 0.2, 0.1, 1.0f};
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mLowSpec);
+//    GLfloat lowShininess2[] = {10000};
+//    glMaterialfv(GL_FRONT, GL_SHININESS, lowShininess2);
 
     for (int i = 0; i < width; i++) {
         for (int k = 0; k < depth; k++) {
@@ -651,25 +662,42 @@ void ShapeCreator::createTessTriPlane(float width, float depth, int tessX, int t
                     glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
                     glm::vec3 vB = {i + n, heightAtn1m1, k + m};
 
+                    float scaleFactor = 2;
+
                     normal = glm::normalize(glm::cross(vB - vA, vC - vB));
                     glNormal3fv(glm::value_ptr(normal));
                     glBegin(GL_POLYGON);
+                    glTexCoord2f((n + tessXSize) * scaleFactor, m * scaleFactor);
                     glVertex3f(vA.x, vA.y, vA.z);
+                    glTexCoord2f(n * scaleFactor, m * scaleFactor);
                     glVertex3f(vB.x, vB.y, vB.z);
+                    glTexCoord2f(n * scaleFactor, (m + tessZSize) * scaleFactor);
                     glVertex3f(vC.x, vC.y, vC.z);
                     glEnd();
 
                     normal = glm::normalize(glm::cross(vC - vA, vD - vC));
                     glNormal3fv(glm::value_ptr(normal));
                     glBegin(GL_POLYGON);
+                    glTexCoord2f((n + tessXSize) * scaleFactor, m * scaleFactor);
                     glVertex3f(vA.x, vA.y, vA.z);
+                    glTexCoord2f(n * scaleFactor, (m + tessZSize) * scaleFactor);
                     glVertex3f(vC.x, vC.y, vC.z);
+                    glTexCoord2f((n + tessXSize) * scaleFactor, (m + tessZSize) * scaleFactor);
                     glVertex3f(vD.x, vD.y, vD.z);
                     glEnd();
                 }
             }
         }
     }
+    GLfloat mspec[] = {1, 1, 1, 1.0f};
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
+    GLfloat shininess2[] = {50};
+    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+    glBindTexture(GL_TEXTURE_2D, 0);
+//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
 void ShapeCreator::drawTextPlane(float w, float h, int index) {
@@ -874,7 +902,7 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
 //    if(numberOfSide % 2 == 1){
 //        numberOfSide +=1;
 //    }
-    glTranslatef(0,0,rad/4);
+    glTranslatef(0, 0, rad / 4);
 
     float interiorAngle = (numberOfSide - 2) * (180.0 / numberOfSide);
     float interiorAngleRad = interiorAngle * (M_PI / 180.0);
@@ -885,8 +913,8 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
     glm::vec3 v3 = {1.0, 0.0, 1.0};
     glm::vec3 v4 = {1.0, 2.0, 1.0};
     for (int j = 0; j < length; j++) {
-        glm::vec3 v1 = {0 + (j), 1.0,   1.0};
-        glm::vec3 v2 = {0 + (j), 0.0,   1.0};
+        glm::vec3 v1 = {0 + (j), 1.0, 1.0};
+        glm::vec3 v2 = {0 + (j), 0.0, 1.0};
         glm::vec3 v3 = {1.0 + (j), 0.0, 1.0};
         glm::vec3 v4 = {1.0 + (j), 1.0, 1.0};
 
@@ -1209,16 +1237,16 @@ void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, flo
 void ShapeCreator::createGeisha(bool black) {
     glBindTexture(GL_TEXTURE_2D, 0);
     ////Draw geisha
-    if(black){
+    if (black) {
         glColor3f(0, 0, 0);
-    }else{
+    } else {
         glColor3f(1, 1, 1);
         glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 3]);
     }
 
     glDisable(GL_CULL_FACE);
     glEnableClientState(GL_VERTEX_ARRAY);
-    if (!black){
+    if (!black) {
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         glTexCoordPointer(2, GL_FLOAT, 0, uvsGeisha.data());
     }
@@ -1232,7 +1260,7 @@ void ShapeCreator::createGeisha(bool black) {
     glDrawArrays(GL_TRIANGLES, 0, verticesGeisha.size() / 3);
     glPopMatrix();
     glDisableClientState(GL_VERTEX_ARRAY);
-    if (!black){
+    if (!black) {
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     }
     glDisableClientState(GL_NORMAL_ARRAY); //enable normal array
@@ -1241,12 +1269,12 @@ void ShapeCreator::createGeisha(bool black) {
 
 void ShapeCreator::createStickGeisha(bool black) {
 
-    glTranslatef(0,0,0);
-    createGeisha( black);
+    glTranslatef(0, 0, 0);
+    createGeisha(black);
     glPushMatrix();
-    glRotatef(90,1,0,0);
-    glTranslatef(0.1,0,-2);
-    createCylinder(0.1,0.1,5,50,50);
+    glRotatef(90, 1, 0, 0);
+    glTranslatef(0.1, 0, -2);
+    createCylinder(0.1, 0.1, 5, 50, 50);
     glPopMatrix();
 }
 

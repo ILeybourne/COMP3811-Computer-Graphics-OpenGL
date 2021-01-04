@@ -8,7 +8,9 @@
 #include <cstdio>
 #include <cmath>
 #include <QColor>
-
+#include <QOpenGLFunctions>
+#include "qopenglfunctions.h"
+#include <QOpenGLTexture>
 // constructor
 TextureCreator::TextureCreator(QWidget *parent) {// constructor
 }
@@ -52,8 +54,13 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
         glBindTexture(GL_TEXTURE_2D, texture[i]);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+//        glGenSamplers(1, &samplerId);
+//        glSamplerParameteri(samplerId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//        glSamplerParameteri(samplerId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
         GLint format;
 
@@ -75,7 +82,11 @@ void TextureCreator::imageLoader(QStringList sImage, GLuint texture[]) {
             qDebug() << "GL_RGBA" << i;
 
         }
+        QOpenGLTexture::GenerateMipMaps;
+
+
         qDebug() << i ;
+//        glGenerateMipmap(GL_TEXTURE_2D);
     }
 }
 

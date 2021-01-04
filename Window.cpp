@@ -11,6 +11,12 @@
 Window::Window(QWidget *parent)
         : QWidget(parent) { // constructor
     // create menu bar
+
+    QGLFormat glFormat;
+    glFormat.setVersion( 3, 3 );
+    glFormat.setProfile( QGLFormat::CoreProfile ); // Requires >=Qt-4.8.0
+    glFormat.setSampleBuffers( true );
+
     menuBar = new QMenuBar(this);
     // create file menu
     fileMenu = menuBar->addMenu("&File");
