@@ -7,11 +7,13 @@ W = Move forward
 A = Turn left
 S = Move backwards
 D = Turn right
-R = 
-T = 
-F = 
-G = 
-ctrl = Crouch
+Q = Strafe  left
+E = Strafe  right
+E = Pan up
+T = Pan down
+F = Tilt down
+G = Tilt up
+Ctrl = Crouch
 
 All assets have used with the relevant licensing and the creators in no way endorse me or this project. 
 
