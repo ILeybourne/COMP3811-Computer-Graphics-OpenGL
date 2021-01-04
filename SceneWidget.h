@@ -74,7 +74,7 @@ protected:
     static constexpr float roomDepth = 50.0;
     static constexpr float roomWidth = 70.0;
     static constexpr float roomHeight = 30.0;
-    float light1Position[4] = {0, 1, -roomDepth/2+3, 1};
+    float light1Position[4] = {0, 2, -roomDepth/2+3, 1};
 
     float geishaPosition[3] = {0,3,-1};
     float geishaRotation = 0;

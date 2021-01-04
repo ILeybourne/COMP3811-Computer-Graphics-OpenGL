@@ -66,7 +66,10 @@ public:
             "./textureinternet/fire/fire_00095.png",//28
             "./textureinternet/Marc_Dekamps.ppm",//29
             "./textureinternet/Mercator-projection.ppm",//30
-            "./textureinternet/grass_rough2.png"//31
+            "./textureinternet/grass_rough2.png",//31,
+            "./textureinternet/PaintedPlaster010_1K_Color.jpg",//32
+            "./textureinternet/PaintedPlaster015_1K_Color.jpg",//33
+            "./textureinternet/PaintedPlaster016_1K_Color.jpg"//34
     };
 
 
@@ -102,19 +105,20 @@ public:
     int marcIndex = 29;      // "./textureinternet/fire/fire_00095.png",
     int mapIndex = 30;      // "./textureinternet/fire/fire_00095.png",
     int grassIndex = 31;      // "./textureinternet/grass_rough2.png",
+    int floorIndex = 33;      // "./textureinternet/grass_rough2.png",
+    int ceilingIndex = 32;      // "./textureinternet/grass_rough2.png",
+    int wallIndex = 34;      // "./textureinternet/grass_rough2.png",
+
+    //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass , 3 walls //35
+    static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1 + 3;
 
     int selectedIndex = 0;
-
-    GLuint samplerId = 0;
-
 
     int numberOfTextures;
 
     QList<QImage> pQImage;
 
-    //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass
-    static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1;
-
+    int numOfTextures = textureStrings.size();
     GLuint textures[constNumberOfTextures];
 
     void swapActiveTexture(int textureNumber);
