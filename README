@@ -1,5 +1,18 @@
 A scence based on plato's allegory of the cave rendered using Opengl.
 
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////Controls////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+W = Move forward
+A = Turn left
+S = Move backwards
+D = Turn right
+R = 
+T = 
+F = 
+G = 
+ctrl = Crouch
+
 All assets have used with the relevant licensing and the creators in no way endorse me or this project. 
 
 A special thanks goes out to all content creators who freely released their models and texture to the public.
@@ -15,7 +28,6 @@ The Skybox textures pack is a 'unrestricted asset' from the unity store pushishe
 https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014
 and more information reguarding the 'Asset Store Terms of Service and EULA' can be found at:
 https://unity3d.com/legal/as_terms
-
 
 Grass texture used under the Creative Commons Zero Public Domain license, courtesy of:
 https://www.outworldz.com/cgi/free-seamless-textures.plx?c=Ground%20grass%20road%20floor
