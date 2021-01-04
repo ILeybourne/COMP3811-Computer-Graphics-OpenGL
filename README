@@ -1,5 +1,18 @@
 A scence based on plato's allegory of the cave rendered using Opengl.
 
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////Controls////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+W = Move forward
+A = Turn left
+S = Move backwards
+D = Turn right
+R = 
+T = 
+F = 
+G = 
+ctrl = Crouch
+
 All assets have used with the relevant licensing and the creators in no way endorse me or this project. 
 
 A special thanks goes out to all content creators who freely released their models and texture to the public.
