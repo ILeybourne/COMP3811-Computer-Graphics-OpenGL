@@ -68,6 +68,8 @@ Window::Window(QWidget *parent)
     selectionLayout->addWidget(screenTextureSelectionLabel,10);
     selectionLayout->addWidget(screenTextureSelection,90);
 
+
+
     rotationSliderLabel = new QLabel(this);
     rotationSliderLabel->setFixedHeight(20);
     rotationSliderLabel->setText("Rotation Speed:");
@@ -76,11 +78,14 @@ Window::Window(QWidget *parent)
     sliderLayout->addWidget(rotationSliderLabel);
     sliderLayout->addWidget(rotationSlider);
 
+    resetCameraButton = new QPushButton(this);
+    resetCameraButton->setText("Reset Camera");
+    QBoxLayout *buttonLayout = new QBoxLayout(QBoxLayout::LeftToRight, this);
+    buttonLayout->addWidget(resetCameraButton);
+    QObject::connect(resetCameraButton, SIGNAL(released()), sceneWidget, SLOT(resetCamera()));
 
     fpsLabel = new QLabel(this);
     fpsLabel->setFixedHeight(20);
-
-
     rotationSlider->sliderReleased();
 
     QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setRotationSpeed()));
@@ -91,21 +96,22 @@ Window::Window(QWidget *parent)
     fpsLabel->setFocusPolicy(Qt::NoFocus);;
     rotationSliderLabel->setFocusPolicy(Qt::NoFocus);;
     rotationSlider->setSliderPosition(10);
+    resetCameraButton->setFocusPolicy(Qt::NoFocus);
 
 
     windowLayout->addWidget(fpsLabel);
     windowLayout->addLayout(sliderLayout);
     windowLayout->addLayout(selectionLayout);
-//    windowLayout->addWidget(screenTextureSelection);
-//    windowLayout->addWidget(screenTextureSelectionLabel);
+    windowLayout->addLayout(buttonLayout);
 
-    //Updates Paint event once every 60 seconds
+    ////Updates Paint event 60 times second
     QTimer *frameTimer = new QTimer(this);
     QObject::connect(frameTimer, SIGNAL(timeout()), sceneWidget, SLOT(updateGL()));
     float frameRate = 1000 / 60;
     frameTimer->setInterval(frameRate);
     frameTimer->start();
 
+    ////FPS timer
     QTimer *secondTimer = new QTimer(this);
     QObject::connect(secondTimer, SIGNAL(timeout()), sceneWidget, SLOT(getFrameRate()));
     QObject::connect(secondTimer, SIGNAL(timeout()), this, SLOT(updateFpsLabel()));

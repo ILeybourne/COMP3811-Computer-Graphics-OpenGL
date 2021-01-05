@@ -22,7 +22,7 @@ SceneWidget::SceneWidget(QWidget *parent)
     window = parent;
     double frame = 0;
     shapeCreator = new ShapeCreator(this);
-    textureCreator = new TextureCreator(this);
+    shapeCreator->textureCreator = new TextureCreator(this);
 } // constructor
 
 // called when OpenGL context is set up
@@ -133,19 +133,19 @@ void SceneWidget::initializeGL() { // initializeGL()
     glEnable(GL_TEXTURE_2D);
 
     ////Load textures
-//    shapeCreator->imageLoader(textureStrings , textureCreator->MyTextures);
-    textureCreator->swapActiveTexture(0);
-    textureCreator->imageLoader(textureCreator->textureStrings, textureCreator->textures);
+//    shapeCreator->imageLoader(textureStrings , shapeCreator->textureCreator->MyTextures);
+    shapeCreator->textureCreator->swapActiveTexture(0);
+    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings, shapeCreator->textureCreator->textures);
 
 //    glActiveTexture(GL_TEXTURE6 );
-//    textureCreator->swapActiveTexture(1);
-//    textureCreator->imageLoader(textureCreator->objTextureStrings, textureCreator->objTextures);
-//    textureCreator->swapActiveTexture(1);
+//    shapeCreator->textureCreator->swapActiveTexture(1);
+//    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->objTextureStrings, shapeCreator->textureCreator->objTextures);
+//    shapeCreator->textureCreator->swapActiveTexture(1);
 
 
-//    textureCreator->swapActiveTexture(2);
-//    textureCreator->imageLoader(textureCreator->fireTextureStrings, textureCreator->fireTextures);
-    shapeCreator->textureCreator = textureCreator;
+//    shapeCreator->textureCreator->swapActiveTexture(2);
+//    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->fireTextureStrings, shapeCreator->textureCreator->fireTextures);
+    shapeCreator->textureCreator = shapeCreator->textureCreator;
     qDebug() << "loaded Texture!!s";
     ////Wireframe mode
 
@@ -227,17 +227,17 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         cameraDirection[1] -= 0.2;
     }
     if (key->key() == Qt::Key_F) {
-        cameraDirection[1] += 0.2;
+        cameraDirection[1] += 0.02;
 
     }
     if (key->key() == Qt::Key_G) {
-        cameraDirection[1] -= 0.2;
+        cameraDirection[1] -= 0.02;
     }
 
     if (key->key() == Qt::Key_Control) {
-        while (cameraPosition[1] > 4) {
-            cameraPosition[1] -= 0.2;
-            cameraDirection[1] -= 0.3;
+        while (cameraPosition[1] > 4.9) {
+            cameraPosition[1] -= 0.02;
+            cameraDirection[1] -= 0.03;
             updateGL();
         }
     }
@@ -278,12 +278,23 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
 void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
     if (key->key() == Qt::Key_Control) {
         while (cameraPosition[1] < 5) {
-            cameraPosition[1] += 0.2;
-            cameraDirection[1] += 0.3;
+            cameraPosition[1] += 0.02;
+            cameraDirection[1] += 0.03;
             updateGL();
         }
         cameraPosition[1] = 5;
         cameraDirection[1] = 5;
+    }
+}
+
+void SceneWidget::resetCamera() {
+    for (int i = 0; i < 3; i++) {
+        cameraPosition[i] = cameraStartPosition[i];
+        cameraDirection[i] = cameraStartDirection[i];
+        yaw = startingYaw;
+        turningNumber = startingTurningNumber;
+        camX = sin(turningNumber) * radius;
+        camZ = cos(turningNumber) * radius;
     }
 }
 
@@ -361,8 +372,8 @@ void SceneWidget::placeTerrain() {
     glPushMatrix();
     glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
     glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
-    shapeCreator->createTessTriPlane(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
-                                     shapeCreator->planeZTess);
+    shapeCreator->createTessilatedTerrain(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
+                                          shapeCreator->planeZTess);
     glPopMatrix();
 }
 
@@ -385,20 +396,18 @@ void SceneWidget::updateFrameActions() {
 
 void SceneWidget::changeScreenTexture(int i) {
     qDebug() << "you are connected" << i;
-    if (i == 0){
-        textureCreator->selectedIndex=textureCreator->skyBoxZPlusIndex;
+    if (i == 0) {
+        shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->skyBoxZPlusIndex;
     }
-    if (i ==1){
-        textureCreator->selectedIndex=textureCreator->marcIndex;
+    if (i == 1) {
+        shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->marcIndex;
     }
-    if (i==2){
-        textureCreator->selectedIndex=textureCreator->mapIndex;
+    if (i == 2) {
+        shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->mapIndex;
     }
 }
 
 unsigned long long SceneWidget::getFrameRate() {
-//    QTime currentTime = QTime::currentTime();
-//    QTime duration = currentTime - startTime;
 
     frameDifference = frame - lastFrameRecorded;
     qDebug() << frame << lastFrameRecorded;
@@ -406,13 +415,11 @@ unsigned long long SceneWidget::getFrameRate() {
     qDebug() << QTime::currentTime();
     qDebug() << frameDifference << "fps";
 
-//    this->parentWidget()->
-
     return frameDifference;
 }
 
 void SceneWidget::drawPC() {
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 1]);
+    glBindTexture(GL_TEXTURE_2D, shapeCreator->textureCreator->textures[6 - 1 + 1]);
     glColor3f(1.0, 1.0, 1.0);
     glColor4f(1.0, 1.0, 1.0, 1.0);
     ////Apple PC
@@ -428,8 +435,6 @@ void SceneWidget::drawPC() {
     glTexCoordPointer(2, GL_FLOAT, 0, shapeCreator->uvsPC.data());
     glNormalPointer(GL_FLOAT, 0, shapeCreator->normalsPC.data());
     glDrawArrays(GL_TRIANGLES, 0, shapeCreator->verticesPC.size() / 3);
-//    glDrawElements(GL_TRIANGLES, shapeCreator->vertexIndices.size(), GL_UNSIGNED_INT, shapeCreator->vertexIndices.data());
-
 
     ////PC Screen
     glDisable(GL_LIGHTING);
@@ -437,7 +442,7 @@ void SceneWidget::drawPC() {
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33, -0.4, -0.62);
     glScalef(1.8, 1.2, 1);
-    shapeCreator->drawTexture(0, 0, 2, 2, 0, 0, 1, 1, true, textureCreator->textures[textureCreator->selectedIndex]);
+    shapeCreator->createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, true, shapeCreator->textureCreator->textures[shapeCreator->textureCreator->selectedIndex]);
     glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
     glPopMatrix();
@@ -492,7 +497,7 @@ void SceneWidget::testLight() {
 }
 
 void SceneWidget::drawShadows() {
-    float wall[4] = {0, 0, -1, (roomDepth/2) - 0.2};
+    float wall[4] = {0, 0, -1, (roomDepth / 2) - 0.2};
 
     //    ////shadow 2
 //    glPushMatrix();
@@ -530,7 +535,7 @@ void SceneWidget::drawShadows() {
 //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
     ////Geisha shadow
 //    glEnable(GL_BLEND);
-//    glBindTexture(GL_TEXTURE_2D, textureCreator->MyTextures[8]);
+//    glBindTexture(GL_TEXTURE_2D, shapeCreator->textureCreator->MyTextures[8]);
 //    glDisable(GL_CULL_FACE);
 //    glDisable(GL_DEPTH_TEST);
 //    glDepthFunc(GL_GEQUAL);
@@ -554,8 +559,8 @@ void SceneWidget::drawShadows() {
 
 void SceneWidget::drawGeisha(bool black) {
     glPushMatrix();
-    glTranslatef(geishaPosition[0],geishaPosition[1],geishaPosition[2]);
-    glRotatef(geishaRotation,0,1,0);
+    glTranslatef(geishaPosition[0], geishaPosition[1], geishaPosition[2]);
+    glRotatef(geishaRotation, 0, 1, 0);
     shapeCreator->createStickGeisha(black);
     glPopMatrix();
 }
@@ -572,7 +577,7 @@ void SceneWidget::drawFire() {
 
     glPushMatrix();
     glTranslatef(light1Position[0] - fireWidth / 2, -fireHeight / 8, light1Position[2]);
-    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
+    shapeCreator->createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, shapeCreator->textureCreator->textures[fireNum]);
     glPopMatrix();
 
     ////Second fire
@@ -580,7 +585,7 @@ void SceneWidget::drawFire() {
 //    glTranslatef(light1Position[0] - fireWidth/2 , -fireHeight/8, light1Position[2]);
 //    glRotatef(90, 0, 1, 0);
 //    glTranslatef(-5, 0, 5);
-//    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, textureCreator->textures[fireNum]);
+//    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, shapeCreator->textureCreator->textures[fireNum]);
 //    glPopMatrix();
 
     glPopMatrix();
@@ -601,7 +606,7 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
 
-//    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,textureCreator->textures[29]);
+//    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,shapeCreator->textureCreator->textures[29]);
 
     glPushMatrix();
     shapeCreator->walls(roomWidth, roomHeight, roomDepth, 50, 50, 50);
@@ -662,19 +667,19 @@ void SceneWidget::paintGL() { // paintGL()
 
 ////TODO LIGGHT2
     glPushMatrix();
-    glTranslatef(roomWidth/2,0,0);
+    glTranslatef(roomWidth / 2, 0, 0);
     glPushMatrix();
-    glTranslatef(20,0,20);
-    glRotatef(180,0,1,0);
+    glTranslatef(20, 0, 20);
+    glRotatef(180, 0, 1, 0);
     ////Draw desk
     shapeCreator->createPopulatedDesk();
     glPopMatrix();
-    shapeCreator->createTunnel(roomWidth,roomHeight,roomDepth+10,50,50,50);
+    shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth + 10, 50, 50, 50);
     glPopMatrix();
 
 
 
-//    textureCreator->swapActiveTexture(0);
+//    shapeCreator->textureCreator->swapActiveTexture(0);
     ////Outside
     ////Skybox
     glDisable(GL_LIGHTING);
@@ -702,14 +707,13 @@ void SceneWidget::paintGL() { // paintGL()
         glPopMatrix();
     }
     ////Draw image pixels
-//    glDrawPixels(textureCreator->pQImage[30].width(),textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, textureCreator->pQImage[30].bits());
+//    glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
 
     glLoadIdentity();
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
-
 
 
     glFlush();

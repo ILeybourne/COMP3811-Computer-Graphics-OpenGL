@@ -20,14 +20,7 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include "TextureCreator.h"
-
-
 using namespace std;
-
-//const unsigned int N_X_IMAGE = 512;
-//const unsigned int N_Y_IMAGE = 512;
-//const unsigned int N_COLOR = 3;
-
 
 class ShapeCreator { //
 public:
@@ -47,15 +40,12 @@ public:
 
     void createSemiCylinder(float rad, float length, int x, int y, int z);
 
-    void createTessTriPlane(float width, float depth, int tessX, int tessZ);
+    void createTessilatedTerrain(float width, float depth, int tessX, int tessZ);
 
     void heightGenerator(float x, float z);
 
-    void loadTextures();
 
-    void imageLoader(QStringList sImage, GLuint texture[]);
-
-    void drawTextPlane(float w, float h, int index);
+    void createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth, float tHeight, bool blend, GLuint texture);
 
     float interpolation(float x, float z, float c);
 
@@ -63,15 +53,6 @@ public:
 
     void createFigurine();
 
-    typedef struct Model {
-        int vertices;
-        int positions;
-        int texels;
-        int normals;
-        int faces;
-    } Model;
-
-    Model getOBJinfo(std::string fp);
 
     bool getOBJData(std::string fp,
                     std::vector<float> &out_vertices,
@@ -80,18 +61,13 @@ public:
                     std::vector<float> &out_normals
     );
 
-//    std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
-    std::vector <glm::vec3> temp_vertices;
-    std::vector <glm::vec2> temp_uvs;
-    std::vector <glm::vec3> temp_normals;
-//    std::vector<float> temp_vertices2;
-//    std::vector <std::array<float, 2>> temp_uvs2;
-//    std::vector <float> tempNormals;
-
-
-    std::vector <std::array<float, 3>> vertices;
-    std::vector <std::array<float, 2>> uvs;
-    std::vector <std::array<float, 3>> normals; // Won't be used at the moment.
+//    std::vector <glm::vec3> temp_vertices;
+//    std::vector <glm::vec2> temp_uvs;
+//    std::vector <glm::vec3> temp_normals;
+//
+//    std::vector <std::array<float, 3>> vertices;
+//    std::vector <std::array<float, 2>> uvs;
+//    std::vector <std::array<float, 3>> normals;
 
     std::vector<GLfloat> verticesPC;
     std::vector<GLfloat> uvsPC;
@@ -101,15 +77,12 @@ public:
     std::vector<GLfloat> uvsGeisha;
     std::vector<GLfloat> normalsGeisha;
 
+//    void drawTexture(float x, float y, float w, float h,
+//                              float tx, float ty, float tw, float th, bool blend ,GLuint texture);
 
-    void drawTexture(float x, float y, float w, float h,
-                              float tx, float ty, float tw, float th, bool blend ,GLuint texture);
-
-
-
-    QWidget parent;
     static constexpr int planeWidth = 10;
     static constexpr int planeDepth = 10;
+
     float amplitude = 10;
     int planeXTess = 20;
     int planeZTess = 20;
@@ -117,40 +90,26 @@ public:
 
     TextureCreator *textureCreator;
 
-    float turnTableRotation = 0;
-
-
-//    int numberOfTextures;
-//    QList <QImage> p_qimage;
-//    static constexpr int textNum = 8;
-//
-//    GLuint MyTexture[textNum];
-//
-//    unsigned int imageWidth[textNum];
-//    unsigned int imageHeight[textNum];
-//    unsigned int imageSize[textNum];
-//    QOpenGLShaderProgram *program = nullptr;
-//    QOpenGLBuffer vbo;
-
     void createTorus(float innerRadius, float width, int sides, int rings);
-    void createGyro();
 
+    float turnTableRotation = 0;
     float gimbal1Turning = 0;
     float gimbal2Turning = 0;
     float gyroTurning = 0;
-    void createPopulatedDesk();
+    void createGyro();
     void createEdgeCylinder(float radius, float height, float slices, float stacks);
     void drawPC();
+    void createPopulatedDesk();
+
     void createGeisha(bool black);
     void createStickGeisha(bool black);
-    void createTunnel(float width, float height , float depth, int tessX, int tessY, int tessZ);
 
+    void createTunnel(float width, float height , float depth, int tessX, int tessY, int tessZ);
 
 protected:
 private:
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
     void createDesk();
-
 };
 
 #endif //SCENE_STB_IMAGE_H

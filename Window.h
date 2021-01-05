@@ -8,6 +8,7 @@
 #include <QLabel>
 #include <QComboBox>
 #include <QBoxLayout>
+#include <QPushButton>
 #include <QTimer>
 #include "QSizePolicy"
 #include "SceneWidget.h"
@@ -38,6 +39,7 @@ public:
     QSlider *rotationSlider;
     QComboBox *screenTextureSelection;
 
+    QPushButton *resetCameraButton;
 
     QLabel *screenTextureSelectionLabel;
 

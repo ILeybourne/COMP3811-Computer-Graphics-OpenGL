@@ -33,6 +33,7 @@ class SceneWidget : public QGLWidget, protected QGLFunctions { //
 Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
+
     unsigned long long frameDifference;
     ShapeCreator *shapeCreator;
     float turnTableRotationSpeed = 1;
@@ -60,23 +61,27 @@ protected:
     unsigned long long frame;
     unsigned long long lastFrameRecorded;
     float cameraPosition[3] = {0, 5, 0};
+    float cameraStartPosition[3] = {cameraPosition[0], cameraPosition[1], cameraPosition[2]};
     float light0Position[4] = {0, 15, -500, 1};
     float cameraUp[3] = {0, 6, 0};
     float fov = 60;
     float radius = 0.1;
     float turningNumber = 0;
+    float startingTurningNumber = turningNumber;
     float yaw = M_PI_2;
+    float startingYaw = yaw;
     float camX = sin(turningNumber) * radius;
     float camZ = cos(turningNumber) * radius;
     float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] - radius};
+    float cameraStartDirection[3] = {cameraDirection[0], cameraDirection[1], cameraDirection[2]};
     bool jumping = false;
     bool falling = false;
     static constexpr float roomDepth = 50.0;
     static constexpr float roomWidth = 70.0;
     static constexpr float roomHeight = 30.0;
-    float light1Position[4] = {0, 2, -roomDepth/2+3, 1};
+    float light1Position[4] = {0, 2, -roomDepth / 2 + 3, 1};
 
-    float geishaPosition[3] = {0,3,-1};
+    float geishaPosition[3] = {0, 3, -1};
     float geishaRotation = 0;
 
     GLuint geishaFrameBuffer;
@@ -93,12 +98,17 @@ protected:
     QWidget *window;
 
 public slots:
+
     unsigned long long getFrameRate();
+
     void changeScreenTexture(int i);
+
+    void resetCamera();
 
 
 private:
     void walls();
+
     void placeTerrain();
 
     void drawPC();
