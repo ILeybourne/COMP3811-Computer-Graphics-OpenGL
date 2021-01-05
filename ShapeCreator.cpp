@@ -240,26 +240,75 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
     float offset = 0.55;
-    tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
-    for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
-            //Render wall that isn't doorway
-            if (!(k > (v3[2] / 10) * 4 && k < (v1[2] / 10) * 4 && j <= height / 2)) {
-                glBegin(GL_POLYGON);
-                glTexCoord2f((k) * scaleFactor+ offset, (j + tessYSize) * scaleFactor);
-                glVertex3f(v2[0], j + tessYSize, k);
-                glTexCoord2f( (k) * scaleFactor+ offset,(j) * scaleFactor);
-                glVertex3f(v1[0], j, k);
-                glTexCoord2f( (k + tessZSize) * scaleFactor+ offset ,(j) * scaleFactor);
-                glVertex3f(v4[0], j, k + tessZSize);
-                glTexCoord2f((k + tessZSize) * scaleFactor+ offset,(j + tessYSize) * scaleFactor);
-                glVertex3f(v3[0], j + tessYSize, k + tessZSize);
-                glEnd();
-            }
 
+    tessYSize = abs(v1[1] - v3[1]) / (tessY);
+
+    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
+    float doorOuter = v3[2] + 2 * (tessZ / 2 * tessZSize);
+    float doorInner = v3[2] + tessZ / 2 * tessZSize;
+    float doorwayWidth = 2;
+    for (int i = 0; i < 2; i++) {
+        glPushMatrix();
+        glTranslatef(doorwayWidth * i, 0, 0);
+        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
+            for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+                //Render wall that isn't doorway
+                if (!(k > doorInner && k < doorOuter && j <= height / 2)) {
+                    glBegin(GL_POLYGON);
+                    glTexCoord2f((k) * scaleFactor + offset, (j + tessYSize) * scaleFactor);
+                    glVertex3f(v2[0], j + tessYSize, k);
+                    glTexCoord2f((k) * scaleFactor + offset, (j) * scaleFactor);
+                    glVertex3f(v1[0], j, k);
+                    glTexCoord2f((k + tessZSize) * scaleFactor + offset, (j) * scaleFactor);
+                    glVertex3f(v4[0], j, k + tessZSize);
+                    glTexCoord2f((k + tessZSize) * scaleFactor + offset, (j + tessYSize) * scaleFactor);
+                    glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+                    glEnd();
+                }
+            }
         }
+        glPopMatrix();
     }
+    glPushMatrix();
+    glTranslatef(0, 0, doorInner);
+    createTexturedPlane(width / 2, 0, doorwayWidth, height / 2, 0, 0, doorwayWidth/10, height / 2 /10, false,
+                        textureCreator->textures[textureCreator->wallIndex]);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 0, doorOuter);
+    glRotatef(180, 1, 0, 0);
+    glTranslatef(0, -height / 2, 0);
+
+    createTexturedPlane(width / 2, 0, doorwayWidth, height / 2, 0, 0, doorwayWidth / 10, height / 2 / 10, false,
+                        textureCreator->textures[textureCreator->wallIndex]);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, height/2,  doorInner);
+glRotatef(90,1,0,0);
+    createTexturedPlane(width / 2, 0, doorwayWidth, doorOuter - doorInner, 0, 0, doorwayWidth / 10, height / 2 / 10, false,
+                        textureCreator->textures[textureCreator->wallIndex]);
+    glPopMatrix();
+
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
+
+//    float inner = (v3[2] / 10) * 4;
+//    float outer = (v3[2] / 10) * 4;
+
+//    v1 = {0, height / 2, inner};
+//    v2 = {0, height / 2, inner};
+//    v3 = {0+ 2, 0,      inner};
+//    v4 = {0+ 2, 0,      inner};
+//    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+//    glNormal3fv(glm::value_ptr(normal));
+//    glBegin(GL_POLYGON);
+//    glVertex3f(v1[0], v1[1], v1[2]);
+//    glVertex3f(v2[0], v2[1], v2[2]);
+//    glVertex3f(v3[0], v3[1], v3[2]);
+//    glVertex3f(v4[0], v4[1], v4[2]);
+//    glEnd();
+
 ////    South Wall Green
 //    glColor3f(0.0, 1.0, 0.0);
     //Coordinates
@@ -307,13 +356,13 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
-            glTexCoord2f((k) * scaleFactor,(j) * scaleFactor);
+            glTexCoord2f((k) * scaleFactor, (j) * scaleFactor);
             glVertex3f(v1[0], j, k);
-            glTexCoord2f((k) * scaleFactor,(j + tessYSize) * scaleFactor);
+            glTexCoord2f((k) * scaleFactor, (j + tessYSize) * scaleFactor);
             glVertex3f(v2[0], j + tessYSize, k);
-            glTexCoord2f((k + tessZSize) * scaleFactor,(j + tessYSize) * scaleFactor);
+            glTexCoord2f((k + tessZSize) * scaleFactor, (j + tessYSize) * scaleFactor);
             glVertex3f(v3[0], j + tessYSize, k + tessZSize);
-            glTexCoord2f((k + tessZSize) * scaleFactor,(j) * scaleFactor);
+            glTexCoord2f((k + tessZSize) * scaleFactor, (j) * scaleFactor);
             glVertex3f(v4[0], j, k + tessZSize);
             glEnd();
         }
@@ -386,6 +435,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
 ////TODO DISABLE LIGHT 1
 void ShapeCreator::createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+    glDisable(GL_CULL_FACE);
     glPushMatrix();
     glScalef(1, 1.5, 1.5);
     createSemiCylinder(depth, width, tessX, tessY, tessZ);
@@ -402,18 +452,18 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
     glNormal3fv(glm::value_ptr(normal));
     float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
-    float scaleFactor = width/tessX/50;
+    float scaleFactor = width / tessX / 50;
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->floorIndex]);
     for (float i = v3[0]; i < v1[0] - tessXSize; i += tessXSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
             glTexCoord2f((i + tessXSize) * scaleFactor, (k + tessZSize) * scaleFactor);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-            glTexCoord2f((i + tessXSize) * scaleFactor, (k ) * scaleFactor);
+            glTexCoord2f((i + tessXSize) * scaleFactor, (k) * scaleFactor);
             glVertex3f(i + tessXSize, v2[1], k);
-            glTexCoord2f((i ) * scaleFactor, (k ) * scaleFactor);
+            glTexCoord2f((i) * scaleFactor, (k) * scaleFactor);
             glVertex3f(i, v3[1], k);
-            glTexCoord2f((i ) * scaleFactor, (k + tessZSize) * scaleFactor);
+            glTexCoord2f((i) * scaleFactor, (k + tessZSize) * scaleFactor);
             glVertex3f(i, v4[1], k + tessZSize);
             glEnd();
         }
@@ -570,6 +620,7 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
             glEnd();
         }
     }
+    glEnable(GL_CULL_FACE);
 }
 
 
@@ -749,7 +800,8 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-void ShapeCreator::createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth, float tHeight, bool blend, GLuint texture) {
+void ShapeCreator::createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth,
+                                       float tHeight, bool blend, GLuint texture) {
 //    glBindTexture(GL_TEXTURE_2D, 0);
 //    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[index]);
 //    GLfloat verts[] = {x, y, x + w, y, x + w, y + h, x, y + h};
@@ -758,13 +810,13 @@ void ShapeCreator::createTexturedPlane(float x, float y, float width, float heig
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
     glTexCoord2f(tu, tv);
-    glVertex3f(x , y, 0);
+    glVertex3f(x, y, 0);
     glTexCoord2f(tu + tWidth, tv);
     glVertex3f(x + width, y, 0);
-    glTexCoord2f(tu + tWidth, tv+tHeight);
+    glTexCoord2f(tu + tWidth, tv + tHeight);
     glVertex3f(x + width, y + height, 0);
-    glTexCoord2f(tu , tv+tHeight);
-    glVertex3f(x , y + height, 0);
+    glTexCoord2f(tu, tv + tHeight);
+    glVertex3f(x, y + height, 0);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, 0);
