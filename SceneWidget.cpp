@@ -700,6 +700,39 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->createPopulatedDesk();
     glPopMatrix();
     shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50, 50);
+    glPushMatrix();
+
+    glPushMatrix();
+    glDisable(GL_CULL_FACE);
+        glTranslatef(-roomWidth/2 , 0, 0);
+
+    glRotatef(90,0,1,0);
+    glTranslatef((roomDepth-roomWidth)/2 - 2.01 , 0, 0);
+    glScalef(1,1,roomWidth/roomDepth);
+
+//    glTranslatef(0 - 2, 0, );
+    shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
+    glEnable(GL_CULL_FACE);
+    glPopMatrix();
+
+    glTranslatef(roomWidth+2 , 0, 0);
+
+    glPushMatrix();
+    glDisable(GL_CULL_FACE);
+    glTranslatef(roomWidth/2 -2.5 , 0, 0);
+    glRotatef(180,0,1,0);
+    shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
+    glEnable(GL_CULL_FACE);
+    glPopMatrix();
+
+    for (int i = 0; i < 15; i++) {
+        shapeCreator->createCube(roomWidth/15, roomHeight/15, roomDepth,0,0,0,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->woodIndex]);
+        glTranslatef(roomWidth/15,roomHeight/15,0);
+    }
+
+
+
+    glPopMatrix();
     glPopMatrix();
 
 

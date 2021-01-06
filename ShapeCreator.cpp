@@ -192,75 +192,57 @@ void ShapeCreator::sky(float width, float height, float depth, int tessX, int te
 
 }
 
-void ShapeCreator::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
-    glDisable(GL_CULL_FACE);
-    glEnable(GL_TEXTURE);
-    glBindTexture(GL_TEXTURE_2D, 0);
-////   North Wall White
+void ShapeCreator::createDoorway(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glColor3f(1.0, 1.0, 1.0);
     //Coordinates
-    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
-    glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    glm::vec3 v1;
+    glm::vec3 v2;
+    glm::vec3 v3;
+    glm::vec3 v4;
 
     //Normal of rect
-    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-    glNormal3fv(glm::value_ptr(normal));
+    glm::vec3 normal;
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     float scaleFactor = width / tessX / 50;
-    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
-    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    for (float i = v1[0]; i < v3[0] - tessXSize; i += tessXSize) {
-        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
-            glBegin(GL_POLYGON);
-//            glTexCoord2f((i + tessXSize) * scaleFactor, (j + tessYSize)* scaleFactor);
-            glTexCoord2f((i) * scaleFactor, (j) * scaleFactor);
-            glVertex3f(i, j, v1[2]);
-            glTexCoord2f((i + tessXSize) * scaleFactor, (j) * scaleFactor);
-            glVertex3f(i + tessXSize, j, v2[2]);
-            glTexCoord2f((i + tessXSize) * scaleFactor, (j + tessYSize) * scaleFactor);
-            glVertex3f(i + tessXSize, j + tessYSize, v3[2]);
-            glTexCoord2f((i) * scaleFactor, (j + tessYSize) * scaleFactor);
-            glVertex3f(i, j + tessYSize, v4[2]);
-            glEnd();
-        }
-    }
 
-    //East Wall Red
-//    glColor3f(1.0, 0.0, 0.0);
+
     //Coordinates
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v2 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+
+    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
+    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
+    float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
+
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
     float offset = 0.55;
 
-    tessYSize = abs(v1[1] - v3[1]) / (tessY);
-
-    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
-    float doorOuter = v3[2] + 2 * (tessZ / 2 * tessZSize);
-    float doorInner = v3[2] + tessZ / 2 * tessZSize;
+//    tessZSize = abs(v1[1] - v3[1]) / (tessZ);
+    float doorOuter = 0 +  10 * (tessZSize);
+    float doorInner = 0 -  10 * (tessZSize);
     float doorwayWidth = 2;
     for (int i = 0; i < 2; i++) {
         glPushMatrix();
         glTranslatef(doorwayWidth * i, 0, 0);
         //Invert normal for external wall
-        if (i == 1)
+        if (i == 1){
             glDisable(GL_LIGHT1);
             glEnable(GL_LIGHT2);
             glEnable(GL_LIGHT3);
             glEnable(GL_LIGHT4);
             glNormal3fv(glm::value_ptr(-normal));
+        }
+
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             for (float k = v3[2]; k < v1[2]; k += tessZSize) {
                 //Render wall that isn't doorway
-                if (!(k > doorInner && k < doorOuter && j <= height / 2)) {
+                if (!(k > doorInner - tessZSize && k < doorOuter && j <= height / 2)) {
                     glBegin(GL_POLYGON);
                     glTexCoord2f((k) * scaleFactor + offset, (j + tessYSize) * scaleFactor);
                     glVertex3f(v2[0], j + tessYSize, k);
@@ -289,7 +271,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0, 0, doorOuter);
+    glTranslatef(0, 0, doorOuter );
     glRotatef(180, 1, 0, 0);
     glTranslatef(0, -height / 2, 0);
 
@@ -305,11 +287,143 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
                         textureCreator->textures[textureCreator->wallIndex]);
     glPopMatrix();
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
+    float inner = (v3[2] / 10) * 4;
+    float outer = (v3[2] / 10) * 4;
 
+    v1 = {0, height / 2, inner};
+    v2 = {0, height / 2, inner};
+    v3 = {0 + 2, 0, inner};
+    v4 = {0 + 2, 0, inner};
+    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    glNormal3fv(glm::value_ptr(normal));
+    glBegin(GL_POLYGON);
+    glVertex3f(v1[0], v1[1], v1[2]);
+    glVertex3f(v2[0], v2[1], v2[2]);
+    glVertex3f(v3[0], v3[1], v3[2]);
+    glVertex3f(v4[0], v4[1], v4[2]);
+    glEnd();
+}
+
+void ShapeCreator::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+////   North Wall White
+    glColor3f(1.0, 1.0, 1.0);
+    //Coordinates
+    glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+    glm::vec3 v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+    glm::vec3 v4 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+
+    //Normal of rect
+    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+    glNormal3fv(glm::value_ptr(normal));
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    float scaleFactor = width / tessX / 50;
+    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
+    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
+
+    for (float i = v1[0]; i < v3[0] - tessXSize; i += tessXSize) {
+        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
+            glBegin(GL_POLYGON);
+//            glTexCoord2f((i + tessXSize) * scaleFactor, (j + tessYSize)* scaleFactor);
+            glTexCoord2f((i) * scaleFactor, (j) * scaleFactor);
+            glVertex3f(i, j, v1[2]);
+            glTexCoord2f((i + tessXSize) * scaleFactor, (j) * scaleFactor);
+            glVertex3f(i + tessXSize, j, v2[2]);
+            glTexCoord2f((i + tessXSize) * scaleFactor, (j + tessYSize) * scaleFactor);
+            glVertex3f(i + tessXSize, j + tessYSize, v3[2]);
+            glTexCoord2f((i) * scaleFactor, (j + tessYSize) * scaleFactor);
+            glVertex3f(i, j + tessYSize, v4[2]);
+            glEnd();
+        }
+    }
+
+    createDoorway(width, height, depth, tessX, tessY, tessZ);
+    ////Replaced by createDoorway;
+//    //East Wall Red
+////    glColor3f(1.0, 0.0, 0.0);
+//    //Coordinates
+//    v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
+//    v2 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
+//    v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
+//    v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
+//    //Normal of rect
+//    normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+//    glNormal3fv(glm::value_ptr(normal));
+//    float offset = 0.55;
+//    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
+//
+//    float doorOuter = v3[2] + 2 * (tessZ / 2 * tessZSize);
+//    float doorInner = v3[2] +      tessZ / 2 * tessZSize;
+//    float doorwayWidth = 2;
+//
+//    for (int i = 0; i < 2; i++) {
+//        glPushMatrix();
+//        glTranslatef(doorwayWidth * i, 0, 0);
+//        //Invert normal for external wall
+//        if (i == 1)
+//            glDisable(GL_LIGHT1);
+//        glEnable(GL_LIGHT2);
+//        glEnable(GL_LIGHT3);
+//        glEnable(GL_LIGHT4);
+//        glNormal3fv(glm::value_ptr(-normal));
+//        for (float j = v1[1]; j < v3[1]; j += tessYSize) {
+//            for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+//                //Render wall that isn't doorway
+//                if (!(k > doorInner && k < doorOuter && j <= height / 2)) {
+//                    glBegin(GL_POLYGON);
+//                    glTexCoord2f((k) * scaleFactor + offset, (j + tessYSize) * scaleFactor);
+//                    glVertex3f(v2[0], j + tessYSize, k);
+//                    glTexCoord2f((k) * scaleFactor + offset, (j) * scaleFactor);
+//                    glVertex3f(v1[0], j, k);
+//                    glTexCoord2f((k + tessZSize) * scaleFactor + offset, (j) * scaleFactor);
+//                    glVertex3f(v4[0], j, k + tessZSize);
+//                    glTexCoord2f((k + tessZSize) * scaleFactor + offset, (j + tessYSize) * scaleFactor);
+//                    glVertex3f(v3[0], j + tessYSize, k + tessZSize);
+//                    glEnd();
+//                }
+//            }
+//        }
+//        glPopMatrix();
+//    }
+//
+//    glEnable(GL_LIGHT1);
+//    glDisable(GL_LIGHT2);
+//    glDisable(GL_LIGHT3);
+//    glDisable(GL_LIGHT4);
+//
+//    glPushMatrix();
+//    glTranslatef(0, 0, doorInner);
+//    createTexturedPlane(width / 2, 0, doorwayWidth, height / 2, 0, 0, doorwayWidth / 10, height / 2 / 10, false,
+//                        textureCreator->textures[textureCreator->wallIndex]);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(0, 0, doorOuter);
+//    glRotatef(180, 1, 0, 0);
+//    glTranslatef(0, -height / 2, 0);
+//
+//    createTexturedPlane(width / 2, 0, doorwayWidth, height / 2, 0, 0, doorwayWidth / 10, height / 2 / 10, false,
+//                        textureCreator->textures[textureCreator->wallIndex]);
+//    glPopMatrix();
+//
+//    glPushMatrix();
+//    glTranslatef(0, height / 2, doorInner);
+//    glRotatef(90, 1, 0, 0);
+//    createTexturedPlane(width / 2, 0, doorwayWidth, doorOuter - doorInner, 0, 0, doorwayWidth / 10, height / 2 / 10,
+//                        false,
+//                        textureCreator->textures[textureCreator->wallIndex]);
+//    glPopMatrix();
+//
+//    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
+//
 //    float inner = (v3[2] / 10) * 4;
 //    float outer = (v3[2] / 10) * 4;
-
+//
 //    v1 = {0, height / 2, inner};
 //    v2 = {0, height / 2, inner};
 //    v3 = {0+ 2, 0,      inner};
@@ -323,6 +437,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 //    glVertex3f(v4[0], v4[1], v4[2]);
 //    glEnd();
 
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
 ////    South Wall Green
 //    glColor3f(0.0, 1.0, 0.0);
     //Coordinates
@@ -366,7 +481,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
     tessYSize = abs(v1[1] - v3[1]) / (tessY);
-    tessZSize = abs(v1[1] - v3[1]) / (tessZ);
+    float tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     for (float j = v1[1]; j < v3[1]; j += tessYSize) {
         for (float k = v3[2]; k < v1[2]; k += tessZSize) {
             glBegin(GL_POLYGON);
@@ -454,25 +569,25 @@ void ShapeCreator::createTorch(unsigned long long frame) {
     float fireWidth = 4;
     float fireHeight = 5;
     glPushMatrix();
-    glTranslatef(0,-1.5,0);
+    glTranslatef(0, -1.5, 0);
     glPushMatrix();
-    glTranslatef(0,1.3,0);
+    glTranslatef(0, 1.3, 0);
     glRotatef(-45, 1, 0, 0);
-    glColor3f(165.0/255.0, 42.0/255.0, 42.0/255.0);
+    glColor3f(165.0 / 255.0, 42.0 / 255.0, 42.0 / 255.0);
     createCylinder(0, 0.5, 2, 10, 10);
     glPopMatrix();
 
     glDisable(GL_LIGHTING);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor3f(1,1,1);
+    glColor3f(1, 1, 1);
 
     glPushMatrix();
-    glTranslatef(-fireWidth/2, 2, 2);
-    createTexturedPlane(0, 0, fireWidth , fireHeight, 0, 0, 1, 1, true,
+    glTranslatef(-fireWidth / 2, 2, 2);
+    createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
                         textureCreator->textures[fireNum]);
     glPopMatrix();
-glPopMatrix();
+    glPopMatrix();
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);

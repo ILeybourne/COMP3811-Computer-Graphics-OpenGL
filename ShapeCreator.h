@@ -126,12 +126,13 @@ public:
     void createTorch(unsigned long long frame);
 
 
+    void createDoorway(float width, float height, float depth, int tessX, int tessY, int tessZ);
 protected:
 private:
+
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
 
     void createDesk();
-
 };
 
 #endif //SCENE_STB_IMAGE_H
