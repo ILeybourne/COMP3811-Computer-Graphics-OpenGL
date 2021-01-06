@@ -50,19 +50,10 @@ void SceneWidget::initializeGL() { // initializeGL()
 
     ////Material parameters
     glEnable(GL_COLOR_MATERIAL);
-//    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
-//    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 0.0f};
-//    glMaterialfv(GL_FRONT, GL_AMBIENT, mambient);
-//    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
-    GLfloat mambient[] = {0.0f, 0.0f, 0.8f, 0.0f};
-    GLfloat mdiff[] = {0.8f, 0.8f, 0.8f, 1.0f};
-    GLfloat mspec[] = {1, 1, 1, 1.0f};
-//    GLfloat shininess2[] = {100};
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mdiff);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
-//    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
-    GLfloat shininess2[] = {50};
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shapeCreator->mambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shapeCreator->mdiff);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shapeCreator->mspec);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shapeCreator->shininess2);
     GLfloat shininess[] = {100.0};
     GLfloat shininess3[] = {5.0};
 
@@ -70,8 +61,8 @@ void SceneWidget::initializeGL() { // initializeGL()
     ////Light 0
     GLfloat light_0_ambient[] = {0.3, 0.2, 0.25, 0.0};
     GLfloat light_0_diffuse[] = {1.0, 1.0, 1.0, 0.0};
-    GLfloat light_0_specular[] = {1, 1, 1, 0.0};
-//    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
+    GLfloat light_0_specular[] = {0.2, 0.2, 0.2, 0.0};
+
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_0_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_0_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_0_specular);
@@ -79,11 +70,11 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT0, GL_SHININESS, shininess3);
     glEnable(GL_LIGHT0);
 
-    ////Light 1
-    GLfloat light_1_ambient[] = {0.1, 0.1, 0.1, 0.0};
-    GLfloat light_1_diffuse[] = {1.0, 1.0, 1.0, 0.0};
+    ////Light 1 inside
+    GLfloat light_1_ambient[] = {0.07, 0.05, 0.05, 0.0};
+    GLfloat light_1_diffuse[] = {0.3, 0.3, 0.3, 0.0};
 //    GLfloat light_1_specular[] = {1.0, 1.0, 1.0, 0.0};
-    GLfloat light_1_specular[] = {1, 1, 1, 0.0};
+    GLfloat light_1_specular[] = {0.8, 0.7, 0.7, 0.0};
 
 //    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
     glLightfv(GL_LIGHT1, GL_AMBIENT, light_1_ambient);
@@ -135,7 +126,8 @@ void SceneWidget::initializeGL() { // initializeGL()
     ////Load textures
 //    shapeCreator->imageLoader(textureStrings , shapeCreator->textureCreator->MyTextures);
     shapeCreator->textureCreator->swapActiveTexture(0);
-    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings, shapeCreator->textureCreator->textures);
+    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings,
+                                              shapeCreator->textureCreator->textures);
 
 //    glActiveTexture(GL_TEXTURE6 );
 //    shapeCreator->textureCreator->swapActiveTexture(1);
@@ -165,7 +157,7 @@ void SceneWidget::resizeGL(int w, int h) { // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
     qDebug() << key;
-    const float cameraSpeed = 0.1f;
+    const float cameraSpeed = 0.2f;
     const float turningSpeed = 0.05f;
     //Keep yaw between -pi/2 and pi/2
     qDebug() << camX;
@@ -442,7 +434,8 @@ void SceneWidget::drawPC() {
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33, -0.4, -0.62);
     glScalef(1.8, 1.2, 1);
-    shapeCreator->createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, true, shapeCreator->textureCreator->textures[shapeCreator->textureCreator->selectedIndex]);
+    shapeCreator->createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, true,
+                                      shapeCreator->textureCreator->textures[shapeCreator->textureCreator->selectedIndex]);
     glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
     glPopMatrix();
@@ -577,7 +570,8 @@ void SceneWidget::drawFire() {
 
     glPushMatrix();
     glTranslatef(light1Position[0] - fireWidth / 2, -fireHeight / 8, light1Position[2]);
-    shapeCreator->createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, shapeCreator->textureCreator->textures[fireNum]);
+    shapeCreator->createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
+                                      shapeCreator->textureCreator->textures[fireNum]);
     glPopMatrix();
 
     ////Second fire
@@ -674,12 +668,10 @@ void SceneWidget::paintGL() { // paintGL()
     ////Draw desk
     shapeCreator->createPopulatedDesk();
     glPopMatrix();
-    shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth + 10, 50, 50, 50);
+    shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
 
 
-
-//    shapeCreator->textureCreator->swapActiveTexture(0);
     ////Outside
     ////Skybox
     glDisable(GL_LIGHTING);

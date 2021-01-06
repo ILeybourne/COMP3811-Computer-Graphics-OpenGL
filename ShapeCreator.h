@@ -20,11 +20,19 @@
 #include <fstream>
 #include <experimental/filesystem>
 #include "TextureCreator.h"
+
 using namespace std;
 
 class ShapeCreator { //
 public:
     ShapeCreator(QWidget *parent);
+
+//    GLfloat mambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat mambient[4] = {0, 0, 0, 0.0f};
+    GLfloat mdiff[4] = {0, 0, 0, 0.0};
+    GLfloat mspec[4] = {1, 1, 1, 0.0f};
+    GLfloat shininess2[1] = {50};
+    GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0f};
 
     void sky(float w, float h, float d, int tX, int tY, int tZ);
 
@@ -40,12 +48,15 @@ public:
 
     void createSemiCylinder(float rad, float length, int x, int y, int z);
 
+    void createSemiCylinder2(float rad, float length, int x, int y, int z, GLuint texture);
+
     void createTessilatedTerrain(float width, float depth, int tessX, int tessZ);
 
     void heightGenerator(float x, float z);
 
-
-    void createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth, float tHeight, bool blend, GLuint texture);
+    void
+    createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth, float tHeight,
+                        bool blend, GLuint texture);
 
     float interpolation(float x, float z, float c);
 
@@ -96,19 +107,25 @@ public:
     float gimbal1Turning = 0;
     float gimbal2Turning = 0;
     float gyroTurning = 0;
+
     void createGyro();
+
     void createEdgeCylinder(float radius, float height, float slices, float stacks);
+
     void drawPC();
+
     void createPopulatedDesk();
 
     void createGeisha(bool black);
+
     void createStickGeisha(bool black);
 
-    void createTunnel(float width, float height , float depth, int tessX, int tessY, int tessZ);
+    void createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ);
 
 protected:
 private:
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
+
     void createDesk();
 };
 

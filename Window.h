@@ -52,9 +52,13 @@ public:
     void ResetInterface();
 
 public slots:
+
     void closeWindow();
+
     void updateFpsLabel();
+
     void setRotationSpeed();
+
     void resetFocus();
 
 };
