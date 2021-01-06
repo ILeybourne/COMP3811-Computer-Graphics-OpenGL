@@ -72,8 +72,7 @@ void SceneWidget::initializeGL() { // initializeGL()
 
     ////Light 1 inside
     GLfloat light_1_ambient[] = {0.07, 0.05, 0.05, 0.0};
-    GLfloat light_1_diffuse[] = {0.3, 0.3, 0.3, 0.0};
-//    GLfloat light_1_specular[] = {1.0, 1.0, 1.0, 0.0};
+    GLfloat light_1_diffuse[] = {0.35, 0.33, 0.3, 0.0};
     GLfloat light_1_specular[] = {0.8, 0.7, 0.7, 0.0};
 
 //    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
@@ -83,6 +82,34 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
     glLightfv(GL_LIGHT1, GL_SHININESS, shininess);
     glEnable(GL_LIGHT1);
+
+    ////Light 2 Tunnel
+//    glTranslatef(roomWidth / 2, 0, 0);
+    GLfloat light_2_ambient[] = {0.07/3, 0.05/3, 0.05/3, 0.0};
+    GLfloat light_2_diffuse[] = {0.35/2, 0.33/2, 0.3/2, 0.0};
+    GLfloat light_2_specular[] = {0.8/3, 0.7/3, 0.7/3, 0.0};
+    glLightfv(GL_LIGHT2, GL_AMBIENT,  light_2_ambient);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE,  light_2_diffuse);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, light_2_specular);
+    glLightfv(GL_LIGHT2, GL_POSITION, light2Position);
+    glEnable(GL_LIGHT2);
+
+    ////Light 3 Tunnel
+//    glTranslatef(roomWidth / 2, 0, 0);
+    glLightfv(GL_LIGHT3, GL_AMBIENT,  light_2_ambient);
+    glLightfv(GL_LIGHT3, GL_DIFFUSE,  light_2_diffuse);
+    glLightfv(GL_LIGHT3, GL_SPECULAR, light_2_specular);
+    glLightfv(GL_LIGHT3, GL_POSITION, light3Position);
+    glEnable(GL_LIGHT3);
+
+    ////Light 4 Tunnel
+//    glTranslatef(roomWidth / 2, 0, 0);
+    glLightfv(GL_LIGHT4, GL_AMBIENT,  light_2_ambient);
+    glLightfv(GL_LIGHT4, GL_DIFFUSE,  light_2_diffuse);
+    glLightfv(GL_LIGHT4, GL_SPECULAR, light_2_specular);
+    glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
+    glEnable(GL_LIGHT4);
+
 
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
@@ -610,7 +637,7 @@ void SceneWidget::paintGL() { // paintGL()
     ////light 1 cube
     glPushMatrix();
     glTranslatef(light1Position[0], light1Position[1], light1Position[2]);
-    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false, 0);
     glPopMatrix();
 
 
@@ -618,13 +645,13 @@ void SceneWidget::paintGL() { // paintGL()
     glPushMatrix();
     glTranslatef(0, 3, 0);
     glRotatef(rotateCube, 0, 1, 0);
-    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false, 0);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(0, 3, 2);
     glRotatef(rotateCube + M_PI, 0, 1, 0);
-    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false);
+//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false, 0);
     glPopMatrix();
 
 
@@ -660,6 +687,10 @@ void SceneWidget::paintGL() { // paintGL()
 
 
 ////TODO LIGGHT2
+    glDisable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
+    glEnable(GL_LIGHT3);
+    glEnable(GL_LIGHT4);
     glPushMatrix();
     glTranslatef(roomWidth / 2, 0, 0);
     glPushMatrix();
@@ -683,14 +714,35 @@ void SceneWidget::paintGL() { // paintGL()
 
     glEnable(GL_LIGHTING);
     glDisable(GL_LIGHT1);
+    glDisable(GL_LIGHT2);
+    glDisable(GL_LIGHT3);
+    glDisable(GL_LIGHT4);
     glEnable(GL_LIGHT0);
     glBindTexture(GL_TEXTURE_2D, 0);
     ////Terrain
     placeTerrain();
 
-
     ////Inside
     /// Draw Fire (LAST!!!)
+    glPushMatrix();
+    glTranslatef(light2Position[0],light2Position[1],light2Position[2]);
+    glScalef(0.8,0.8,0.8);
+    shapeCreator->createTorch(frame);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(light3Position[0],light3Position[1],light3Position[2]);
+    glScalef(0.8,0.8,0.8);
+    glRotatef(180,0,1,0);
+    shapeCreator->createTorch(frame);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(light4Position[0],light4Position[1],light4Position[2]);
+    glScalef(0.8,0.8,0.8);
+    shapeCreator->createTorch(frame);
+    glPopMatrix();
+
     for (float i = 0; i < 10; i++) {
         glPushMatrix();
         glTranslatef(0, 0, (i) / 10);
@@ -698,6 +750,7 @@ void SceneWidget::paintGL() { // paintGL()
         drawFire();
         glPopMatrix();
     }
+
     ////Draw image pixels
 //    glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
 
@@ -706,7 +759,9 @@ void SceneWidget::paintGL() { // paintGL()
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
-
+    glLightfv(GL_LIGHT2, GL_POSITION, light2Position);
+    glLightfv(GL_LIGHT3, GL_POSITION, light3Position);
+    glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
 
     glFlush();
     updateFrameActions();

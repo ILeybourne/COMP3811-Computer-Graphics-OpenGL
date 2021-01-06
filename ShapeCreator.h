@@ -28,10 +28,11 @@ public:
     ShapeCreator(QWidget *parent);
 
 //    GLfloat mambient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat mambient[4] = {0, 0, 0, 0.0f};
-    GLfloat mdiff[4] = {0, 0, 0, 0.0};
+    GLfloat mambient[4] = {1, 1, 1, 0.0f};
+    GLfloat mdiff[4] = {1, 1, 1, 0.0};
     GLfloat mspec[4] = {1, 1, 1, 0.0f};
     GLfloat shininess2[1] = {50};
+    GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0f};
     GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0f};
 
     void sky(float w, float h, float d, int tX, int tY, int tZ);
@@ -40,7 +41,7 @@ public:
 
     void createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ);
 
-    void createCube(float w, float h, float d, float x, float y, float z, bool shadow);
+    void createCube(float w, float h, float d, float x, float y, float z, bool shadow, GLuint texture);
 
     void createSphere(GLdouble radius, GLint slices, GLint stacks);
 
@@ -122,11 +123,15 @@ public:
 
     void createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ);
 
+    void createTorch(unsigned long long frame);
+
+
 protected:
 private:
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
 
     void createDesk();
+
 };
 
 #endif //SCENE_STB_IMAGE_H

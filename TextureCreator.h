@@ -69,7 +69,8 @@ public:
             "./textureinternet/grass_rough2.png",//31,
             "./textureinternet/PaintedPlaster010_1K_Color.jpg",//32
             "./textureinternet/PaintedPlaster015_1K_Color.jpg",//33
-            "./textureinternet/PaintedPlaster016_1K_Color.jpg"//34
+            "./textureinternet/PaintedPlaster016_1K_Color.jpg",//34
+            "./textureinternet/Wood047_1K_Color.jpg"//35
     };
 
 
@@ -108,6 +109,7 @@ public:
     int floorIndex = 33;      // "./textureinternet/grass_rough2.png",
     int ceilingIndex = 32;      // "./textureinternet/grass_rough2.png",
     int wallIndex = 34;      // "./textureinternet/grass_rough2.png",
+    int woodIndex = 35;
 
     //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass , 3 walls //35
     static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1 + 3;

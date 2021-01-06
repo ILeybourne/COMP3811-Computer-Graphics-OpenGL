@@ -80,6 +80,16 @@ protected:
     static constexpr float roomWidth = 70.0;
     static constexpr float roomHeight = 30.0;
     float light1Position[4] = {0, 3, -roomDepth / 2 + 5, 1};
+//    float light2Position[4] = {roomWidth, 5, -roomDepth / 2 + 4, 1};
+    ////Right of tunnel
+    float cosPiOver3 = cos(M_PI/3);
+    float sinPiOver3 = sin(M_PI/3);
+    ////Left of tunnel
+    float negCosPiOver3 = cos(-M_PI/3);
+    float negSinPiOver3 = sin(-M_PI/3);
+    float light2Position[4] = {roomWidth - roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10, roomDepth/2 * negSinPiOver3 , 1};
+    float light3Position[4] = {roomWidth , roomDepth/2 * cosPiOver3  - roomDepth/ 10, roomDepth/2 * sinPiOver3 , 1};
+    float light4Position[4] = {roomWidth + roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10, roomDepth/2 * negSinPiOver3 , 1};
 
     float geishaPosition[3] = {0, 3, -1};
     float geishaRotation = 0;

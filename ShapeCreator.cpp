@@ -252,6 +252,10 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         glTranslatef(doorwayWidth * i, 0, 0);
         //Invert normal for external wall
         if (i == 1)
+            glDisable(GL_LIGHT1);
+            glEnable(GL_LIGHT2);
+            glEnable(GL_LIGHT3);
+            glEnable(GL_LIGHT4);
             glNormal3fv(glm::value_ptr(-normal));
         for (float j = v1[1]; j < v3[1]; j += tessYSize) {
             for (float k = v3[2]; k < v1[2]; k += tessZSize) {
@@ -272,6 +276,12 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         }
         glPopMatrix();
     }
+
+    glEnable(GL_LIGHT1);
+    glDisable(GL_LIGHT2);
+    glDisable(GL_LIGHT3);
+    glDisable(GL_LIGHT4);
+
     glPushMatrix();
     glTranslatef(0, 0, doorInner);
     createTexturedPlane(width / 2, 0, doorwayWidth, height / 2, 0, 0, doorwayWidth / 10, height / 2 / 10, false,
@@ -437,6 +447,38 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
+void ShapeCreator::createTorch(unsigned long long frame) {
+    glDisable(GL_CULL_FACE);
+
+    int fireNum = frame % 20 + (6 + 3);
+    float fireWidth = 4;
+    float fireHeight = 5;
+    glPushMatrix();
+    glTranslatef(0,-1.5,0);
+    glPushMatrix();
+    glTranslatef(0,1.3,0);
+    glRotatef(-45, 1, 0, 0);
+    glColor3f(165.0/255.0, 42.0/255.0, 42.0/255.0);
+    createCylinder(0, 0.5, 2, 10, 10);
+    glPopMatrix();
+
+    glDisable(GL_LIGHTING);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor3f(1,1,1);
+
+    glPushMatrix();
+    glTranslatef(-fireWidth/2, 2, 2);
+    createTexturedPlane(0, 0, fireWidth , fireHeight, 0, 0, 1, 1, true,
+                        textureCreator->textures[fireNum]);
+    glPopMatrix();
+glPopMatrix();
+    glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+};
+
+
 ////TODO DISABLE LIGHT 1
 void ShapeCreator::createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glPushMatrix();
@@ -463,8 +505,9 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
     glTranslatef(depth / 2 + 10, 0, 0);
 
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->floorIndex]);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mMidSpec);
     for (float i = v3[0]; i < v1[0]; i += tessXSize) {
-        for (float k = v3[2]; k < v1[2]; k += tessZSize) {
+        for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
             glTexCoord2f((i + tessXSize) * scaleFactor, (k + tessZSize) * scaleFactor);
             glVertex3f(i + tessXSize, v1[1], k + tessZSize);
@@ -478,7 +521,7 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
         }
     }
     glPopMatrix();
-
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mspec);
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -860,7 +903,7 @@ void ShapeCreator::createFigurine() {
             offset = 0.4;
         }
         glTranslatef(0, -0.05, 0);
-        createCube(1. + ((i + 1) * (0.05 * neg)) + offset, 0.1, 1 + ((i + 1) * (0.05 * neg)) + offset, 0, 0, 0, 0);
+        createCube(1. + ((i + 1) * (0.05 * neg)) + offset, 0.1, 1 + ((i + 1) * (0.05 * neg)) + offset, 0, 0, 0, 0, 0);
     }
     glPopMatrix();
     glPushMatrix();
@@ -902,10 +945,11 @@ void ShapeCreator::createFigurine() {
 }
 
 
-void ShapeCreator::createCube(float w, float h, float d, float x, float y, float z, bool shadow) {
+void ShapeCreator::createCube(float w, float h, float d, float x, float y, float z, bool shadow, GLuint texture) {
     glColor3f(1.0, 1.0, 1.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
 
+    glBindTexture(GL_TEXTURE_2D, texture);
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
     glTexCoord2f(0.0f, 0.0f);
@@ -919,58 +963,82 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glEnd();
 
     //East Wall
-    glColor3f(1.0, 0.0, 0.0);
+    if (texture == 0)
+        glColor3f(1.0, 0.0, 0.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
 
     glBegin(GL_POLYGON);
     glNormal3f(1, 0, 0);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
     glEnd();
 
     //South Wall Green
-    glColor3f(0.0, 1.0, 0.0);
+    if (texture == 0) glColor3f(0.0, 1.0, 0.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, -1);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glEnd();
 
     //West Wall Blue
-    glColor3f(0.0, 0.0, 1.0);
+    if (texture == 0)
+        glColor3f(0.0, 0.0, 1.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
     glBegin(GL_POLYGON);
     glNormal3f(-1, 0, 0);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glEnd();
 
     //Purple Ceil
-    glColor3f(1.0, 0.0, 1.0);
+    if (texture == 0)
+        glColor3f(1.0, 0.0, 1.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
     glBegin(GL_POLYGON);
     glNormal3f(0, 1, 0);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0 * w / 2 + x, 1.0 * h + y, 1.0 * d / 2 + z);
     glEnd();
 
     //Yellow floor
-    glColor3f(1.0, 1.0, 0.0);
+    if (texture == 0)
+        glColor3f(1.0, 1.0, 0.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
     glBegin(GL_POLYGON);
     glNormal3f(0, -1, 0);
+    glTexCoord2f(1.0f, 1.0f);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 1.0f);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, 1.0 * d / 2 + z);
+    glTexCoord2f(0.0f, 0.0f);
     glVertex3f(-1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
+    glTexCoord2f(1.0f, 0.0f);
     glVertex3f(1.0 * w / 2 + x, 0.0 * h + y, -1.0 * d / 2 + z);
     glEnd();
 
@@ -1004,21 +1072,12 @@ void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int t
             float y2 = rad * sin(t + M_PI / numberOfSides);
 
             glm::vec3 v1 = {x, y, z};
-            glm::vec3 v2 = {x + 1, y, z};
+            glm::vec3 v2 = {x, y2, z2};
             glm::vec3 v3 = {x + 1, y2, z2};
-            glm::vec3 v4 = {x, y2, z2};
+            glm::vec3 v4 = {x + 1, y, z};
 
             glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
             glNormal3fv(glm::value_ptr(normal));
-
-//            glTexCoord2f((i + tessXSize) * scaleFactor, (k + tessZSize) * scaleFactor);
-//            glVertex3f(i + tessXSize, v1[1], k + tessZSize);
-//            glTexCoord2f((i + tessXSize) * scaleFactor, (k) * scaleFactor);
-//            glVertex3f(i + tessXSize, v2[1], k);
-//            glTexCoord2f((i) * scaleFactor, (k) * scaleFactor);
-//            glVertex3f(i, v3[1], k);
-//            glTexCoord2f((i) * scaleFactor, (k + tessZSize) * scaleFactor);
-//            glVertex3f(i, v4[1], k + tessZSize);
 
             glBegin(GL_POLYGON);
             glTexCoord2f((v1[0]) * scaleFactor, (v1[2]) * scaleFactor);
@@ -1342,29 +1401,30 @@ void ShapeCreator::createGyro() {
 }
 
 void ShapeCreator::createDesk() {
-    glBindTexture(GL_TEXTURE_2D, 0);
     glColor3f(1, 0, 0);
 
     glPushMatrix();
     glTranslatef(5, 0, 2);
-    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-5, 0, 2);
-    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(5, 0, -2);
-    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(-5, 0, -2);
-    createCube(0.5, 4, 0.5, 0, 0, 0, 0);
+    createCube(0.5, 4, 0.5, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0, 4, 0);
-    createCube(10 + 2, 0.25, 4 + 2, 0, 0, 0, 0);
+    createCube(10 + 2, 0.25, 4 + 2, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
+    glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks) {
