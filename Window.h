@@ -21,35 +21,17 @@ public:
 
     ~Window();
 
-    // visual hierarchy
-    // menu bar
     QMenuBar *menuBar;
-    // file menu
     QMenu *fileMenu;
-    // quit action
     QAction *actionQuit;
-
-    // window layout
     QBoxLayout *windowLayout;
-
-    // beneath that, the main widget
     SceneWidget *sceneWidget;
-    QGLWidget *wid;
-    // and a slider for the number of vertices
     QSlider *rotationSlider;
     QComboBox *screenTextureSelection;
-
     QPushButton *resetCameraButton;
-
     QLabel *screenTextureSelectionLabel;
-
     QLabel *fpsLabel;
     QLabel *rotationSliderLabel;
-
-    int test;
-
-    // resets all the interface elements
-    void ResetInterface();
 
 public slots:
 

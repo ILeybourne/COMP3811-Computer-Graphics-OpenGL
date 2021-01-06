@@ -138,15 +138,10 @@ Window::~Window() { // destructor
     delete actionQuit;
     delete fileMenu;
     delete menuBar;
+    delete screenTextureSelection;
+    delete screenTextureSelectionLabel;
+    delete rotationSliderLabel;
+    delete resetCameraButton;
+    delete fpsLabel;
 } // destructor
 
-// resets all the interface elements
-void Window::ResetInterface() { // ResetInterface()
-    rotationSlider->setMinimum(3);
-    rotationSlider->setMaximum(30);
-    //don't use the slider for now
-    //	rotationSlider->setValue(thePolygon->nVertices);
-    // now force refresh
-    sceneWidget->update();
-    update();
-} // ResetInterface()
