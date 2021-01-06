@@ -602,7 +602,7 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
 //    createSemiCylinder(depth, width, tessX, tessY, tessZ);
     glTranslatef(0, -depth / 10, 0);
     glScalef(1, 1.1, 1);
-    createSemiCylinder2(depth / 2, width, tessX, tessY, tessZ, textureCreator->textures[textureCreator->wallIndex]);
+    createSemiCylinder2(depth / 2, width -1, tessX, tessY, tessZ, textureCreator->textures[textureCreator->wallIndex]);
     glPopMatrix();
     glDisable(GL_CULL_FACE);
     //Yellow floor
