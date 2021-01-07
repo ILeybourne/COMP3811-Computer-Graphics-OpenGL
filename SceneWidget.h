@@ -34,6 +34,7 @@ Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
 
+    float lowestTerrain = 100;
     unsigned long long frameDifference;
     ShapeCreator *shapeCreator;
     float turnTableRotationSpeed = 1;

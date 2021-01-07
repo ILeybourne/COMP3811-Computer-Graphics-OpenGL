@@ -108,7 +108,6 @@ Window::Window(QWidget *parent)
 
 void Window::updateFpsLabel() {
     QString fps = QString::number(sceneWidget->frameDifference);
-    qDebug() << "test" << fps << sceneWidget->frameDifference;
     fpsLabel->setText(fps + " fps");
 }
 

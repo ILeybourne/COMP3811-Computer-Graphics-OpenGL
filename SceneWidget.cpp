@@ -15,12 +15,7 @@
 // constructor
 SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
-//    QTimer *timer = new QTimer(this);
-//    connect(timer, SIGNAL(timeout()) , SLOT(update()));
-//    timer->start(1000);
-//
     window = parent;
-    double frame = 0;
     shapeCreator = new ShapeCreator(this);
     shapeCreator->textureCreator = new TextureCreator(this);
 } // constructor
@@ -43,10 +38,10 @@ void SceneWidget::initializeGL() { // initializeGL()
 //    glEnable(GL_FOG);
 //    glFogf(GL_FOG_MODE,GL_EXP2);
 //    glFogfv(GL_FOG_COLOR,fog_colour);
-//    glFogf(GL_FOG_DENSITY,0.05);
+//    glFogf(GL_FOG_DENSITY,0.0005);
 //    glHint(GL_FOG_HINT,GL_NICEST);
-//    glFogf(GL_FOG_START,10);
-//    glFogf(GL_FOG_END,100);
+//    glFogf(GL_FOG_START,700);
+//    glFogf(GL_FOG_END,1000);
 
     ////Material parameters
     glEnable(GL_COLOR_MATERIAL);
@@ -54,59 +49,55 @@ void SceneWidget::initializeGL() { // initializeGL()
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shapeCreator->mdiff);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shapeCreator->mspec);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shapeCreator->shininess2);
-    GLfloat shininess[] = {100.0};
-    GLfloat shininess3[] = {5.0};
+    GLfloat light0Shininess[] = {5.0};
+    GLfloat light1Shininess[] = {100.0};
 
     ////Light parameters
     ////Light 0
-    GLfloat light_0_ambient[] = {0.3, 0.2, 0.25, 0.0};
-    GLfloat light_0_diffuse[] = {1.0, 1.0, 1.0, 0.0};
-    GLfloat light_0_specular[] = {0.2, 0.2, 0.2, 0.0};
+    GLfloat light0Ambient[] = {0.3, 0.2, 0.25, 0.0};
+    GLfloat light0Diffuse[] = {1.0, 1.0, 1.0, 0.0};
+    GLfloat light0Specular[] = {0.2, 0.2, 0.2, 0.0};
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_0_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_0_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_0_specular);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light0Ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light0Specular);
+    glLightfv(GL_LIGHT0, GL_SHININESS, light0Shininess);
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
-    glLightfv(GL_LIGHT0, GL_SHININESS, shininess3);
     glEnable(GL_LIGHT0);
 
     ////Light 1 inside
-    GLfloat light_1_ambient[] = {0.07, 0.05, 0.05, 0.0};
-    GLfloat light_1_diffuse[] = {0.35, 0.33, 0.3, 0.0};
-    GLfloat light_1_specular[] = {0.8, 0.7, 0.7, 0.0};
+    GLfloat light1Ambient[] = {0.07, 0.05, 0.05, 0.0};
+    GLfloat light1Diffuse[] = {0.35, 0.33, 0.3, 0.0};
+    GLfloat light1Specular[] = {0.8, 0.7, 0.7, 0.0};
 
-//    GLfloat light_position[] = {0.0, 5, 0.0, 1.0};
-    glLightfv(GL_LIGHT1, GL_AMBIENT, light_1_ambient);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, light_1_diffuse);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, light_1_specular);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, light1Ambient);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light1Diffuse);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, light1Specular);
+    glLightfv(GL_LIGHT1, GL_SHININESS, light1Shininess);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
-    glLightfv(GL_LIGHT1, GL_SHININESS, shininess);
     glEnable(GL_LIGHT1);
 
     ////Light 2 Tunnel
-//    glTranslatef(roomWidth / 2, 0, 0);
-    GLfloat light_2_ambient[] = {0.07 / 3, 0.05 / 3, 0.05 / 3, 0.0};
-    GLfloat light_2_diffuse[] = {0.35 / 2, 0.33 / 2, 0.3 / 2, 0.0};
-    GLfloat light_2_specular[] = {0.8 / 3, 0.7 / 3, 0.7 / 3, 0.0};
-    glLightfv(GL_LIGHT2, GL_AMBIENT, light_2_ambient);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, light_2_diffuse);
-    glLightfv(GL_LIGHT2, GL_SPECULAR, light_2_specular);
+    GLfloat light2Ambient[] = {0.07 / 3, 0.05 / 3, 0.05 / 3, 0.0};
+    GLfloat light2Diffuse[] = {0.35 / 2, 0.33 / 2, 0.3 / 2, 0.0};
+    GLfloat light2Specular[] = {0.8 / 3, 0.7 / 3, 0.7 / 3, 0.0};
+    glLightfv(GL_LIGHT2, GL_AMBIENT, light2Ambient);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, light2Diffuse);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, light2Specular);
     glLightfv(GL_LIGHT2, GL_POSITION, light2Position);
     glEnable(GL_LIGHT2);
 
     ////Light 3 Tunnel
-//    glTranslatef(roomWidth / 2, 0, 0);
-    glLightfv(GL_LIGHT3, GL_AMBIENT, light_2_ambient);
-    glLightfv(GL_LIGHT3, GL_DIFFUSE, light_2_diffuse);
-    glLightfv(GL_LIGHT3, GL_SPECULAR, light_2_specular);
+    glLightfv(GL_LIGHT3, GL_AMBIENT, light2Ambient);
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, light2Diffuse);
+    glLightfv(GL_LIGHT3, GL_SPECULAR, light2Specular);
     glLightfv(GL_LIGHT3, GL_POSITION, light3Position);
     glEnable(GL_LIGHT3);
 
     ////Light 4 Tunnel
-//    glTranslatef(roomWidth / 2, 0, 0);
-    glLightfv(GL_LIGHT4, GL_AMBIENT, light_2_ambient);
-    glLightfv(GL_LIGHT4, GL_DIFFUSE, light_2_diffuse);
-    glLightfv(GL_LIGHT4, GL_SPECULAR, light_2_specular);
+    glLightfv(GL_LIGHT4, GL_AMBIENT, light2Ambient);
+    glLightfv(GL_LIGHT4, GL_DIFFUSE, light2Diffuse);
+    glLightfv(GL_LIGHT4, GL_SPECULAR, light2Specular);
     glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
     glEnable(GL_LIGHT4);
 
@@ -126,68 +117,40 @@ void SceneWidget::initializeGL() { // initializeGL()
     bool loadedGeisha = shapeCreator->getOBJData("/geisha2.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
                                                  shapeCreator->normalsGeisha);
 
-    qDebug() << "loaded" << loadedGeisha;
-
-//    glGenFramebuffers(1, &geishaFrameBuffer);
-//    glBindFramebuffer(GL_FRAMEBUFFER, geishaFrameBuffer);
-
-//    qDebug() << res;
-
-//    QStringList textureStrings = {
-//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
-//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
-//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
-//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_3_Right-X.jpg",
-//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
-//            "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
-//            "./textureinternet/appleIIe.jpg",
-//            "./textureinternet/mario2.png"
-//    };
-//
-//    QStringList textureStrings2 = {
-//            "./textureinternet/mario2.png"
-//    };
+    if (!(loadedGeisha || loadedPC))
+        qDebug() << "There accessing an OBJ file";
 
     glEnable(GL_TEXTURE_2D);
 
     ////Load textures
-//    shapeCreator->imageLoader(textureStrings , shapeCreator->textureCreator->MyTextures);
     shapeCreator->textureCreator->swapActiveTexture(0);
     shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings,
                                               shapeCreator->textureCreator->textures);
 
-//    glActiveTexture(GL_TEXTURE6 );
-//    shapeCreator->textureCreator->swapActiveTexture(1);
-//    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->objTextureStrings, shapeCreator->textureCreator->objTextures);
-//    shapeCreator->textureCreator->swapActiveTexture(1);
-
-
-//    shapeCreator->textureCreator->swapActiveTexture(2);
-//    shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->fireTextureStrings, shapeCreator->textureCreator->fireTextures);
     shapeCreator->textureCreator = shapeCreator->textureCreator;
-    qDebug() << "loaded Texture!!s";
-    ////Wireframe mode
 
+    //Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 } // initializeGL()
 
 // called every time the widget is resized
 void SceneWidget::resizeGL(int w, int h) { // resizeGL()
-    // set the viewport to the entire widget
+    // Set the viewport to the entire widget
     glViewport(0, 0, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     float width = w;
     float height = h;
+    //Change the perspective to match the new aspect ratio of the view port
     gluPerspective(this->fov, width / height, 0.01, sqrt(pow(1000, 2) + pow(1000, 2)) + pow(1000, 2));
 } // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
-    qDebug() << key;
+//    qDebug() << key;
     const float cameraSpeed = 0.2f;
     const float turningSpeed = 0.05f;
     //Keep yaw between -pi/2 and pi/2
-    qDebug() << camX;
+//    qDebug() << camX;
     if (camX < 0) {
         yaw = (M_PI + yaw);
     }
@@ -287,9 +250,9 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         jumping = false;
         falling = false;
     }
-    qDebug() << "pos" << cameraPosition[0] << cameraPosition[1] << cameraPosition[2];
-    qDebug() << "dir" << cameraDirection[0] << cameraDirection[1] << cameraDirection[2] << camZ << camX;
-    qDebug() << "yaw" << yaw << fmod((yaw / M_2_PI) * 360, 360);
+//    qDebug() << "pos" << cameraPosition[0] << cameraPosition[1] << cameraPosition[2];
+//    qDebug() << "dir" << cameraDirection[0] << cameraDirection[1] << cameraDirection[2] << camZ << camX;
+//    qDebug() << "yaw" << yaw << fmod((yaw / M_2_PI) * 360, 360);
 //    updateGL();
 }
 
@@ -306,6 +269,7 @@ void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
 //    }
 }
 
+////Called by Qt button
 void SceneWidget::resetCamera() {
     for (int i = 0; i < 3; i++) {
         cameraPosition[i] = cameraStartPosition[i];
@@ -426,51 +390,11 @@ void SceneWidget::changeScreenTexture(int i) {
     }
 }
 
+////Called as by Qt connection to display framerate
 unsigned long long SceneWidget::getFrameRate() {
-
     frameDifference = frame - lastFrameRecorded;
-    qDebug() << frame << lastFrameRecorded;
     lastFrameRecorded = frame;
-    qDebug() << QTime::currentTime();
-    qDebug() << frameDifference << "fps";
-
     return frameDifference;
-}
-
-void SceneWidget::drawPC() {
-    glBindTexture(GL_TEXTURE_2D, shapeCreator->textureCreator->textures[6 - 1 + 1]);
-    glColor3f(1.0, 1.0, 1.0);
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    ////Apple PC
-    glDisable(GL_CULL_FACE);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
-    glPushMatrix();
-    glTranslatef(5, 3, -4);
-    glScalef(1, 1, 1.2);
-
-    glVertexPointer(3, GL_FLOAT, 0, shapeCreator->verticesPC.data());
-    glTexCoordPointer(2, GL_FLOAT, 0, shapeCreator->uvsPC.data());
-    glNormalPointer(GL_FLOAT, 0, shapeCreator->normalsPC.data());
-    glDrawArrays(GL_TRIANGLES, 0, shapeCreator->verticesPC.size() / 3);
-
-    ////PC Screen
-    glDisable(GL_LIGHTING);
-    glPushMatrix();
-    glRotatef(-2, 1, 0, 0);
-    glTranslatef(-1.33, -0.4, -0.62);
-    glScalef(1.8, 1.2, 1);
-    shapeCreator->createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, true,
-                                      shapeCreator->textureCreator->textures[shapeCreator->textureCreator->selectedIndex]);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glPopMatrix();
-    glPopMatrix();
-    glDisableClientState(GL_VERTEX_ARRAY); //disable the client states again
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_LIGHTING);
 }
 
 void SceneWidget::testLight() {
@@ -517,64 +441,21 @@ void SceneWidget::testLight() {
 }
 
 void SceneWidget::drawShadows() {
-    float wall[4] = {0, 0, -1, (roomDepth / 2) - 0.2};
-
-    //    ////shadow 2
-//    glPushMatrix();
-//    glDisable(GL_LIGHTING);
-//    glEnable(GL_BLEND); //Enable blending.
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-//    float *shadowMatrix;
-//    wall[3] -= 0; // neg z and increase to stop cross blending
-//    shadowMatrix = getShadowMatrix(wall, light1Position);
-//    glMultMatrixf(shadowMatrix);
-//    glTranslatef(0, 3, 2);
-//    glRotatef(rotateCube, 0, 1, 0);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, true);
-//    glEnable(GL_LIGHTING);
-//    glDisable(GL_BLEND);
-//    glPopMatrix();
-//    glEnable(GL_DEPTH_TEST);
-//
-//    ////cube shadow 1
-//    glPushMatrix();
-//    glDisable(GL_LIGHTING);
-//    glEnable(GL_BLEND); //Enable blending.
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-//    wall[3] += 0.01;
-//    shadowMatrix = getShadowMatrix(wall, light1Position);
-//    glMultMatrixf(shadowMatrix);
-//    glTranslatef(0, 3, 0);
-//    glRotatef(rotateCube, 0, 1, 0);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, true);
+    float wallAsPlane[4] = {0, 0, -1, (roomDepth / 2) - 0.2};
     glDisable(GL_LIGHTING);
-//    glPopMatrix();
-
     glColor3f(0, 0, 0);
     glColor4f(0, 0, 0, 1);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
     ////Geisha shadow
-//    glEnable(GL_BLEND);
-//    glBindTexture(GL_TEXTURE_2D, shapeCreator->textureCreator->MyTextures[8]);
-//    glDisable(GL_CULL_FACE);
-//    glDisable(GL_DEPTH_TEST);
-//    glDepthFunc(GL_GEQUAL);
     glEnable(GL_CULL_FACE);
     glEnableClientState(GL_VERTEX_ARRAY);
-//    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glPushMatrix();
-    wall[3] += 0.02;
-    float *shadowMatrix = getShadowMatrix(wall, light1Position);
+    wallAsPlane[3] += 0.02;
+    float *shadowMatrix = getShadowMatrix(wallAsPlane, light1Position);
     glMultMatrixf(shadowMatrix);
     drawGeisha(true);
     glPopMatrix();
     glEnable(GL_LIGHTING);
-
-//    glEnable(GL_DEPTH_TEST);
-//    glDepthFunc(GL_LESS);
-//    glDisable(GL_BLEND);
 }
 
 void SceneWidget::drawGeisha(bool black) {
@@ -590,32 +471,19 @@ void SceneWidget::drawFire() {
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
-    glPushMatrix();
     int fireNum = frame % 20 + (6 + 3);
     float fireWidth = 10;
     float fireHeight = 20;
-
     glPushMatrix();
     glTranslatef(light1Position[0] - fireWidth / 2, -fireHeight / 8, light1Position[2]);
     shapeCreator->createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
                                       shapeCreator->textureCreator->textures[fireNum]);
-    glPopMatrix();
-
-    ////Second fire
-//    glPushMatrix();
-//    glTranslatef(light1Position[0] - fireWidth/2 , -fireHeight/8, light1Position[2]);
-//    glRotatef(90, 0, 1, 0);
-//    glTranslatef(-5, 0, 5);
-//    shapeCreator->drawTexture(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true, shapeCreator->textureCreator->textures[fireNum]);
-//    glPopMatrix();
-
     glPopMatrix();
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
 }
 
-// called every time the widget needs painting
 void SceneWidget::paintGL() { // paintGL()
     ////Clear screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -625,85 +493,43 @@ void SceneWidget::paintGL() { // paintGL()
     glEnable(GL_LIGHTING);
     ////Inside
     glPushMatrix();
-    glTranslatef(0,-100-roomHeight,0);
+    //Move room to underneath terrain
+    glTranslatef(0,-lowestTerrain-roomHeight- 0.01,0);
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
 
-//    shapeCreator->drawTexture(0,0,30,30,0,0,1,1,0,shapeCreator->textureCreator->textures[29]);
-
+    //Draw main room walls
     glPushMatrix();
     shapeCreator->walls(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
 
-
-    ////light 1 cube
-    glPushMatrix();
-    glTranslatef(light1Position[0], light1Position[1], light1Position[2]);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false, 0);
-    glPopMatrix();
-
-
-    ////Spinning Cubes
-    glPushMatrix();
-    glTranslatef(0, 3, 0);
-    glRotatef(rotateCube, 0, 1, 0);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false, 0);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 3, 2);
-    glRotatef(rotateCube + M_PI, 0, 1, 0);
-//    shapeCreator->createCube(1, 1, 1, 0, 0, 0, false, 0);
-    glPopMatrix();
-
-
+    //Draw shadows onto +Z wall
     drawShadows();
 
-    ////Semicylinder
-//    shapeCreator->createSemiCylinder(5,5,3,3,3);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    ////Draw PC
-//    drawPC();
-
     ////Draw Geisha
-//    drawGeisha();
     glPushMatrix();
-//    glTranslatef(geishaPosition[0],geishaPosition[1],geishaPosition[2]);
-//    shapeCreator->createStickGeisha(false);
     drawGeisha(false);
     glPopMatrix();
-    ///Draw Gyro
-//    glPushMatrix();
-//    glDisable(GL_CULL_FACE);
-//    glTranslatef(2, 5, 0);
-//    glRotatef(shapeCreator->gyroTurning, 0, 1, 0);
-//    glTranslatef(2, 0, 0);
-//    glScalef(0.2, 0.2, 0.2);
-//    shapeCreator->createGyro();
-//    glEnable(GL_CULL_FACE);
-//    glPopMatrix();
 
-
-
-
-////TODO LIGGHT2
-
+    ////Inside - tunnel
+    //Change lighting to tunnel lighting
     glDisable(GL_LIGHT1);
     glEnable(GL_LIGHT2);
     glEnable(GL_LIGHT3);
     glEnable(GL_LIGHT4);
+    //Move over to edge of wall +X
     glPushMatrix();
     glTranslatef(roomWidth / 2, 0, 0);
+    //Draw desk
     glPushMatrix();
     glTranslatef(20, 0, 20);
     glRotatef(180, 0, 1, 0);
-    ////Draw desk
     shapeCreator->createPopulatedDesk();
     glPopMatrix();
+    //Draw Tunnel
     shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPushMatrix();
+    //Create Fireplace
     glPushMatrix();
     glDisable(GL_CULL_FACE);
     glTranslatef(-roomWidth / 2, 0, 0);
@@ -711,11 +537,10 @@ void SceneWidget::paintGL() { // paintGL()
     glTranslatef((roomDepth - roomWidth) / 2 - 2.01, 0, 0);
     glScalef(1, 1, roomWidth / roomDepth);
     shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
-    glEnable(GL_CULL_FACE);
     glPopMatrix();
+    //Draw Doorway at end of tunnel
     glTranslatef(roomWidth + 2, 0, 0);
     glPushMatrix();
-    glDisable(GL_CULL_FACE);
     glTranslatef(roomWidth / 2 - 2.5, 0, 0);
     glRotatef(180, 0, 1, 0);
     shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
@@ -728,6 +553,7 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     glEnable(GL_CULL_FACE);
 
+    //Draw Stairs
     for (int i = 0; i < 15; i++) {
         shapeCreator->createCube(roomWidth / 15, roomHeight / 15, roomDepth, 0, 0, 0, 0,
                                  shapeCreator->textureCreator->textures[shapeCreator->textureCreator->woodIndex]);
@@ -737,15 +563,16 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     glPopMatrix();
 
+
     ////Outside
-    ////Skybox
+    //Skybox
     glDisable(GL_LIGHTING);
     glPushMatrix();
     glTranslatef(0, -500, 0);
     shapeCreator->sky(1000.0, 1000.0, 1000.0);
     glPopMatrix();
 
-
+    //Change lighting to outdoor lighting
     glEnable(GL_LIGHTING);
     glDisable(GL_LIGHT1);
     glDisable(GL_LIGHT2);
@@ -753,13 +580,15 @@ void SceneWidget::paintGL() { // paintGL()
     glDisable(GL_LIGHT4);
     glEnable(GL_LIGHT0);
     glBindTexture(GL_TEXTURE_2D, 0);
-    ////Terrain
+
+    //Terrain
     placeTerrain();
 
     ////Inside
-    /// Draw Fire (LAST!!!)
+    // Draw torches and fire (Drawn last as they are blended objects)
+    // Draw torches
     glPushMatrix();
-    glTranslatef(0,-100-roomHeight,0);
+    glTranslatef(0,-lowestTerrain-roomHeight- 0.01,0);
     glPushMatrix();
     glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
     glScalef(0.8, 0.8, 0.8);
@@ -779,12 +608,12 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
+    //Draw Fire
     glPushMatrix();
     glTranslatef(0,0,-1);
     for (float i = 0; i < 10; i++) {
         glPushMatrix();
         glTranslatef(0, 0, (i) / 10);
-//        glScalef(1/i,1/i,1/i);
         drawFire();
         glPopMatrix();
     }
@@ -793,17 +622,22 @@ void SceneWidget::paintGL() { // paintGL()
 
 
     ////Draw image pixels
-//    glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
+    //glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
 
     glLoadIdentity();
+    //Place Camera
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
+    //Ensure lights are fixed
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
     glLightfv(GL_LIGHT2, GL_POSITION, light2Position);
     glLightfv(GL_LIGHT3, GL_POSITION, light3Position);
     glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
 
+    //Render
     glFlush();
+
+    //Update frame dependant variables
     updateFrameActions();
 } // paintGL()
