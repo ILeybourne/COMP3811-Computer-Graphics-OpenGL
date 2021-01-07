@@ -34,11 +34,9 @@ Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
 
-    float lowestTerrain = 100;
     unsigned long long frameDifference;
     ShapeCreator *shapeCreator;
     float turnTableRotationSpeed = 1;
-
 
 protected:
     // called when OpenGL context is set up
@@ -59,11 +57,11 @@ protected:
 
     float *getShadowMatrix(float p[4], float l[4]);
 
+    float lowestTerrain = 100;
     unsigned long long frame;
     unsigned long long lastFrameRecorded;
     float cameraPosition[3] = {0, 5 - 100 - roomHeight, 0};
     float cameraStartPosition[3] = {cameraPosition[0], cameraPosition[1], cameraPosition[2]};
-    float light0Position[4] = {0, 15, -500, 1};
     float cameraUp[3] = {0, 6, 0};
     float fov = 60;
     float radius = 0.1;
@@ -80,7 +78,6 @@ protected:
     static constexpr float roomDepth = 50.0;
     static constexpr float roomWidth = 70.0;
     static constexpr float roomHeight = 30.0;
-    float light1Position[4] = {0, 3, -roomDepth / 2 + 5, 1};
 //    float light2Position[4] = {roomWidth, 5, -roomDepth / 2 + 4, 1};
     ////Right of tunnel
     float cosPiOver3 = cos(M_PI/3);
@@ -88,24 +85,17 @@ protected:
     ////Left of tunnel
     float negCosPiOver3 = cos(-M_PI/3);
     float negSinPiOver3 = sin(-M_PI/3);
-    float light2Position[4] = {roomWidth - roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10, roomDepth/2 * negSinPiOver3 , 1};
-    float light3Position[4] = {roomWidth , roomDepth/2 * cosPiOver3  - roomDepth/ 10, roomDepth/2 * sinPiOver3 , 1};
-    float light4Position[4] = {roomWidth + roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10, roomDepth/2 * negSinPiOver3 , 1};
+    float light0Position[4] = {0, 15 , -500, 1};
+    float light1Position[4] = {0, 3 - lowestTerrain - roomHeight, -roomDepth / 2 + 5, 1};
+    float light2Position[4] = {roomWidth - roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10 - lowestTerrain - roomHeight, roomDepth/2 * negSinPiOver3 , 1};
+    float light3Position[4] = {roomWidth , roomDepth/2 * cosPiOver3  - roomDepth/ 10- lowestTerrain - roomHeight, roomDepth/2 * sinPiOver3 , 1};
+    float light4Position[4] = {roomWidth + roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10 - lowestTerrain - roomHeight, roomDepth/2 * negSinPiOver3 , 1};
 
-    float geishaPosition[3] = {0, 3, -1};
+    float geishaPosition[3] = {0, 3 , -1};
     float geishaRotation = 0;
 
-    GLuint geishaFrameBuffer;
-
-
-    long unsigned int appleVertNumber;
-    float vertexFloatArray[48519]; // Update if vert number updates
-
     float rotateCube = 0;
-    GLfloat shadowMatrix1[16];
 
-
-    TextureCreator *textureCreator;
     QWidget *window;
 
 public slots:
@@ -121,8 +111,6 @@ private:
     void walls();
 
     void placeTerrain();
-
-    void drawPC();
 
     void testLight();
 

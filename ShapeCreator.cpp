@@ -608,7 +608,7 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
         }
     }
     glPopMatrix();
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mspec);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpec);
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -932,10 +932,10 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
             }
         }
     }
-//    GLfloat mspec[] = {1, 1, 1, 1.0f};
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mspec);
-//    GLfloat shininess2[] = {50};
-    glMaterialfv(GL_FRONT, GL_SHININESS, shininess2);
+//    GLfloat mSpec[] = {1, 1, 1, 1.0f};
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mSpec);
+//    GLfloat mShininess2[] = {50};
+    glMaterialfv(GL_FRONT, GL_SHININESS, mShininess2);
     glBindTexture(GL_TEXTURE_2D, 0);
 //    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 //    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

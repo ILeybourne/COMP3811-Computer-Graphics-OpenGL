@@ -45,10 +45,10 @@ void SceneWidget::initializeGL() { // initializeGL()
 
     ////Material parameters
     glEnable(GL_COLOR_MATERIAL);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shapeCreator->mambient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shapeCreator->mdiff);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shapeCreator->mspec);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shapeCreator->shininess2);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shapeCreator->mAmbient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shapeCreator->mDiff);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shapeCreator->mSpec);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shapeCreator->mShininess2);
     GLfloat light0Shininess[] = {5.0};
     GLfloat light1Shininess[] = {100.0};
 
@@ -297,27 +297,6 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
     light[2] = l[2];
     light[3] = l[3];
 
-//    float wall[4] = {0, 0, -1, 15 - 0.01};
-
-//    float width= ;
-//    float height= ;
-//    float depth= ;
-//
-//    glm::vec3 p1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-//    glm::vec3 p2 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-//    glm::vec3 p3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-//    glm::vec3 p4 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-
-//    plane[0] = ((p2[1]-p1[1])*(p3[2]-p1[2]))-
-//               ((p2[2]-p1[2])*(p3[1]-p1[1]));
-//    plane[1] = ((p2[2]-p1[2])*(p3[0]-p1[0]))-
-//               ((p2[0]-p1[0])*(p3[2]-p1[2]));
-//    plane[2] = ((p2[0]-p1[0])*(p3[1]-p1[1]))-
-//               ((p2[1]-p1[1])*(p3[0]-p1[0]));
-//    plane[3] = -(plane[0]*p1[0] + plane[1]*p1[1] + plane[2]*p1[2]);
-
-
-
     float dot = wall[0] * light[0] +
                 wall[1] * light[1] +
                 wall[2] * light[2] +
@@ -447,8 +426,6 @@ void SceneWidget::drawShadows() {
     glColor4f(0, 0, 0, 1);
     ////Geisha shadow
     glEnable(GL_CULL_FACE);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
     glPushMatrix();
     wallAsPlane[3] += 0.02;
     float *shadowMatrix = getShadowMatrix(wallAsPlane, light1Position);
@@ -460,7 +437,12 @@ void SceneWidget::drawShadows() {
 
 void SceneWidget::drawGeisha(bool black) {
     glPushMatrix();
-    glTranslatef(geishaPosition[0], geishaPosition[1], geishaPosition[2]);
+    if (!black){
+
+        glTranslatef(geishaPosition[0], geishaPosition[1], geishaPosition[2]);
+    }else{
+        glTranslatef(geishaPosition[0], geishaPosition[1]- lowestTerrain - roomHeight, geishaPosition[2]);
+    }
     glRotatef(geishaRotation, 0, 1, 0);
     shapeCreator->createStickGeisha(black);
     glPopMatrix();
@@ -496,6 +478,9 @@ void SceneWidget::paintGL() { // paintGL()
     //Move room to underneath terrain
     glTranslatef(0,-lowestTerrain-roomHeight- 0.01,0);
     glDisable(GL_LIGHT0);
+    glDisable(GL_LIGHT2);
+    glDisable(GL_LIGHT3);
+    glDisable(GL_LIGHT4);
     glEnable(GL_LIGHT1);
 
     //Draw main room walls
@@ -503,8 +488,7 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->walls(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
 
-    //Draw shadows onto +Z wall
-    drawShadows();
+
 
     ////Draw Geisha
     glPushMatrix();
@@ -585,7 +569,11 @@ void SceneWidget::paintGL() { // paintGL()
     placeTerrain();
 
     ////Inside
-    // Draw torches and fire (Drawn last as they are blended objects)
+    ////Shadows are immune to translations and should be projected separately
+    //Draw shadows onto +Z wall
+    drawShadows();
+
+    //// Draw torches and fire (Drawn last as they are blended objects)
     // Draw torches
     glPushMatrix();
     glTranslatef(0,-lowestTerrain-roomHeight- 0.01,0);
