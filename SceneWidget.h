@@ -57,10 +57,11 @@ protected:
 
     float *getShadowMatrix(float p[4], float l[4]);
 
-    float lowestTerrain = 100;
     unsigned long long frame;
-    unsigned long long lastFrameRecorded;
-    float cameraPosition[3] = {0, 5 - 100 - roomHeight, 0};
+    unsigned long long lastFrameRecorded = 0;
+    float lowestTerrain = 100;
+
+    float cameraPosition[3] = {0, 5 - lowestTerrain - roomHeight, 0};
     float cameraStartPosition[3] = {cameraPosition[0], cameraPosition[1], cameraPosition[2]};
     float cameraUp[3] = {0, 6, 0};
     float fov = 60;
@@ -73,25 +74,33 @@ protected:
     float camZ = cos(turningNumber) * radius;
     float cameraDirection[3] = {cameraPosition[0] - 0, cameraPosition[1], cameraPosition[2] - radius};
     float cameraStartDirection[3] = {cameraDirection[0], cameraDirection[1], cameraDirection[2]};
+
     bool jumping = false;
     bool falling = false;
+
     static constexpr float roomDepth = 50.0;
     static constexpr float roomWidth = 70.0;
     static constexpr float roomHeight = 30.0;
-//    float light2Position[4] = {roomWidth, 5, -roomDepth / 2 + 4, 1};
-    ////Right of tunnel
-    float cosPiOver3 = cos(M_PI/3);
-    float sinPiOver3 = sin(M_PI/3);
-    ////Left of tunnel
-    float negCosPiOver3 = cos(-M_PI/3);
-    float negSinPiOver3 = sin(-M_PI/3);
-    float light0Position[4] = {0, 15 , -500, 1};
-    float light1Position[4] = {0, 3 - lowestTerrain - roomHeight, -roomDepth / 2 + 5, 1};
-    float light2Position[4] = {roomWidth - roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10 - lowestTerrain - roomHeight, roomDepth/2 * negSinPiOver3 , 1};
-    float light3Position[4] = {roomWidth , roomDepth/2 * cosPiOver3  - roomDepth/ 10- lowestTerrain - roomHeight, roomDepth/2 * sinPiOver3 , 1};
-    float light4Position[4] = {roomWidth + roomWidth/3, roomDepth/2 * negCosPiOver3  - roomDepth/ 10 - lowestTerrain - roomHeight, roomDepth/2 * negSinPiOver3 , 1};
 
-    float geishaPosition[3] = {0, 3 , -1};
+    ////Right of tunnel
+    float cosPiOver3 = cos(M_PI / 3);
+    float sinPiOver3 = sin(M_PI / 3);
+    ////Left of tunnel
+    float negCosPiOver3 = cos(-M_PI / 3);
+    float negSinPiOver3 = sin(-M_PI / 3);
+
+    float light0Position[4] = {0, 15, -500, 1};
+    float light1Position[4] = {0, 3 - lowestTerrain - roomHeight, -roomDepth / 2 + 5, 1};
+    float light2Position[4] = {roomWidth - roomWidth / 3,
+                               roomDepth / 2 * negCosPiOver3 - roomDepth / 10 - lowestTerrain - roomHeight,
+                               roomDepth / 2 * negSinPiOver3, 1};
+    float light3Position[4] = {roomWidth, roomDepth / 2 * cosPiOver3 - roomDepth / 10 - lowestTerrain - roomHeight,
+                               roomDepth / 2 * sinPiOver3, 1};
+    float light4Position[4] = {roomWidth + roomWidth / 3,
+                               roomDepth / 2 * negCosPiOver3 - roomDepth / 10 - lowestTerrain - roomHeight,
+                               roomDepth / 2 * negSinPiOver3, 1};
+
+    float geishaPosition[3] = {0, 3, -1};
     float geishaRotation = 0;
 
     float rotateCube = 0;
@@ -106,7 +115,6 @@ public slots:
 
     void resetCamera();
 
-
 private:
     void walls();
 
@@ -120,6 +128,6 @@ private:
 
     void drawFire();
 
-}; // class GLPolygonWidget
+};
 
 #endif

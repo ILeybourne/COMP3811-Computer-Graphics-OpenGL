@@ -146,11 +146,9 @@ void SceneWidget::resizeGL(int w, int h) { // resizeGL()
 } // resizeGL()
 
 void SceneWidget::keyPressEvent(QKeyEvent *key) {
-//    qDebug() << key;
     const float cameraSpeed = 0.2f;
     const float turningSpeed = 0.05f;
     //Keep yaw between -pi/2 and pi/2
-//    qDebug() << camX;
     if (camX < 0) {
         yaw = (M_PI + yaw);
     }
@@ -228,7 +226,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         return;
     }
     if (key->key() == Qt::Key_Shift && !jumping && !falling && !key->isAutoRepeat()) {
-        qDebug() << jumping;
+//        qDebug() << jumping;
         while (cameraPosition[1] < 6.5) {
 
             cameraPosition[1] += 0.2;
@@ -250,6 +248,10 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         jumping = false;
         falling = false;
     }
+    //    qDebug() << key;
+
+    //    qDebug() << camX;
+
 //    qDebug() << "pos" << cameraPosition[0] << cameraPosition[1] << cameraPosition[2];
 //    qDebug() << "dir" << cameraDirection[0] << cameraDirection[1] << cameraDirection[2] << camZ << camX;
 //    qDebug() << "yaw" << yaw << fmod((yaw / M_2_PI) * 360, 360);
@@ -437,11 +439,11 @@ void SceneWidget::drawShadows() {
 
 void SceneWidget::drawGeisha(bool black) {
     glPushMatrix();
-    if (!black){
+    if (!black) {
 
         glTranslatef(geishaPosition[0], geishaPosition[1], geishaPosition[2]);
-    }else{
-        glTranslatef(geishaPosition[0], geishaPosition[1]- lowestTerrain - roomHeight, geishaPosition[2]);
+    } else {
+        glTranslatef(geishaPosition[0], geishaPosition[1] - lowestTerrain - roomHeight, geishaPosition[2]);
     }
     glRotatef(geishaRotation, 0, 1, 0);
     shapeCreator->createStickGeisha(black);
@@ -476,7 +478,7 @@ void SceneWidget::paintGL() { // paintGL()
     ////Inside
     glPushMatrix();
     //Move room to underneath terrain
-    glTranslatef(0,-lowestTerrain-roomHeight- 0.01,0);
+    glTranslatef(0, -lowestTerrain - roomHeight - 0.1, 0);
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHT2);
     glDisable(GL_LIGHT3);
@@ -530,10 +532,12 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
     glPushMatrix();
-    glTranslatef(-2.5,0,-roomDepth/2);
-    shapeCreator->createTexturedPlane(0,0,roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
-    glTranslatef(roomWidth,0,roomDepth);
-    shapeCreator->createTexturedPlane(0,0,-roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
+    glTranslatef(-2.5, 0, -roomDepth / 2);
+    shapeCreator->createTexturedPlane(0, 0, roomWidth, roomHeight, 0, 0, 1, 1, 0,
+                                      shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
+    glTranslatef(roomWidth, 0, roomDepth);
+    shapeCreator->createTexturedPlane(0, 0, -roomWidth, roomHeight, 0, 0, 1, 1, 0,
+                                      shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
     glPopMatrix();
     glEnable(GL_CULL_FACE);
 
@@ -575,30 +579,31 @@ void SceneWidget::paintGL() { // paintGL()
 
     //// Draw torches and fire (Drawn last as they are blended objects)
     // Draw torches
-    glPushMatrix();
-    glTranslatef(0,-lowestTerrain-roomHeight- 0.01,0);
+
     glPushMatrix();
     glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
-    glScalef(0.8, 0.8, 0.8);
+//    glScalef(0.8, 0.8, 0.8);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light3Position[0], light3Position[1], light3Position[2]);
-    glScalef(0.8, 0.8, 0.8);
+//    glScalef(0.8, 0.8, 0.8);
     glRotatef(180, 0, 1, 0);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light4Position[0], light4Position[1], light4Position[2]);
-    glScalef(0.8, 0.8, 0.8);
+//    glScalef(0.8, 0.8, 0.8);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0, -lowestTerrain - roomHeight - 0.01, 0);
     //Draw Fire
     glPushMatrix();
-    glTranslatef(0,0,-1);
+    glTranslatef(0, 0, -1);
     for (float i = 0; i < 10; i++) {
         glPushMatrix();
         glTranslatef(0, 0, (i) / 10);
