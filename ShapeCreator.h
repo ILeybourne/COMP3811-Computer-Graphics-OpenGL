@@ -35,7 +35,7 @@ public:
     GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0f};
     GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0f};
 
-    void sky(float w, float h, float d, int tX, int tY, int tZ);
+    void sky(float w, float h, float d);
 
     void walls(float w, float h, float d, int tX, int tY, int tZ);
 

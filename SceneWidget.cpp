@@ -253,13 +253,13 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         cameraDirection[1] -= 0.02;
     }
 
-    if (key->key() == Qt::Key_Control) {
-        while (cameraPosition[1] > 4.9) {
-            cameraPosition[1] -= 0.02;
-            cameraDirection[1] -= 0.03;
-            updateGL();
-        }
-    }
+//    if (key->key() == Qt::Key_Control) {
+//        while (cameraPosition[1] > 4.9) {
+//            cameraPosition[1] -= 0.02;
+//            cameraDirection[1] -= 0.03;
+//            updateGL();
+//        }
+//    }
     if (jumping || falling) {
         key->ignore();
         return;
@@ -295,15 +295,15 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
 
 
 void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
-    if (key->key() == Qt::Key_Control) {
-        while (cameraPosition[1] < 5) {
-            cameraPosition[1] += 0.02;
-            cameraDirection[1] += 0.03;
-            updateGL();
-        }
-        cameraPosition[1] = 5;
-        cameraDirection[1] = 5;
-    }
+//    if (key->key() == Qt::Key_Control) {
+//        while (cameraPosition[1] < 5) {
+//            cameraPosition[1] += 0.02;
+//            cameraDirection[1] += 0.03;
+//            updateGL();
+//        }
+//        cameraPosition[1] = 5;
+//        cameraDirection[1] = 5;
+//    }
 }
 
 void SceneWidget::resetCamera() {
@@ -624,6 +624,8 @@ void SceneWidget::paintGL() { // paintGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     ////Inside
+    glPushMatrix();
+    glTranslatef(0,-100-roomHeight,0);
     glDisable(GL_LIGHT0);
     glEnable(GL_LIGHT1);
 
@@ -721,12 +723,8 @@ void SceneWidget::paintGL() { // paintGL()
     glPushMatrix();
     glTranslatef(-2.5,0,-roomDepth/2);
     shapeCreator->createTexturedPlane(0,0,roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
-    glPopMatrix();
-    glPushMatrix();
-    glRotatef(180,0,1,0);
-    glTranslatef( -roomWidth + 2.5,0,-roomDepth/2);
-//    glTranslatef(roomWidth+ 2.5,0,roomDepth/2);
-    shapeCreator->createTexturedPlane(0,0,roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
+    glTranslatef(roomWidth,0,roomDepth);
+    shapeCreator->createTexturedPlane(0,0,-roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
     glPopMatrix();
     glEnable(GL_CULL_FACE);
 
@@ -737,13 +735,14 @@ void SceneWidget::paintGL() { // paintGL()
     }
     glPopMatrix();
     glPopMatrix();
+    glPopMatrix();
 
     ////Outside
     ////Skybox
     glDisable(GL_LIGHTING);
     glPushMatrix();
     glTranslatef(0, -500, 0);
-    shapeCreator->sky(1000.0, 1000.0, 1000.0, 1, 1, 1);
+    shapeCreator->sky(1000.0, 1000.0, 1000.0);
     glPopMatrix();
 
 
@@ -759,6 +758,8 @@ void SceneWidget::paintGL() { // paintGL()
 
     ////Inside
     /// Draw Fire (LAST!!!)
+    glPushMatrix();
+    glTranslatef(0,-100-roomHeight,0);
     glPushMatrix();
     glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
     glScalef(0.8, 0.8, 0.8);
@@ -788,6 +789,8 @@ void SceneWidget::paintGL() { // paintGL()
         glPopMatrix();
     }
     glPopMatrix();
+    glPopMatrix();
+
 
     ////Draw image pixels
 //    glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());

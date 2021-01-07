@@ -60,7 +60,7 @@ protected:
 
     unsigned long long frame;
     unsigned long long lastFrameRecorded;
-    float cameraPosition[3] = {0, 5, 0};
+    float cameraPosition[3] = {0, 5 - 100 - roomHeight, 0};
     float cameraStartPosition[3] = {cameraPosition[0], cameraPosition[1], cameraPosition[2]};
     float light0Position[4] = {0, 15, -500, 1};
     float cameraUp[3] = {0, 6, 0};
@@ -72,7 +72,7 @@ protected:
     float startingYaw = yaw;
     float camX = sin(turningNumber) * radius;
     float camZ = cos(turningNumber) * radius;
-    float cameraDirection[3] = {cameraPosition[0] - 0, 5, cameraPosition[2] - radius};
+    float cameraDirection[3] = {cameraPosition[0] - 0, cameraPosition[1], cameraPosition[2] - radius};
     float cameraStartDirection[3] = {cameraDirection[0], cameraDirection[1], cameraDirection[2]};
     bool jumping = false;
     bool falling = false;
