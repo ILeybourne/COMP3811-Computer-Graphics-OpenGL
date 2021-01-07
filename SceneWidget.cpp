@@ -85,27 +85,27 @@ void SceneWidget::initializeGL() { // initializeGL()
 
     ////Light 2 Tunnel
 //    glTranslatef(roomWidth / 2, 0, 0);
-    GLfloat light_2_ambient[] = {0.07/3, 0.05/3, 0.05/3, 0.0};
-    GLfloat light_2_diffuse[] = {0.35/2, 0.33/2, 0.3/2, 0.0};
-    GLfloat light_2_specular[] = {0.8/3, 0.7/3, 0.7/3, 0.0};
-    glLightfv(GL_LIGHT2, GL_AMBIENT,  light_2_ambient);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE,  light_2_diffuse);
+    GLfloat light_2_ambient[] = {0.07 / 3, 0.05 / 3, 0.05 / 3, 0.0};
+    GLfloat light_2_diffuse[] = {0.35 / 2, 0.33 / 2, 0.3 / 2, 0.0};
+    GLfloat light_2_specular[] = {0.8 / 3, 0.7 / 3, 0.7 / 3, 0.0};
+    glLightfv(GL_LIGHT2, GL_AMBIENT, light_2_ambient);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, light_2_diffuse);
     glLightfv(GL_LIGHT2, GL_SPECULAR, light_2_specular);
     glLightfv(GL_LIGHT2, GL_POSITION, light2Position);
     glEnable(GL_LIGHT2);
 
     ////Light 3 Tunnel
 //    glTranslatef(roomWidth / 2, 0, 0);
-    glLightfv(GL_LIGHT3, GL_AMBIENT,  light_2_ambient);
-    glLightfv(GL_LIGHT3, GL_DIFFUSE,  light_2_diffuse);
+    glLightfv(GL_LIGHT3, GL_AMBIENT, light_2_ambient);
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, light_2_diffuse);
     glLightfv(GL_LIGHT3, GL_SPECULAR, light_2_specular);
     glLightfv(GL_LIGHT3, GL_POSITION, light3Position);
     glEnable(GL_LIGHT3);
 
     ////Light 4 Tunnel
 //    glTranslatef(roomWidth / 2, 0, 0);
-    glLightfv(GL_LIGHT4, GL_AMBIENT,  light_2_ambient);
-    glLightfv(GL_LIGHT4, GL_DIFFUSE,  light_2_diffuse);
+    glLightfv(GL_LIGHT4, GL_AMBIENT, light_2_ambient);
+    glLightfv(GL_LIGHT4, GL_DIFFUSE, light_2_diffuse);
     glLightfv(GL_LIGHT4, GL_SPECULAR, light_2_specular);
     glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
     glEnable(GL_LIGHT4);
@@ -687,6 +687,7 @@ void SceneWidget::paintGL() { // paintGL()
 
 
 ////TODO LIGGHT2
+
     glDisable(GL_LIGHT1);
     glEnable(GL_LIGHT2);
     glEnable(GL_LIGHT3);
@@ -701,40 +702,41 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPushMatrix();
-
     glPushMatrix();
     glDisable(GL_CULL_FACE);
-        glTranslatef(-roomWidth/2 , 0, 0);
-
-    glRotatef(90,0,1,0);
-    glTranslatef((roomDepth-roomWidth)/2 - 2.01 , 0, 0);
-    glScalef(1,1,roomWidth/roomDepth);
-
-//    glTranslatef(0 - 2, 0, );
+    glTranslatef(-roomWidth / 2, 0, 0);
+    glRotatef(90, 0, 1, 0);
+    glTranslatef((roomDepth - roomWidth) / 2 - 2.01, 0, 0);
+    glScalef(1, 1, roomWidth / roomDepth);
     shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glEnable(GL_CULL_FACE);
     glPopMatrix();
-
-    glTranslatef(roomWidth+2 , 0, 0);
-
+    glTranslatef(roomWidth + 2, 0, 0);
     glPushMatrix();
     glDisable(GL_CULL_FACE);
-    glTranslatef(roomWidth/2 -2.5 , 0, 0);
+    glTranslatef(roomWidth / 2 - 2.5, 0, 0);
+    glRotatef(180, 0, 1, 0);
+    shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(-2.5,0,-roomDepth/2);
+    shapeCreator->createTexturedPlane(0,0,roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
+    glPopMatrix();
+    glPushMatrix();
     glRotatef(180,0,1,0);
-    shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
-    glEnable(GL_CULL_FACE);
+    glTranslatef( -roomWidth + 2.5,0,-roomDepth/2);
+//    glTranslatef(roomWidth+ 2.5,0,roomDepth/2);
+    shapeCreator->createTexturedPlane(0,0,roomWidth,roomHeight,0,0,1,1,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->wallIndex]);
     glPopMatrix();
+    glEnable(GL_CULL_FACE);
 
     for (int i = 0; i < 15; i++) {
-        shapeCreator->createCube(roomWidth/15, roomHeight/15, roomDepth,0,0,0,0,shapeCreator->textureCreator->textures[shapeCreator->textureCreator->woodIndex]);
-        glTranslatef(roomWidth/15,roomHeight/15,0);
+        shapeCreator->createCube(roomWidth / 15, roomHeight / 15, roomDepth, 0, 0, 0, 0,
+                                 shapeCreator->textureCreator->textures[shapeCreator->textureCreator->woodIndex]);
+        glTranslatef(roomWidth / 15, roomHeight / 15, 0);
     }
-
-
-
     glPopMatrix();
     glPopMatrix();
-
 
     ////Outside
     ////Skybox
@@ -758,24 +760,26 @@ void SceneWidget::paintGL() { // paintGL()
     ////Inside
     /// Draw Fire (LAST!!!)
     glPushMatrix();
-    glTranslatef(light2Position[0],light2Position[1],light2Position[2]);
-    glScalef(0.8,0.8,0.8);
+    glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
+    glScalef(0.8, 0.8, 0.8);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(light3Position[0],light3Position[1],light3Position[2]);
-    glScalef(0.8,0.8,0.8);
-    glRotatef(180,0,1,0);
+    glTranslatef(light3Position[0], light3Position[1], light3Position[2]);
+    glScalef(0.8, 0.8, 0.8);
+    glRotatef(180, 0, 1, 0);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(light4Position[0],light4Position[1],light4Position[2]);
-    glScalef(0.8,0.8,0.8);
+    glTranslatef(light4Position[0], light4Position[1], light4Position[2]);
+    glScalef(0.8, 0.8, 0.8);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0,0,-1);
     for (float i = 0; i < 10; i++) {
         glPushMatrix();
         glTranslatef(0, 0, (i) / 10);
@@ -783,6 +787,7 @@ void SceneWidget::paintGL() { // paintGL()
         drawFire();
         glPopMatrix();
     }
+    glPopMatrix();
 
     ////Draw image pixels
 //    glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
