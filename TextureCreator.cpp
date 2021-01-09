@@ -1,16 +1,5 @@
 #include "TextureCreator.h"
-#include <GL/glu.h>
-#include <glm/glm.hpp>
-#include <QGLWidget>
-#include <QtGui>
-#include <QOpenGLFunctions>
-#include <QtCore/QTime>
-#include <cstdio>
-#include <cmath>
-#include <QColor>
-#include <QOpenGLFunctions>
-#include "qopenglfunctions.h"
-#include <QOpenGLTexture>
+
 
 // constructor
 TextureCreator::TextureCreator(QWidget *parent) {// constructor

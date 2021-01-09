@@ -18,6 +18,11 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <GL/glu.h>
+#include <QGLWidget>
+#include <QtCore/QTime>
+#include "qopenglfunctions.h"
+#include <QOpenGLTexture>
 
 using namespace std;
 
@@ -66,7 +71,6 @@ public:
             "./textureinternet/Wood047_1K_Color.jpg"//35
     };
 
-
     int skyBoxZPlusIndex = 0;  // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
     int skyboxZNegIndex = 1;   // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
     int SkyboxXNegIndex = 2;   // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
@@ -113,7 +117,6 @@ public:
 
     QList<QImage> pQImage;
 
-    int numOfTextures = textureStrings.size();
     GLuint textures[constNumberOfTextures];
 
     void swapActiveTexture(int textureNumber);
@@ -121,5 +124,4 @@ public:
 protected:
 private:
 };
-
 #endif //SCENE_TextureCreator_H
