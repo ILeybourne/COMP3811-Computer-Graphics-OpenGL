@@ -2,7 +2,6 @@
 #define SCENE_WINDOW_H
 
 #include <QGLWidget>
-#include <QGLWidget>
 #include <QMenuBar>
 #include <QSlider>
 #include <QLabel>
@@ -11,6 +10,7 @@
 #include <QPushButton>
 #include <QTimer>
 #include "QSizePolicy"
+#include <QTimer>
 #include "SceneWidget.h"
 
 class Window : public QWidget {
