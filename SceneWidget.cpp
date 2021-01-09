@@ -1,16 +1,6 @@
 //#define GL_GLEXT_PROTOTYPES
-//#include <GL/glew.h>
-#include <GL/glu.h>
-#include <QGLWidget>
-#include <QtGui>
-#include <QtCore/QTime>
-#include <cmath>
-#include "SceneWidget.h"
-#include <glm/glm.hpp>
-#include "ShapeCreator.h"
-#include "TextureCreator.h"
-#include <vector>
 
+#include "SceneWidget.h"
 
 // constructor
 SceneWidget::SceneWidget(QWidget *parent)

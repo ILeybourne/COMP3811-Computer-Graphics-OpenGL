@@ -11,7 +11,6 @@
 #include <QTimer>
 #include <QApplication>
 #include <QObject>
-
 #include <GL/glu.h>
 #include <QGLWidget>
 #include <QtGui>
@@ -20,6 +19,7 @@
 #include <ctime>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 #include "ShapeCreator.h"
 #include "TextureCreator.h"
 
