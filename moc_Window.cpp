@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Window.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.12.8)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,32 +12,29 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'Window.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.12.8. It"
+#error "This file was generated using the moc from 5.3.1. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-QT_WARNING_PUSH
-QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_Window_t {
     QByteArrayData data[6];
-    char stringdata0[63];
+    char stringdata[63];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_Window_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_Window_t, stringdata) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_Window_t qt_meta_stringdata_Window = {
     {
-QT_MOC_LITERAL(0, 0, 6), // "Window"
-QT_MOC_LITERAL(1, 7, 11), // "closeWindow"
-QT_MOC_LITERAL(2, 19, 0), // ""
-QT_MOC_LITERAL(3, 20, 14), // "updateFpsLabel"
-QT_MOC_LITERAL(4, 35, 16), // "setRotationSpeed"
-QT_MOC_LITERAL(5, 52, 10) // "resetFocus"
-
+QT_MOC_LITERAL(0, 0, 6),
+QT_MOC_LITERAL(1, 7, 11),
+QT_MOC_LITERAL(2, 19, 0),
+QT_MOC_LITERAL(3, 20, 14),
+QT_MOC_LITERAL(4, 35, 16),
+QT_MOC_LITERAL(5, 52, 10)
     },
     "Window\0closeWindow\0\0updateFpsLabel\0"
     "setRotationSpeed\0resetFocus"
@@ -47,7 +44,7 @@ QT_MOC_LITERAL(5, 52, 10) // "resetFocus"
 static const uint qt_meta_data_Window[] = {
 
  // content:
-       8,       // revision
+       7,       // revision
        0,       // classname
        0,    0, // classinfo
        4,   14, // methods
@@ -75,8 +72,7 @@ static const uint qt_meta_data_Window[] = {
 void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<Window *>(_o);
-        Q_UNUSED(_t)
+        Window *_t = static_cast<Window *>(_o);
         switch (_id) {
         case 0: _t->closeWindow(); break;
         case 1: _t->updateFpsLabel(); break;
@@ -88,14 +84,10 @@ void Window::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
     Q_UNUSED(_a);
 }
 
-QT_INIT_METAOBJECT const QMetaObject Window::staticMetaObject = { {
-    &QWidget::staticMetaObject,
-    qt_meta_stringdata_Window.data,
-    qt_meta_data_Window,
-    qt_static_metacall,
-    nullptr,
-    nullptr
-} };
+const QMetaObject Window::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_Window.data,
+      qt_meta_data_Window,  qt_static_metacall, 0, 0}
+};
 
 
 const QMetaObject *Window::metaObject() const
@@ -105,9 +97,9 @@ const QMetaObject *Window::metaObject() const
 
 void *Window::qt_metacast(const char *_clname)
 {
-    if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Window.stringdata0))
-        return static_cast<void*>(this);
+    if (!_clname) return 0;
+    if (!strcmp(_clname, qt_meta_stringdata_Window.stringdata))
+        return static_cast<void*>(const_cast< Window*>(this));
     return QWidget::qt_metacast(_clname);
 }
 
@@ -127,5 +119,4 @@ int Window::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     }
     return _id;
 }
-QT_WARNING_POP
 QT_END_MOC_NAMESPACE

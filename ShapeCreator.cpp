@@ -1187,83 +1187,83 @@ void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int t
     glPopMatrix();
 }
 
-void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
-    //TODO Clean up outside also visible with culling. Triangles in both directions?
-    glDisable(GL_CULL_FACE);
-    glPushMatrix();
-    int numberOfSide = 100;
-//    int numberOfSide = rad;
-//    if(numberOfSide % 2 == 1){
-//        numberOfSide +=1;
-//    }
-    glTranslatef(0, 0, rad / 4);
-
-    float interiorAngle = (numberOfSide - 2) * (180.0 / numberOfSide);
-    float interiorAngleRad = interiorAngle * (M_PI / 180.0);
-    glColor3f(1.0, 0.0, 0.0);
-    //Coordinates
-    glm::vec3 v1 = {-1.0, 2.0, 1.0};
-    glm::vec3 v2 = {-1.0, 0.0, 1.0};
-    glm::vec3 v3 = {1.0, 0.0, 1.0};
-    glm::vec3 v4 = {1.0, 2.0, 1.0};
-    for (int j = 0; j < length; j++) {
-        glm::vec3 v1 = {0 + (j), 1.0, 1.0};
-        glm::vec3 v2 = {0 + (j), 0.0, 1.0};
-        glm::vec3 v3 = {1.0 + (j), 0.0, 1.0};
-        glm::vec3 v4 = {1.0 + (j), 1.0, 1.0};
-
-        for (int i = 0; i < numberOfSide / 2 + 1; i++) {
-            glm::vec3 lastv1 = v1;
-            glm::vec3 lastv2 = v2;
-            glm::vec3 lastv3 = v3;
-            glm::vec3 lastv4 = v4;
-
-            glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-            if (i % 2 == 0) {
-                normal = -normal;
-                glNormal3fv(glm::value_ptr(normal));
-                glBegin(GL_POLYGON);
-                glVertex3f(v1[0], v1[1], v1[2]);
-                glVertex3f(v4[0], v4[1], v4[2]);
-                glVertex3f(v3[0], v3[1], v3[2]);
-                glVertex3f(v2[0], v2[1], v2[2]);
-                glEnd();
-            }
-            glNormal3fv(glm::value_ptr(normal));
-            glBegin(GL_POLYGON);
-            glVertex3f(v1[0], v1[1], v1[2]);
-            glVertex3f(v2[0], v2[1], v2[2]);
-            glVertex3f(v3[0], v3[1], v3[2]);
-            glVertex3f(v4[0], v4[1], v4[2]);
-            glEnd();
-
-            glm::mat4 xrotationMat(1); // Creates a identity matrix
-            xrotationMat = glm::rotate(xrotationMat, interiorAngleRad, glm::vec3({1, 0, 0}));
-
-            v1 = glm::vec3(xrotationMat * glm::vec4(v1, 1.0));
-            v2 = glm::vec3(xrotationMat * glm::vec4(v2, 1.0));
-            v3 = glm::vec3(xrotationMat * glm::vec4(v3, 1.0));
-            v4 = glm::vec3(xrotationMat * glm::vec4(v4, 1.0));
-
-//            if (i != 0 && j >= 1) {
-            glm::mat4 transform(1);
-            if (i % 2 == 1) {
-                transform = glm::translate(transform, lastv2 - v2);
-            } else {
-                transform = glm::translate(transform, lastv1 - v1);
-            }
-
-            v1 = glm::vec3(transform * glm::vec4(v1, 1.0));
-            v2 = glm::vec3(transform * glm::vec4(v2, 1.0));
-            v3 = glm::vec3(transform * glm::vec4(v3, 1.0));
-            v4 = glm::vec3(transform * glm::vec4(v4, 1.0));
-        }
-    }
-    glEnable(GL_CULL_FACE);
-    glPopMatrix();
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
+// void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ) {
+//     //TODO Clean up outside also visible with culling. Triangles in both directions?
+//     glDisable(GL_CULL_FACE);
+//     glPushMatrix();
+//     int numberOfSide = 100;
+// //    int numberOfSide = rad;
+// //    if(numberOfSide % 2 == 1){
+// //        numberOfSide +=1;
+// //    }
+//     glTranslatef(0, 0, rad / 4);
+//
+//     float interiorAngle = (numberOfSide - 2) * (180.0 / numberOfSide);
+//     float interiorAngleRad = interiorAngle * (M_PI / 180.0);
+//     glColor3f(1.0, 0.0, 0.0);
+//     //Coordinates
+//     glm::vec3 v1 = {-1.0, 2.0, 1.0};
+//     glm::vec3 v2 = {-1.0, 0.0, 1.0};
+//     glm::vec3 v3 = {1.0, 0.0, 1.0};
+//     glm::vec3 v4 = {1.0, 2.0, 1.0};
+//     for (int j = 0; j < length; j++) {
+//         glm::vec3 v1 = {0 + (j), 1.0, 1.0};
+//         glm::vec3 v2 = {0 + (j), 0.0, 1.0};
+//         glm::vec3 v3 = {1.0 + (j), 0.0, 1.0};
+//         glm::vec3 v4 = {1.0 + (j), 1.0, 1.0};
+//
+//         for (int i = 0; i < numberOfSide / 2 + 1; i++) {
+//             glm::vec3 lastv1 = v1;
+//             glm::vec3 lastv2 = v2;
+//             glm::vec3 lastv3 = v3;
+//             glm::vec3 lastv4 = v4;
+//
+//             glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+//             if (i % 2 == 0) {
+//                 normal = -normal;
+//                 glNormal3fv(glm::value_ptr(normal));
+//                 glBegin(GL_POLYGON);
+//                 glVertex3f(v1[0], v1[1], v1[2]);
+//                 glVertex3f(v4[0], v4[1], v4[2]);
+//                 glVertex3f(v3[0], v3[1], v3[2]);
+//                 glVertex3f(v2[0], v2[1], v2[2]);
+//                 glEnd();
+//             }
+//             glNormal3fv(glm::value_ptr(normal));
+//             glBegin(GL_POLYGON);
+//             glVertex3f(v1[0], v1[1], v1[2]);
+//             glVertex3f(v2[0], v2[1], v2[2]);
+//             glVertex3f(v3[0], v3[1], v3[2]);
+//             glVertex3f(v4[0], v4[1], v4[2]);
+//             glEnd();
+//
+//             glm::mat4 xrotationMat(1); // Creates a identity matrix
+//             xrotationMat = glm::rotate(xrotationMat, interiorAngleRad, glm::vec3({1, 0, 0}));
+//
+//             v1 = glm::vec3(xrotationMat * glm::vec4(v1, 1.0));
+//             v2 = glm::vec3(xrotationMat * glm::vec4(v2, 1.0));
+//             v3 = glm::vec3(xrotationMat * glm::vec4(v3, 1.0));
+//             v4 = glm::vec3(xrotationMat * glm::vec4(v4, 1.0));
+//
+// //            if (i != 0 && j >= 1) {
+//             glm::mat4 transform(1);
+//             if (i % 2 == 1) {
+//                 transform = glm::translate(transform, lastv2 - v2);
+//             } else {
+//                 transform = glm::translate(transform, lastv1 - v1);
+//             }
+//
+//             v1 = glm::vec3(transform * glm::vec4(v1, 1.0));
+//             v2 = glm::vec3(transform * glm::vec4(v2, 1.0));
+//             v3 = glm::vec3(transform * glm::vec4(v3, 1.0));
+//             v4 = glm::vec3(transform * glm::vec4(v4, 1.0));
+//         }
+//     }
+//     glEnable(GL_CULL_FACE);
+//     glPopMatrix();
+//
+//     glBindTexture(GL_TEXTURE_2D, 0);
+// }
 
 void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
     GLUquadric *quadric = gluNewQuadric();
@@ -1287,7 +1287,10 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                               std::vector<float> &out_uvs,
                               std::vector<float> &out_normals) {
 
-    string cp = std::experimental::filesystem::current_path();
+    char nPath[512];
+    getcwd(nPath, 512);
+
+    string cp = nPath;
 
     std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
     std::vector<float> temp_vertices2;

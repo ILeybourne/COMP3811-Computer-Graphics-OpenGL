@@ -18,15 +18,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <experimental/filesystem>
-
 
 using namespace std;
-
-const unsigned int N_X_IMAGE = 512;
-const unsigned int N_Y_IMAGE = 512;
-const unsigned int N_COLOR = 3;
-
 
 class TextureCreator {
 public:
@@ -130,4 +123,3 @@ private:
 };
 
 #endif //SCENE_TextureCreator_H
-

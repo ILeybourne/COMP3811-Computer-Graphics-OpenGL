@@ -6,10 +6,11 @@ TEMPLATE = app
 TARGET = Scene
 INCLUDEPATH += . /opt/local/include
 
-QT += widgets opengl gui 
+QT += widgets opengl gui
 
-LIBS += -lGLU -lstdc++fs
+LIBS += -lGLU
 
+QMAKE_CXXFLAGS += -std=c++11
 
 # Input
 HEADERS += ShapeCreator.h SceneWidget.h Window.h TextureCreator.h
