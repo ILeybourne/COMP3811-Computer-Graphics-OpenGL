@@ -8,11 +8,7 @@
 #include <QtGui>
 #include <QtCore/QTime>
 #include <GL/glu.h>
-#include <QGLWidget>
 #include <QtGui>
-#include <QtCore/QTime>
-#include <cmath>
-#include <ctime>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
@@ -20,18 +16,9 @@
 #include <fstream>
 #include <string>
 #include <unistd.h>
-
-
-
-// #ifdef __cpp_lib_filesystem
-//     #include <boost/filesystem>
-//     using fs = boost::filesystem;
-// #elif __cpp_lib_experimental_filesystem
-//     #include <experimental/filesystem>
-//     using fs = std::experimental::filesystem;
-// #else
-//     #warning "false";
-// #endif
+#include <QGLWidget>
+#include <QOpenGLFunctions>
+#include <cstdio>
 #include "TextureCreator.h"
 
 using namespace std;

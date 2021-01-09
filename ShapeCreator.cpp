@@ -1,14 +1,5 @@
 #include "ShapeCreator.h"
-#include <GL/glu.h>
-#include <QGLWidget>
-#include <QtGui>
-#include <QtCore/QTime>
-#include <glm/glm.hpp>
-#include <QOpenGLFunctions>
-#include <cstdio>
-#include <ctime>
-#include <cmath>
-#include <QColor>
+
 
 // constructor
 ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
