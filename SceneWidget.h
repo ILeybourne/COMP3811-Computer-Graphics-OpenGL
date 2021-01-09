@@ -43,7 +43,7 @@ Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
 
-    unsigned long long frameDifference;
+    unsigned long long frameDifference = 0;
     ShapeCreator *shapeCreator;
     float turnTableRotationSpeed = 1;
 
@@ -66,7 +66,7 @@ protected:
 
     float *getShadowMatrix(float p[4], float l[4]);
 
-    unsigned long long frame;
+    unsigned long long frame = 0;
     unsigned long long lastFrameRecorded = 0;
     float lowestTerrain = 100;
 

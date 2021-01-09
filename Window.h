@@ -32,6 +32,7 @@ public:
     QLabel *screenTextureSelectionLabel;
     QLabel *fpsLabel;
     QLabel *rotationSliderLabel;
+    QString fps = 0;
 
 public slots:
 

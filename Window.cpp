@@ -46,6 +46,7 @@ Window::Window(QWidget *parent)
 
     fpsLabel = new QLabel(this);
     fpsLabel->setFixedHeight(20);
+    this->updateFpsLabel();
 
     ////Set Focus policies
     rotationSlider->setFocusPolicy(Qt::NoFocus);
@@ -102,7 +103,7 @@ Window::Window(QWidget *parent)
 }
 
 void Window::updateFpsLabel() {
-    QString fps = QString::number(sceneWidget->frameDifference);
+    fps = QString::number(sceneWidget->frameDifference);
     fpsLabel->setText(fps + " fps");
 }
 
