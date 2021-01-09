@@ -325,7 +325,22 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
 void SceneWidget::placeTerrain() {
     glPushMatrix();
     glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
+
     glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
+
+    for (int i = 0; i < 30; i++) {
+        float x = shapeCreator->treePositions[i][0];
+        float z = shapeCreator->treePositions[i][2];
+        float y = shapeCreator->treePositions[i][1];
+        glPushMatrix();
+        glTranslatef(x, y, z);
+        //Restore aspect ratio of trees
+        glScaled( 1, 10.0,  1);
+        //and then scale down by x5
+        glScaled( 1.0/5.0, 1.0/5.0,  1.0/5.0);
+        shapeCreator->createTree();
+        glPopMatrix();
+    }
     shapeCreator->createTessilatedTerrain(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
                                           shapeCreator->planeZTess);
     glPopMatrix();
@@ -480,6 +495,9 @@ void SceneWidget::paintGL() { // paintGL()
     shapeCreator->walls(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
 
+    glPushMatrix();
+    shapeCreator->createTree();
+    glPopMatrix();
 
 
     ////Draw Geisha
@@ -561,6 +579,8 @@ void SceneWidget::paintGL() { // paintGL()
 
     //Terrain
     placeTerrain();
+
+
 
     ////Inside
     ////Shadows are immune to translations and should be projected separately

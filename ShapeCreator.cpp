@@ -7,6 +7,29 @@ ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
 }
 // constructor
 
+void ShapeCreator::createTree() {
+    float trunkHeight = 10;
+    float bushRadius = 7;
+    glDisable(GL_CULL_FACE);
+    glPushMatrix();
+    glScalef(0.1, 0.1, 0.1);
+
+    glPushMatrix();
+    glRotatef(-90, 1, 0, 0);
+    glColor3f(210.0 / 255.0, 105.0 / 255.0, 30.0 / 255.0); // Brown
+    createCylinder(0.5, 0.3, trunkHeight, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, trunkHeight + bushRadius - 1, 0);
+    glColor3f(0, 1, 0.1);
+    createSphere(bushRadius, 10, 10);
+    glPopMatrix();
+    glPopMatrix();
+    glColor3f(1, 1, 1);
+    glEnable(GL_CULL_FACE);
+
+}
+
 void ShapeCreator::sky(float width, float height, float depth) {
     //Set colour to white as textures will be drawn
     glColor3f(1.0, 1.0, 1.0);
@@ -802,12 +825,17 @@ void ShapeCreator::heightGenerator(float x, float z) {
             float center = tempHeightsGenerated[i][k] / 3.0;
 
             heightsGenerated[i][k] = corners + consecutive + center;
-//            heightsGenerated[i][k]  = tempHeightsGenerated[i][k] ;
         }
     }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
+    for (int i = 0; i < numberOfTrees; i++) {
+        int x = ((rand() % (planeWidth)));
+        int z = ((rand() % (planeDepth)));
+        std::array<float, 3> treePosition = {(float) x, heightsGenerated[x][z], (float) z};
+        treePositions.push_back(treePosition);
+    }
 
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 float ShapeCreator::interpolation(float x, float z, float c) {
@@ -931,7 +959,8 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
 //    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 //    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);    //    Trees
+
 }
 
 void ShapeCreator::createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth,
