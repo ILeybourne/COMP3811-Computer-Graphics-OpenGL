@@ -347,7 +347,9 @@ void SceneWidget::placeTerrain() {
 
 void SceneWidget::updateFrameActions() {
     ////Rotation variable of cubes
-    rotateCube += 0.5;
+//    rotateCube += 0.5;
+
+    //Add to the rotation variables of the gyroscopes parts
     shapeCreator->gimbal1Turning += M_PI_2;
     shapeCreator->gimbal2Turning += 1;
     shapeCreator->gyroTurning += 1.618033988749895 * 2;
@@ -359,6 +361,7 @@ void SceneWidget::updateFrameActions() {
         geishaBop += 0.5;
     }
 
+    //Move geisha across X axis if not turning
     if (moveLeft && !turningRight) {
         geishaPosition[0] -= 0.1;
     }
@@ -366,6 +369,7 @@ void SceneWidget::updateFrameActions() {
         geishaPosition[0] += 0.1;
     }
 
+    //Decides when to turn and when to move geisha
     if (geishaPosition[0] >= 5.0 && geishaRotation == 270 - 180) {
         turningLeft = true;
     } else if (geishaPosition[0] >= 5.0 && geishaRotation == 270) {
@@ -373,7 +377,6 @@ void SceneWidget::updateFrameActions() {
         moveRight = false;
         moveLeft = true;
     }
-
     if (geishaPosition[0] <= -5.0 && geishaRotation == 270) {
         turningRight = true;
     } else if (geishaPosition[0] <= -5.0 && geishaRotation == 270 - 180) {
@@ -382,36 +385,32 @@ void SceneWidget::updateFrameActions() {
         moveLeft = false;
     }
 
+    //Add or subtracts to geisha's rotation variable
     if (turningRight) {
         geishaRotation -= 2;
     }
-
     if (turningLeft) {
         geishaRotation += 2;
     }
 
-////Update frame number
+    //Update frame number
     frame++;
     if (frame == ULLONG_MAX) {
         frame = 0;
     }
-
 }
 
 void SceneWidget::changeScreenTexture(int i) {
-    qDebug() << "you are connected" << i;
-    if (i == 0) {
+    //Changes texture based on selected item from combo box
+    if (i == 0)
         shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->skyBoxZPlusIndex;
-    }
-    if (i == 1) {
+    if (i == 1)
         shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->marcIndex;
-    }
-    if (i == 2) {
+    if (i == 2)
         shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->mapIndex;
-    }
 }
 
-////Called as by Qt connection to display framerate
+////Slot called by Qt connection to display framerate
 unsigned long long SceneWidget::getFrameRate() {
     frameDifference = frame - lastFrameRecorded;
     lastFrameRecorded = frame;
@@ -462,13 +461,16 @@ void SceneWidget::testLight() {
 }
 
 void SceneWidget::drawShadows() {
+    //Define wall plane as ax+by+cz+d=0, defined by its norm and distance from origin. Offset to avoid Z-fighting
     float wallAsPlane[4] = {0, 0, -1, (roomDepth / 2) - 0.2};
+
+    //Shadows should not be lit and should be black
     glDisable(GL_LIGHTING);
     glColor4f(0, 0, 0, 1);
-    ////Geisha shadow
     glEnable(GL_CULL_FACE);
+
+    ////Geisha shadow
     glPushMatrix();
-    wallAsPlane[3] += 0.02;
     float *shadowMatrix = getShadowMatrix(wallAsPlane, light1Position);
     glMultMatrixf(shadowMatrix);
     drawGeishas(true);
@@ -477,7 +479,9 @@ void SceneWidget::drawShadows() {
 }
 
 void SceneWidget::drawGeishas(bool black) {
+    //Geisha 1
     glPushMatrix();
+    //Coloured geishas are placed normally. Shadow geishas are placed with respect to the room here view to the matrix projection
     if (!black) {
         glTranslatef(geishaPosition[0], geishaPosition[1], geishaPosition[2]);
     } else {
@@ -486,6 +490,8 @@ void SceneWidget::drawGeishas(bool black) {
     glRotatef(geishaRotation, 0, 1, 0);
     shapeCreator->createStickGeisha(black);
     glPopMatrix();
+
+    //Geisha 2
     glPushMatrix();
     if (!black) {
         glTranslatef(-geishaPosition[0], geishaPosition[1], geishaPosition[2]);

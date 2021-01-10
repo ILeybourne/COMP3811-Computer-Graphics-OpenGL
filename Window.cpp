@@ -53,7 +53,7 @@ Window::Window(QWidget *parent)
     seedNumberLabel->setText("Terrain Seed Number:");
     seedNumberLineEdit = new QLineEdit(this);
     seedNumberLineEdit->setText("1");
-    seedNumberLineEdit->setValidator(new QIntValidator(0, INT_MAX, this) );
+    seedNumberLineEdit->setValidator(intValid);
 
     ////Set Focus policies
     //Sets the main focus to the scene widget and prevents focus on any other widgets so key event are always activate
@@ -96,13 +96,14 @@ Window::Window(QWidget *parent)
     ////Connections
     QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged(int)), sceneWidget,
                      SLOT(changeScreenTexture(int)));
-    QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(resetFocus()));
+//    QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(resetFocus()));
     QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setRotationSpeed()));
     rotationSlider->setSliderPosition(10);
     QObject::connect(resetCameraButton, SIGNAL(released()), sceneWidget, SLOT(resetCamera()));
-    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
-    QObject::connect(seedNumberLineEdit, SIGNAL(textChanged(const QString &)), sceneWidget, SLOT(changeTerrainSeed(QString)));
-    QObject::connect(seedNumberLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(resetFocus()));
+//    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
+    QObject::connect(seedNumberLineEdit, SIGNAL(textChanged(const QString &)), sceneWidget,
+                     SLOT(changeTerrainSeed(QString)));
+    QObject::connect(seedNumberLineEdit, SIGNAL(inputRejected()), this, SLOT(resetFocus()));
 
     ////Timers
     //Updates Paint event 60 times second
@@ -137,10 +138,10 @@ void Window::closeWindow() {
 }
 
 void Window::resetFocus() {
-    rotationSlider->clearFocus();
-    screenTextureSelection->clearFocus();
-    fpsLabel->clearFocus();
-    screenTextureSelectionLabel->clearFocus();
+//    rotationSlider->clearFocus();
+//    screenTextureSelection->clearFocus();
+//    fpsLabel->clearFocus();
+//    screenTextureSelectionLabel->clearFocus();
     seedNumberLabel->clearFocus();
     seedNumberLineEdit->clearFocus();
     sceneWidget->setFocus();

@@ -38,7 +38,7 @@ public:
     QString fps = 0;
     QLabel *seedNumberLabel;
     QLineEdit *seedNumberLineEdit;
-
+    QIntValidator *intValid = new QIntValidator(0, INT_MAX, this);
 
 public slots:
 
