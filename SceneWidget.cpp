@@ -142,6 +142,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (camX < 0) {
         yaw = (M_PI + yaw);
     }
+    //Strife Left
     if (key->key() == Qt::Key_Q) {
         float newYaw = yaw - M_PI / 2;
         cameraPosition[2] += sin(newYaw) * cameraSpeed;
@@ -149,6 +150,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         cameraPosition[0] += cos(newYaw) * cameraSpeed;
         cameraDirection[0] += cos(newYaw) * cameraSpeed;
     }
+    //Strife Right
     if (key->key() == Qt::Key_E) {
         float newYaw = yaw + M_PI / 2;
         cameraPosition[2] += sin(newYaw) * cameraSpeed;
@@ -156,22 +158,25 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
         cameraPosition[0] += cos(newYaw) * cameraSpeed;
         cameraDirection[0] += cos(newYaw) * cameraSpeed;
     }
+    //Move Forward
     if (key->key() == Qt::Key_W) {
         cameraPosition[0] += cos(yaw) * cameraSpeed;
         cameraDirection[0] += cos(yaw) * cameraSpeed;
         cameraPosition[2] += sin(yaw) * cameraSpeed;
         cameraDirection[2] += sin(yaw) * cameraSpeed;
     }
+    //Move Backwards
     if (key->key() == Qt::Key_S) {
         cameraPosition[0] -= cos(yaw) * cameraSpeed;
         cameraDirection[0] -= cos(yaw) * cameraSpeed;
         cameraPosition[2] -= sin(yaw) * cameraSpeed;
         cameraDirection[2] -= sin(yaw) * cameraSpeed;
     }
-
+    //Turn Left
     if (key->key() == Qt::Key_A) {
         turningNumber += turningSpeed;
     }
+    //Turn Right
     if (key->key() == Qt::Key_D) {
         turningNumber -= turningSpeed;
     }
@@ -181,63 +186,53 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     cameraDirection[2] = cameraPosition[2] - camZ;
     if (camX != 0) {
         yaw = atan(camZ / camX);
-    } else {
-//        if (camZ == 1) {
-//            yaw = M_PI_2;
-//        } else {
-//            yaw = 3 * M_PI_2;
-//        }
     }
+    //Pan up
     if (key->key() == Qt::Key_R) {
         cameraPosition[1] += 0.2;
         cameraDirection[1] += 0.2;
     }
-    if (key->key() == Qt::Key_T) {
+    //Pan Down
+    if (key->key() == Qt::Key_F) {
         cameraPosition[1] -= 0.2;
         cameraDirection[1] -= 0.2;
     }
-    if (key->key() == Qt::Key_F) {
-        cameraDirection[1] += 0.02;
-
-    }
-    if (key->key() == Qt::Key_G) {
+    //Tilt Up
+    if (key->key() == Qt::Key_T) {
         cameraDirection[1] -= 0.02;
     }
+    //Tilt Down
+    if (key->key() == Qt::Key_G) {
+        cameraDirection[1] += 0.02;
+    }
 
-//    if (key->key() == Qt::Key_Control) {
-//        while (cameraPosition[1] > 4.9) {
-//            cameraPosition[1] -= 0.02;
-//            cameraDirection[1] -= 0.03;
-//            updateGL();
-//        }
-//    }
     if (jumping || falling) {
         key->ignore();
         return;
     }
-    if (key->key() == Qt::Key_Shift && !jumping && !falling && !key->isAutoRepeat()) {
-//        qDebug() << jumping;
-        while (cameraPosition[1] < 6.5) {
-
-            cameraPosition[1] += 0.2;
-            cameraDirection[1] += 0.2;
-            cameraPosition[1] -= 1.0 / 16;
-            cameraDirection[1] -= 1.0 / 16;
-//            updateGL();
-            jumping = true;
-        }
-        while (cameraPosition[1] > 5) {
-
-            cameraPosition[1] -= 1.0 / 16;
-            cameraDirection[1] -= 1.0 / 16;
-//            updateGL();
-            falling = true;
-        }
-        cameraPosition[1] = 5;
-        cameraDirection[1] = 5;
-        jumping = false;
-        falling = false;
-    }
+//    if (key->key() == Qt::Key_Shift && !jumping && !falling && !key->isAutoRepeat()) {
+////        qDebug() << jumping;
+//        while (cameraPosition[1] < 6.5) {
+//
+//            cameraPosition[1] += 0.2;
+//            cameraDirection[1] += 0.2;
+//            cameraPosition[1] -= 1.0 / 16;
+//            cameraDirection[1] -= 1.0 / 16;
+////            updateGL();
+//            jumping = true;
+//        }
+//        while (cameraPosition[1] > 5) {
+//
+//            cameraPosition[1] -= 1.0 / 16;
+//            cameraDirection[1] -= 1.0 / 16;
+////            updateGL();
+//            falling = true;
+//        }
+//        cameraPosition[1] = 5;
+//        cameraDirection[1] = 5;
+//        jumping = false;
+//        falling = false;
+//    }
     //    qDebug() << key;
 
     //    qDebug() << camX;
@@ -249,17 +244,17 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
 }
 
 
-void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
-//    if (key->key() == Qt::Key_Control) {
-//        while (cameraPosition[1] < 5) {
-//            cameraPosition[1] += 0.02;
-//            cameraDirection[1] += 0.03;
-//            updateGL();
-//        }
-//        cameraPosition[1] = 5;
-//        cameraDirection[1] = 5;
-//    }
-}
+//void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
+////    if (key->key() == Qt::Key_Control) {
+////        while (cameraPosition[1] < 5) {
+////            cameraPosition[1] += 0.02;
+////            cameraDirection[1] += 0.03;
+////            updateGL();
+////        }
+////        cameraPosition[1] = 5;
+////        cameraDirection[1] = 5;
+////    }
+//}
 
 ////Called by Qt button
 void SceneWidget::resetCamera() {
@@ -322,7 +317,7 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
     return shadowMatrix;
 }
 
-void SceneWidget::changeTerrainSeed(QString seed){
+void SceneWidget::changeTerrainSeed(QString seed) {
     int seedAsInt = seed.toInt();
     shapeCreator->heightGenerator(seedAsInt);
 }
@@ -339,9 +334,9 @@ void SceneWidget::placeTerrain() {
         glPushMatrix();
         glTranslatef(x, y, z);
         //Restore aspect ratio of trees
-        glScaled( 1, treeHeightRatio,  1);
+        glScaled(1, treeHeightRatio, 1);
         //and then scale down by x5
-        glScaled( 1.0/5.0, 1.0/5.0,  1.0/5.0);
+        glScaled(1.0 / 5.0, 1.0 / 5.0, 1.0 / 5.0);
         shapeCreator->createTree();
         glPopMatrix();
     }
@@ -357,9 +352,45 @@ void SceneWidget::updateFrameActions() {
     shapeCreator->gimbal2Turning += 1;
     shapeCreator->gyroTurning += 1.618033988749895 * 2;
     shapeCreator->turnTableRotation += turnTableRotationSpeed;
-    geishaPosition[2] -= 0.0001;
-    geishaRotation += 1;
-    ////Update frame number
+
+    //Add a sin wave to geishas height
+    if (!(turningRight || turningLeft)) {
+        geishaPosition[1] += sin(geishaBop) / 30.0;
+        geishaBop += 0.5;
+    }
+
+    if (moveLeft && !turningRight) {
+        geishaPosition[0] -= 0.1;
+    }
+    if (moveRight && !turningLeft) {
+        geishaPosition[0] += 0.1;
+    }
+
+    if (geishaPosition[0] >= 5.0 && geishaRotation == 270 - 180) {
+        turningLeft = true;
+    } else if (geishaPosition[0] >= 5.0 && geishaRotation == 270) {
+        turningLeft = false;
+        moveRight = false;
+        moveLeft = true;
+    }
+
+    if (geishaPosition[0] <= -5.0 && geishaRotation == 270) {
+        turningRight = true;
+    } else if (geishaPosition[0] <= -5.0 && geishaRotation == 270 - 180) {
+        turningRight = false;
+        moveRight = true;
+        moveLeft = false;
+    }
+
+    if (turningRight) {
+        geishaRotation -= 2;
+    }
+
+    if (turningLeft) {
+        geishaRotation += 2;
+    }
+
+////Update frame number
     frame++;
     if (frame == ULLONG_MAX) {
         frame = 0;
@@ -389,51 +420,50 @@ unsigned long long SceneWidget::getFrameRate() {
 
 void SceneWidget::testLight() {
     ////Lighting testcubes
-//    glEnable(GL_LIGHT1);
-//    glDisable(GL_LIGHT0);
-//    glPushMatrix();
-//    glTranslatef(0, 9, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//    glPushMatrix();
-//    glTranslatef(0, 11, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//
-//    glPushMatrix();
-//    glTranslatef(3, 9, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//
-//    glPushMatrix();
-//    glTranslatef(-3, 9, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//
-//    glPushMatrix();
-//    glTranslatef(0, 9, 3);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//    glPushMatrix();
-//    glTranslatef(0, 9, -3);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
-//
-//    glPushMatrix();
-//    glTranslatef(0, 5, 0);
-//    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    glEnable(GL_LIGHT1);
+    glDisable(GL_LIGHT0);
+    glPushMatrix();
+    glTranslatef(0, 9, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, 11, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
 
-//    glPushMatrix();
-//    glTranslatef(0, 2, 0);
-//    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
-//    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(3, 9, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-3, 9, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 9, 3);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+    glPushMatrix();
+    glTranslatef(0, 9, -3);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 5, 0);
+    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0, 2, 0);
+    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
+    glPopMatrix();
 }
 
 void SceneWidget::drawShadows() {
     float wallAsPlane[4] = {0, 0, -1, (roomDepth / 2) - 0.2};
     glDisable(GL_LIGHTING);
-    glColor3f(0, 0, 0);
     glColor4f(0, 0, 0, 1);
     ////Geisha shadow
     glEnable(GL_CULL_FACE);
@@ -441,20 +471,28 @@ void SceneWidget::drawShadows() {
     wallAsPlane[3] += 0.02;
     float *shadowMatrix = getShadowMatrix(wallAsPlane, light1Position);
     glMultMatrixf(shadowMatrix);
-    drawGeisha(true);
+    drawGeishas(true);
     glPopMatrix();
     glEnable(GL_LIGHTING);
 }
 
-void SceneWidget::drawGeisha(bool black) {
+void SceneWidget::drawGeishas(bool black) {
     glPushMatrix();
     if (!black) {
-
         glTranslatef(geishaPosition[0], geishaPosition[1], geishaPosition[2]);
     } else {
         glTranslatef(geishaPosition[0], geishaPosition[1] - lowestTerrain - roomHeight, geishaPosition[2]);
     }
     glRotatef(geishaRotation, 0, 1, 0);
+    shapeCreator->createStickGeisha(black);
+    glPopMatrix();
+    glPushMatrix();
+    if (!black) {
+        glTranslatef(-geishaPosition[0], geishaPosition[1], geishaPosition[2]);
+    } else {
+        glTranslatef(-geishaPosition[0], geishaPosition[1] - lowestTerrain - roomHeight, geishaPosition[2]);
+    }
+    glRotatef(geishaRotation - 180, 0, 1, 0);
     shapeCreator->createStickGeisha(black);
     glPopMatrix();
 }
@@ -498,7 +536,7 @@ void SceneWidget::paintGL() { // paintGL()
 
     ////Draw Geisha
     glPushMatrix();
-    drawGeisha(false);
+    drawGeishas(false);
     glPopMatrix();
 
     ////Inside - tunnel
@@ -614,7 +652,6 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     glPopMatrix();
 
-
     ////Draw image pixels
     //glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
 
@@ -622,6 +659,7 @@ void SceneWidget::paintGL() { // paintGL()
     //Place Camera
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
+
     //Ensure lights are fixed
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);

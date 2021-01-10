@@ -61,7 +61,7 @@ protected:
 
     void keyPressEvent(QKeyEvent *key);
 
-    void keyReleaseEvent(QKeyEvent *key);
+//    void keyReleaseEvent(QKeyEvent *key);
 
 
     float *getShadowMatrix(float p[4], float l[4]);
@@ -109,8 +109,13 @@ protected:
                                roomDepth / 2 * negCosPiOver3 - roomDepth / 10 - lowestTerrain - roomHeight,
                                roomDepth / 2 * negSinPiOver3, 1};
 
-    float geishaPosition[3] = {0, 3, -1};
-    float geishaRotation = 0;
+    float geishaPosition[3] = {5, 2.5, -3};
+    bool moveLeft = true;
+    bool moveRight = false;
+    bool turningLeft = false;
+    bool turningRight = false;
+    int geishaRotation = 270;
+    float geishaBop = 0;
 
     float rotateCube = 0;
 
@@ -135,7 +140,7 @@ private:
 
     void drawShadows();
 
-    void drawGeisha(bool black);
+    void drawGeishas(bool black);
 
     void drawFire();
 
