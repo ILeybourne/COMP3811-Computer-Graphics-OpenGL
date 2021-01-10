@@ -19,7 +19,7 @@ void SceneWidget::initializeGL() { // initializeGL()
     ////Set Identitity matrix
     glLoadIdentity();
     ////Set Background colour
-    glClearColor(0.8, 0.3, 0.3, 0.0);
+    glClearColor(1, 1, 1, 1);
     ////Access some more GL Functions via QT //TODO ?
     initializeGLFunctions();
 
@@ -34,19 +34,27 @@ void SceneWidget::initializeGL() { // initializeGL()
 //    glFogf(GL_FOG_END,1000);
 
     ////Material parameters
-    glEnable(GL_COLOR_MATERIAL);
+//    glColorMaterial(	GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+//    glColorMaterial(	GL_FRONT_AND_BACK, GL_DIFFUSE);
+//    glColorMaterial(	GL_FRONT_AND_BACK, GL_SPECULAR);
+//                     , , GL_SPECULAR, );
+
+//    glEnable(GL_COLOR_MATERIAL);
+//    glColor3f(1,1,1);
+    glDisable(GL_COLOR_MATERIAL);
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shapeCreator->mAmbient);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shapeCreator->mDiff);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shapeCreator->mSpec);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shapeCreator->mShininess2);
-    GLfloat light0Shininess[] = {5.0};
-    GLfloat light1Shininess[] = {100.0};
+
 
     ////Light parameters
     ////Light 0
     GLfloat light0Ambient[] = {0.3, 0.2, 0.25, 0.0};
-    GLfloat light0Diffuse[] = {1.0, 1.0, 1.0, 0.0};
+    GLfloat light0Diffuse[] = {2.0, 2.0, 2.0, 0.0};
     GLfloat light0Specular[] = {0.2, 0.2, 0.2, 0.0};
+    GLfloat light0Shininess[] = {5.0};
+
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0Ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diffuse);
@@ -56,9 +64,10 @@ void SceneWidget::initializeGL() { // initializeGL()
     glEnable(GL_LIGHT0);
 
     ////Light 1 inside
-    GLfloat light1Ambient[] = {0.07, 0.05, 0.05, 0.0};
-    GLfloat light1Diffuse[] = {0.35, 0.33, 0.3, 0.0};
+    GLfloat light1Ambient[] = {0.1, 0.1, 0.1, 0.0};
+    GLfloat light1Diffuse[] = {1, 1, 1, 0.0};
     GLfloat light1Specular[] = {0.8, 0.7, 0.7, 0.0};
+    GLfloat light1Shininess[] = {100.0};
 
     glLightfv(GL_LIGHT1, GL_AMBIENT, light1Ambient);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1Diffuse);
@@ -68,9 +77,9 @@ void SceneWidget::initializeGL() { // initializeGL()
     glEnable(GL_LIGHT1);
 
     ////Light 2 Tunnel
-    GLfloat light2Ambient[] = {0.07 / 3, 0.05 / 3, 0.05 / 3, 0.0};
-    GLfloat light2Diffuse[] = {0.35 / 2, 0.33 / 2, 0.3 / 2, 0.0};
-    GLfloat light2Specular[] = {0.8 / 3, 0.7 / 3, 0.7 / 3, 0.0};
+    GLfloat light2Ambient[] = {0.1, 0.1, 0.1, 0.0};
+    GLfloat light2Diffuse[] = {1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0, 0.0};
+    GLfloat light2Specular[] = {0.8 / 3.0, 0.7 / 3.0, 0.7 / 3.0, 0.0};
     glLightfv(GL_LIGHT2, GL_AMBIENT, light2Ambient);
     glLightfv(GL_LIGHT2, GL_DIFFUSE, light2Diffuse);
     glLightfv(GL_LIGHT2, GL_SPECULAR, light2Specular);
@@ -91,7 +100,6 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
     glEnable(GL_LIGHT4);
 
-
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
 
@@ -103,21 +111,18 @@ void SceneWidget::initializeGL() { // initializeGL()
     bool loadedPC = shapeCreator->getOBJData("/AppleIIe4.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
                                              shapeCreator->normalsPC);
 
-
     bool loadedGeisha = shapeCreator->getOBJData("/geisha2.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
                                                  shapeCreator->normalsGeisha);
 
     if (!(loadedGeisha || loadedPC))
-        qDebug() << "There accessing an OBJ file";
+        qDebug() << "There was a problem accessing an OBJ file";
 
     glEnable(GL_TEXTURE_2D);
-
     ////Load textures
     shapeCreator->textureCreator->swapActiveTexture(0);
     shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings,
                                               shapeCreator->textureCreator->textures);
-
-    shapeCreator->textureCreator = shapeCreator->textureCreator;
+//    shapeCreator->textureCreator = shapeCreator->textureCreator;
 
     //Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );

@@ -10,6 +10,7 @@ ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
 void ShapeCreator::createTree() {
     float trunkHeight = 10;
     float bushRadius = 7;
+//    glEnable(GL_COLOR_MATERIAL);
     glDisable(GL_CULL_FACE);
     glPushMatrix();
     glScalef(0.1, 0.1, 0.1);
@@ -25,7 +26,9 @@ void ShapeCreator::createTree() {
     glPopMatrix();
     glPopMatrix();
     glColor3f(1, 1, 1);
+//    glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_CULL_FACE);
+//    glDisable(GL_COLOR_MATERIAL);
 
 }
 
@@ -516,6 +519,8 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->floorIndex]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mLowSpec);
+
 //    glColor3f(1.0, 1.0, 0.0);
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v2 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
@@ -541,6 +546,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
             glEnd();
         }
     }
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mSpec);
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -1130,13 +1136,7 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 }
 
 
-void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
-    glBindTexture(GL_TEXTURE_2D, 0);
-    GLUquadric *quadric = gluNewQuadric();
-    gluQuadricDrawStyle(quadric, GLU_FILL);
-    gluQuadricNormals(quadric, GLU_SMOOTH);
-    gluSphere(quadric, radius, slices, stacks);
-}
+
 
 void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int tessY, int tessZ, GLuint texture) {
     glPushMatrix();
@@ -1258,21 +1258,33 @@ void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int t
 // }
 
 void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
+//    glEnable(GL_COLOR_MATERIAL);
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluCylinder(quadric, base, top, height, slices, stacks);
+//    glColor3f(1,1,1);
+
+//    glDisable(GL_COLOR_MATERIAL);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops) {
-
+//    glEnable(GL_COLOR_MATERIAL);
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluDisk(quadric, inner, outer, slices, loops);
+//    glColor3f(1,1,1);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
 
+void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    GLUquadric *quadric = gluNewQuadric();
+    gluQuadricDrawStyle(quadric, GLU_FILL);
+    gluQuadricNormals(quadric, GLU_SMOOTH);
+    gluSphere(quadric, radius, slices, stacks);
 }
 
 bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
@@ -1592,7 +1604,11 @@ void ShapeCreator::createPopulatedDesk() {
     glPushMatrix();
     glRotatef(turnTableRotation, 0, 1, 0);
     glTranslatef(0, 0, 7);
+//    glEnable(GL_COLOR_MATERIAL);
+    glColor3f(1,0,0);
     createGyro();
+    glColor3f(1,1,1);
+//    glDisable(GL_COLOR_MATERIAL);
     glPopMatrix();
     glPopMatrix();
 
@@ -1642,7 +1658,7 @@ void ShapeCreator::drawPC() {
 
 void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, int rings) {
     glBindTexture(GL_TEXTURE_2D, 0);
-    glColor3f(1, 0, 0);
+//    glColor3f(1, 0, 0);
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
     float diffTheta = (M_PI * 2) / rings;

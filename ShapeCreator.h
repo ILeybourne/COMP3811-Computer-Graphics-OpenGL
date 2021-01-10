@@ -28,12 +28,14 @@ public:
     ShapeCreator(QWidget *parent);
 
 //    GLfloat mAmbient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat mAmbient[4] = {1, 1, 1, 0.0f};
-    GLfloat mDiff[4] = {1, 1, 1, 0.0};
-    GLfloat mSpec[4] = {1, 1, 1, 0.0f};
+    GLfloat mAmbient[4] = {0.4, 0.4, 0.4, 1.0};
+    GLfloat mDiff[4] = {0.5, 0.5, 0.5, 1.0};
+    GLfloat mSpec[4] = {1, 1, 1, 1.0};
     GLfloat mShininess2[1] = {50};
-    GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0f};
-    GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0f};
+    GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0};
+    GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0};
+
+    void changeColour(float red, float green, float blue);
 
     void sky(float w, float h, float d);
 

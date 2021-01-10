@@ -6,7 +6,7 @@ Window::Window(QWidget *parent)
         : QWidget(parent) { // constructor
     ////Create menu bar
     menuBar = new QMenuBar(this);
-    fileMenu = menuBar->addMenu("&File");
+    fileMenu = menuBar->addMenu("File");
     actionQuit = new QAction("&Quit", this);
     fileMenu->addAction(actionQuit);
     QObject::connect(actionQuit, SIGNAL(triggered()), this, SLOT(closeWindow()));
@@ -129,7 +129,6 @@ void Window::updateFpsLabel() {
 
 void Window::setRotationSpeed() {
     int pos = rotationSlider->sliderPosition();
-    qDebug() << pos;
     sceneWidget->turnTableRotationSpeed = pos / 10;
 }
 
@@ -138,10 +137,6 @@ void Window::closeWindow() {
 }
 
 void Window::resetFocus() {
-//    rotationSlider->clearFocus();
-//    screenTextureSelection->clearFocus();
-//    fpsLabel->clearFocus();
-//    screenTextureSelectionLabel->clearFocus();
     seedNumberLabel->clearFocus();
     seedNumberLineEdit->clearFocus();
     sceneWidget->setFocus();
