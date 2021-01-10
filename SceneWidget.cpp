@@ -322,20 +322,24 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
     return shadowMatrix;
 }
 
+void SceneWidget::changeTerrainSeed(QString seed){
+    int seedAsInt = seed.toInt();
+    shapeCreator->heightGenerator(seedAsInt);
+}
+
 void SceneWidget::placeTerrain() {
     glPushMatrix();
-    glScaled(1.0 / shapeCreator->planeWidth * 1000, 10, 1.0 / shapeCreator->planeDepth * 1000);
-
-    glTranslatef(-shapeCreator->planeWidth / 2.0, -10, -shapeCreator->planeDepth / 2.0);
-
-    for (int i = 0; i < 30; i++) {
+    glScaled(1.0 / shapeCreator->planeWidth * 1000, 1.0, 1.0 / shapeCreator->planeDepth * 1000);
+    float treeHeightRatio = (1.0 / shapeCreator->planeWidth * 1000) / 1.0;
+    glTranslatef(-shapeCreator->planeWidth / 2.0, -shapeCreator->amplitude, -shapeCreator->planeDepth / 2.0);
+    for (int i = 0; i < shapeCreator->numberOfTrees; i++) {
         float x = shapeCreator->treePositions[i][0];
-        float z = shapeCreator->treePositions[i][2];
         float y = shapeCreator->treePositions[i][1];
+        float z = shapeCreator->treePositions[i][2];
         glPushMatrix();
         glTranslatef(x, y, z);
         //Restore aspect ratio of trees
-        glScaled( 1, 10.0,  1);
+        glScaled( 1, treeHeightRatio,  1);
         //and then scale down by x5
         glScaled( 1.0/5.0, 1.0/5.0,  1.0/5.0);
         shapeCreator->createTree();
@@ -458,8 +462,6 @@ void SceneWidget::drawGeisha(bool black) {
 void SceneWidget::drawFire() {
     glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set blending function.
     int fireNum = frame % 20 + (6 + 3);
     float fireWidth = 10;
     float fireHeight = 20;
@@ -468,7 +470,6 @@ void SceneWidget::drawFire() {
     shapeCreator->createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
                                       shapeCreator->textureCreator->textures[fireNum]);
     glPopMatrix();
-    glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
 }
@@ -494,11 +495,6 @@ void SceneWidget::paintGL() { // paintGL()
     glPushMatrix();
     shapeCreator->walls(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
-
-    glPushMatrix();
-    shapeCreator->createTree();
-    glPopMatrix();
-
 
     ////Draw Geisha
     glPushMatrix();
@@ -559,7 +555,6 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     glPopMatrix();
 
-
     ////Outside
     //Skybox
     glDisable(GL_LIGHTING);
@@ -581,7 +576,6 @@ void SceneWidget::paintGL() { // paintGL()
     placeTerrain();
 
 
-
     ////Inside
     ////Shadows are immune to translations and should be projected separately
     //Draw shadows onto +Z wall
@@ -592,20 +586,17 @@ void SceneWidget::paintGL() { // paintGL()
 
     glPushMatrix();
     glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
-//    glScalef(0.8, 0.8, 0.8);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light3Position[0], light3Position[1], light3Position[2]);
-//    glScalef(0.8, 0.8, 0.8);
     glRotatef(180, 0, 1, 0);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light4Position[0], light4Position[1], light4Position[2]);
-//    glScalef(0.8, 0.8, 0.8);
     shapeCreator->createTorch(frame);
     glPopMatrix();
 

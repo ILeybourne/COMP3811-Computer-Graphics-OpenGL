@@ -11,6 +11,9 @@
 #include <QTimer>
 #include "QSizePolicy"
 #include <QTimer>
+#include <QTextEdit>
+#include <QLineEdit>
+#include <QIntValidator>
 #include "SceneWidget.h"
 
 class Window : public QWidget {
@@ -33,6 +36,9 @@ public:
     QLabel *fpsLabel;
     QLabel *rotationSliderLabel;
     QString fps = 0;
+    QLabel *seedNumberLabel;
+    QLineEdit *seedNumberLineEdit;
+
 
 public slots:
 

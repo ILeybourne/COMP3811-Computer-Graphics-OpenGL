@@ -53,7 +53,7 @@ public:
 
     void createTessilatedTerrain(float width, float depth, int tessX, int tessZ);
 
-    void heightGenerator(float x, float z);
+    void heightGenerator(int seedNumber);
 
     void
     createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth, float tHeight,
@@ -92,15 +92,17 @@ public:
 //    void drawTexture(float x, float y, float w, float h,
 //                              float tx, float ty, float tw, float th, bool blend ,GLuint texture);
 
+    int seedNumber = 1;
+
     static constexpr int planeWidth = 10;
     static constexpr int planeDepth = 10;
 
-    float amplitude = 10;
+    float amplitude = 100;
     int planeXTess = 20;
     int planeZTess = 20;
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
     std::vector<std::array<float, 3>> treePositions;
-    int numberOfTrees =30;
+    int numberOfTrees = 30;
 
     TextureCreator *textureCreator;
 
@@ -126,7 +128,6 @@ public:
     void createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ);
 
     void createTorch(unsigned long long frame);
-
 
     void createDoorway(float width, float height, float depth, int tessX, int tessY, int tessZ);
 

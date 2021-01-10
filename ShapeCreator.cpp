@@ -3,7 +3,7 @@
 
 // constructor
 ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
-    this->heightGenerator(1, 1);
+    this->heightGenerator(seedNumber);
 }
 // constructor
 
@@ -13,7 +13,6 @@ void ShapeCreator::createTree() {
     glDisable(GL_CULL_FACE);
     glPushMatrix();
     glScalef(0.1, 0.1, 0.1);
-
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
     glColor3f(210.0 / 255.0, 105.0 / 255.0, 30.0 / 255.0); // Brown
@@ -777,9 +776,8 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
 }
 
 
-void ShapeCreator::heightGenerator(float x, float z) {
+void ShapeCreator::heightGenerator(int seedNumber) {
     float amp = 2;
-    int seedNumber = 1;
     float height = 1;
     int width = int(planeWidth);
     int depth = int(planeDepth);
@@ -817,22 +815,28 @@ void ShapeCreator::heightGenerator(float x, float z) {
                 n2 = 0;
 
             float corners = (tempHeightsGenerated[n1][m1] + tempHeightsGenerated[n1][m2] +
-                             tempHeightsGenerated[n2][m1] + tempHeightsGenerated[n2][m2]) / (4 * 6.0);
-
+                             tempHeightsGenerated[n2][m1] + tempHeightsGenerated[n2][m2]) / (4.0 * 6.0);
             float consecutive = (tempHeightsGenerated[n1][k] + tempHeightsGenerated[n2][k] +
-                                 tempHeightsGenerated[i][m1] + tempHeightsGenerated[i][m2]) / (4 * 3.0);
-
-            float center = tempHeightsGenerated[i][k] / 3.0;
-
+                                 tempHeightsGenerated[i][m1] + tempHeightsGenerated[i][m2]) / (4.0 * 3.0);
+            float center = tempHeightsGenerated[i][k] / (3.0);
             heightsGenerated[i][k] = corners + consecutive + center;
         }
     }
-
+    treePositions.clear();
+    ////Procedure Tree Generation
     for (int i = 0; i < numberOfTrees; i++) {
+        //Get random X and Z coordinates
         int x = ((rand() % (planeWidth)));
         int z = ((rand() % (planeDepth)));
-        std::array<float, 3> treePosition = {(float) x, heightsGenerated[x][z], (float) z};
-        treePositions.push_back(treePosition);
+        //If coordinates sit above room exit or at any edge regenerate coordinates
+        if (z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2 || x == 0 || z == 0 || z == planeDepth) {
+            i--;
+        } else {
+            float treeHeight = heightsGenerated[x][z];
+            //Place trees x, y, z coordinates in tree position buffer
+            std::array<float, 3> treePosition = {(float) x, treeHeight, (float) z};
+            treePositions.push_back(treePosition);
+        }
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -857,9 +861,7 @@ float ShapeCreator::interpolateAt(float x, float z) {
     float heightAti1k0 = heightsGenerated[i + 1][k];
     float heightAti1k1 = heightsGenerated[i + 1][k + 1];
 
-
     float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFract);
-
     float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFract);
 
     return interpolation(interpolX1, interpolX2, kFract);
@@ -867,50 +869,24 @@ float ShapeCreator::interpolateAt(float x, float z) {
 
 
 void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, int tessZ) {
-    float height = 1;
-//    int heightXCounter = 0;
-//    int heightZCounter = 0;
-//    int tessXCounter = 0;
-//    int tessZCounter = 0;
-    glColor3f(0.5, 1.0, 0.0);
-    glm::vec3 v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    glm::vec3 v3 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    glm::vec3 v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    //Normal of rect
-    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-    glNormal3fv(glm::value_ptr(normal));
-
     float tessXSize = 1.0 / (tessX);
     float tessZSize = 1.0 / (tessZ);
-
     float thetaSpeed = 2.0;
     float theta = thetaSpeed * M_PI;
     float x = (1.0 - cosf(theta)) * 0.5;
+    glm::vec3 normal;
 
     glColor3f(1, 1, 1);
 
-//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glBindTexture(GL_TEXTURE_2D, textureCreator->grassIndex + 1);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->grassIndex]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mLowSpec);
-//    GLfloat lowShininess2[] = {10000};
-//    glMaterialfv(GL_FRONT, GL_SHININESS, lowShininess2);
 
     for (int i = 0; i < width; i++) {
         for (int k = 0; k < depth; k++) {
-//    for (int i = 0; i < width; i++) {
-//        for (int k = 0; k < depth; k++) {
-
             for (float n = 0; n < 1; n += tessXSize) {
                 for (float m = 0; m < 1; m += tessZSize) {
-                    //                    float heightAti0k0 = heightsGenerated[i][k];
-                    //                    float heightAti0k1 = heightsGenerated[i][k + 1];
-                    //                    float heightAti1k0 = heightsGenerated[i + 1][k + 1];
-                    //                    float heightAti1k1 = heightsGenerated[i + 1][k + 1];
-
 
                     float heightAtn1m1 = interpolateAt(i + n, k + m);
                     float heightAtn0m0 = interpolateAt(i + n + tessXSize, k + m);
@@ -924,7 +900,6 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
 
                     float scaleFactor = 2;
 
-//                    if (!(k > depth / 2 - 1 && k < depth / 2 + 1 && i > width / 2 - 1 && k < width / 2 + 1)) {
                     normal = glm::normalize(glm::cross(vB - vA, vC - vB));
                     glNormal3fv(glm::value_ptr(normal));
                     glBegin(GL_POLYGON);
@@ -946,29 +921,23 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
                     glTexCoord2f((n + tessXSize) * scaleFactor, (m + tessZSize) * scaleFactor);
                     glVertex3f(vD.x, vD.y, vD.z);
                     glEnd();
-//                    }
                 }
             }
         }
     }
-//    GLfloat mSpec[] = {1, 1, 1, 1.0f};
     glMaterialfv(GL_FRONT, GL_SPECULAR, mSpec);
-//    GLfloat mShininess2[] = {50};
     glMaterialfv(GL_FRONT, GL_SHININESS, mShininess2);
-    glBindTexture(GL_TEXTURE_2D, 0);
-//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//    glSamplerParameteri(textureCreator->samplerId, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);    //    Trees
-
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ShapeCreator::createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth,
                                        float tHeight, bool blend, GLuint texture) {
-//    glBindTexture(GL_TEXTURE_2D, 0);
-//    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[index]);
-//    GLfloat verts[] = {x, y, x + w, y, x + w, y + h, x, y + h};
-
+    if (blend){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
     glBindTexture(GL_TEXTURE_2D, texture);
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
@@ -982,6 +951,9 @@ void ShapeCreator::createTexturedPlane(float x, float y, float width, float heig
     glVertex3f(x, y + height, 0);
     glEnd();
 
+    if (blend) {
+        glDisable(GL_BLEND);
+    }
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

@@ -21,7 +21,6 @@ Window::Window(QWidget *parent)
     QGLFormat format;
     format.setSamples(8);
     sceneWidget->setFormat(format);
-    sceneWidget->setFocusPolicy(Qt::StrongFocus);
 
 
     ////Create QWidgets
@@ -34,6 +33,7 @@ Window::Window(QWidget *parent)
     screenTextureSelection->addItems(stringsList);
 
     screenTextureSelectionLabel = new QLabel(this);
+    screenTextureSelectionLabel->setFixedHeight(20);
     screenTextureSelectionLabel->setText("Screen Image:");
     screenTextureSelectionLabel->setBuddy(screenTextureSelection);
 
@@ -48,13 +48,24 @@ Window::Window(QWidget *parent)
     fpsLabel->setFixedHeight(20);
     this->updateFpsLabel();
 
+    seedNumberLabel = new QLabel(this);
+    seedNumberLabel->setFixedHeight(20);
+    seedNumberLabel->setText("Terrain Seed Number:");
+    seedNumberLineEdit = new QLineEdit(this);
+    seedNumberLineEdit->setText("1");
+    seedNumberLineEdit->setValidator(new QIntValidator(0, INT_MAX, this) );
+
     ////Set Focus policies
+    //Sets the main focus to the scene widget and prevents focus on any other widgets so key event are always activate
+    sceneWidget->setFocusPolicy(Qt::StrongFocus);
     rotationSlider->setFocusPolicy(Qt::NoFocus);
     screenTextureSelection->setFocusPolicy(Qt::NoFocus);
     screenTextureSelectionLabel->setFocusPolicy(Qt::NoFocus);
     fpsLabel->setFocusPolicy(Qt::NoFocus);;
     rotationSliderLabel->setFocusPolicy(Qt::NoFocus);;
     resetCameraButton->setFocusPolicy(Qt::NoFocus);
+    seedNumberLabel->setFocusPolicy(Qt::NoFocus);
+//    seedNumberLineEdit->setFocusPolicy(Qt::NoFocus);
 
     ////Set up layouts and widget in window order
     windowLayout->addWidget(sceneWidget);
@@ -72,8 +83,14 @@ Window::Window(QWidget *parent)
     QBoxLayout *buttonLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     buttonLayout->addWidget(resetCameraButton);
 
+    QBoxLayout *seedLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    seedLayout->addWidget(seedNumberLabel, 15);
+    seedLayout->addWidget(seedNumberLineEdit, 85);
+
+
     windowLayout->addLayout(sliderLayout);
     windowLayout->addLayout(selectionLayout);
+    windowLayout->addLayout(seedLayout);
     windowLayout->addLayout(buttonLayout);
 
     ////Connections
@@ -81,9 +98,11 @@ Window::Window(QWidget *parent)
                      SLOT(changeScreenTexture(int)));
     QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(resetFocus()));
     QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setRotationSpeed()));
-    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
     rotationSlider->setSliderPosition(10);
     QObject::connect(resetCameraButton, SIGNAL(released()), sceneWidget, SLOT(resetCamera()));
+    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
+    QObject::connect(seedNumberLineEdit, SIGNAL(textChanged(const QString &)), sceneWidget, SLOT(changeTerrainSeed(QString)));
+    QObject::connect(seedNumberLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(resetFocus()));
 
     ////Timers
     //Updates Paint event 60 times second
@@ -114,7 +133,6 @@ void Window::setRotationSpeed() {
 }
 
 void Window::closeWindow() {
-    qDebug() << "closing";
     this->close();
 }
 
@@ -123,6 +141,8 @@ void Window::resetFocus() {
     screenTextureSelection->clearFocus();
     fpsLabel->clearFocus();
     screenTextureSelectionLabel->clearFocus();
+    seedNumberLabel->clearFocus();
+    seedNumberLineEdit->clearFocus();
     sceneWidget->setFocus();
 }
 

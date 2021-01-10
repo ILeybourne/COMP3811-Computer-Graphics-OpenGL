@@ -124,6 +124,8 @@ public slots:
 
     void resetCamera();
 
+    void changeTerrainSeed(QString seed);
+
 private:
     void walls();
 
