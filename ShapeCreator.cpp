@@ -22,7 +22,7 @@ void ShapeCreator::createTree(float height, float rad) {
     glPushMatrix();
     glTranslatef(0, trunkHeight + bushRadius - 1, 0);
     glColor3f(0, 1, 0.1);
-    createSphere(bushRadius, 10, 10,  textureCreator->textures[textureCreator->treeIndex]);
+    createSphere(bushRadius, 10, 10, textureCreator->textures[textureCreator->treeIndex]);
     glPopMatrix();
     glPopMatrix();
     glColor3f(1, 1, 1);
@@ -565,7 +565,7 @@ void ShapeCreator::createTorch(unsigned long long frame) {
     glTranslatef(0, 1.3, 0);
     glRotatef(-45, 1, 0, 0);
     glColor3f(165.0 / 255.0, 42.0 / 255.0, 42.0 / 255.0);
-    createCylinder(0, 0.5, 2, 10, 10 ,  textureCreator->textures[textureCreator->woodIndex]);
+    createCylinder(0, 0.5, 2, 10, 10, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
 
     glDisable(GL_LIGHTING);
@@ -834,22 +834,34 @@ void ShapeCreator::heightGenerator(int seedNumber) {
         //Get random X and Z coordinates
         int x = ((rand() % (planeWidth)));
         int z = ((rand() % (planeDepth)));
-        //If coordinates sit above room exit or at any edge regenerate coordinates
-        if (z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2 || x == 0 || z == 0 || z == planeDepth) {
-            i--;
-        } else {
-            float treeHeight = heightsGenerated[x][z];
-            //Place trees x, y, z coordinates in tree position buffer
-            std::array<float, 3> treePosition = {(float) x, treeHeight, (float) z};
-            treePositions.push_back(treePosition);
+            //If coordinates sit above room exit or at any edge regenerate coordinates or a tree is generated in the same place get new coords
+            if (z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2 || x == 0 || z == 0 ||
+                z == planeDepth) {
+                i--;
+            } else {
+                float treeHeight = heightsGenerated[x][z];
+                //Place trees x, y, z coordinates in tree position buffer
+                std::array<float, 3> treePosition = {(float) x, treeHeight, (float) z};
+                treePositions.push_back(treePosition);
 
-            float additionHeight = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/10.0);
-            float additionRad = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/4.0);
-            std::array<float, 2> treeVariables = {additionHeight,additionRad};
-            treeHeightRad.push_back(treeVariables);
+                //Generate some random height and radius to add to the tree min height and rad and store it.
+                float additionHeight = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 10.0);
+                float additionRad = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 4.0);
+                std::array<float, 2> treeVariables = {additionHeight, additionRad};
+                treeHeightRad.push_back(treeVariables);
+
+                //No two trees overlap
+                for (int j = 0; j < i; j++) {
+                    if (treePositions[j][0] == x && treePositions[j][1] == z &&
+                        numberOfTrees < 0.5 * planeDepth * planeWidth) {
+                        treePositions.pop_back();
+                        treeHeightRad.pop_back();
+                        i--;
+                        break;
+                }
+            }
         }
     }
-
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -945,7 +957,7 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
 
 void ShapeCreator::createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth,
                                        float tHeight, bool blend, GLuint texture) {
-    if (blend){
+    if (blend) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -1141,8 +1153,6 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
 }
 
 
-
-
 void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int tessY, int tessZ, GLuint texture) {
     glPushMatrix();
 //    glTranslatef(-rad, 0, 0);
@@ -1262,10 +1272,11 @@ void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int t
 //     glBindTexture(GL_TEXTURE_2D, 0);
 // }
 
-void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture) {
+void
+ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture) {
 //    glEnable(GL_COLOR_MATERIAL);
     GLUquadric *quadric = gluNewQuadric();
-    gluQuadricTexture(quadric,GL_TRUE);
+    gluQuadricTexture(quadric, GL_TRUE);
     glBindTexture(GL_TEXTURE_2D, texture);
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
@@ -1276,7 +1287,7 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
 
 void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
-    gluQuadricTexture(quadric,GL_TRUE);
+    gluQuadricTexture(quadric, GL_TRUE);
     glBindTexture(GL_TEXTURE_2D, texture);
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
@@ -1286,7 +1297,7 @@ void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLin
 
 void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
-    gluQuadricTexture(quadric,GL_TRUE);
+    gluQuadricTexture(quadric, GL_TRUE);
     glBindTexture(GL_TEXTURE_2D, texture);
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
@@ -1427,19 +1438,19 @@ void ShapeCreator::createGyro() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mHighSpec);
 
     ////Frame
-    createTorus(frameRad, frameWidth, 50, 50 , textureCreator->textures[(textureCreator->metalIndex)]);
+    createTorus(frameRad, frameWidth, 50, 50, textureCreator->textures[(textureCreator->metalIndex)]);
 
     ////Bearing 1 Outer
     glPushMatrix();
     glTranslatef(frameRad - frameWidth - 0.2, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     ////Bearing 2 Outer
     glPushMatrix();
     glTranslatef(-frameRad + frameWidth, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
 
     ////Gimbal1
@@ -1452,14 +1463,14 @@ void ShapeCreator::createGyro() {
     glPushMatrix();
     glTranslatef(0, gimbal1Rad - frameWidth, 0);
     glRotatef(90, 1, 0, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
 
     ////Bearing 4 Inner
     glPushMatrix();
     glTranslatef(0, -gimbal1Rad + frameWidth + 0.2, 0);
     glRotatef(90, 1, 0, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     glPushMatrix();
     float gimbal2Rad = gimbal1Rad - (frameWidth) * 2 - 0.1;
@@ -1485,9 +1496,10 @@ void ShapeCreator::createGyro() {
     createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->metalIndex]);
     glRotatef(180, 0, 1, 0);
     glTranslatef(0, 0, gyroHeight);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10,textureCreator->textures[textureCreator->metalIndex]);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->metalIndex]);
     glTranslatef(0, 0, -gyroHeight);
-    createCylinder(gimbal2Rad - 0.5, gimbal2Rad - 0.5, gyroHeight, gyroSlices, gyroSlices, textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(gimbal2Rad - 0.5, gimbal2Rad - 0.5, gyroHeight, gyroSlices, gyroSlices,
+                   textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
@@ -1502,11 +1514,12 @@ void ShapeCreator::createGyro() {
     glRotatef(90, 1, 0, 0);
     glPushMatrix();
     glRotatef(180, 1, 0, 0);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10,textureCreator->textures[textureCreator->woodIndex]);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
-    createCylinder(gimbal2Rad - 0.5, frameRad - 0.5, gyroHeight, gyroSlices, gyroSlices, textureCreator->textures[textureCreator->woodIndex]);
+    createCylinder(gimbal2Rad - 0.5, frameRad - 0.5, gyroHeight, gyroSlices, gyroSlices,
+                   textureCreator->textures[textureCreator->woodIndex]);
     glTranslatef(0, 0, gyroHeight);
-    createDisk(0, frameRad - 0.5, gyroSlices, 10,textureCreator->textures[textureCreator->woodIndex]);
+    createDisk(0, frameRad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -1539,15 +1552,15 @@ void ShapeCreator::createDesk() {
 
 }
 
-void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks , GLuint texture) {
+void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks, GLuint texture) {
     glPushMatrix();
     glTranslatef(0, height, 0);
     glRotatef(90, 1, 0, 0);
     glPushMatrix();
     glRotatef(180, 1, 0, 0);
-    createDisk(0, rad, slices, stacks , texture);
+    createDisk(0, rad, slices, stacks, texture);
     glPopMatrix();
-    createCylinder(rad, rad, height, slices, stacks ,texture);
+    createCylinder(rad, rad, height, slices, stacks, texture);
     glTranslatef(0, 0, height);
     createDisk(0, rad, slices, stacks, texture);
     glPopMatrix();
@@ -1591,7 +1604,7 @@ void ShapeCreator::createStickGeisha(bool black) {
     glPushMatrix();
     glRotatef(90, 1, 0, 0);
     glTranslatef(0.1, 0, -2);
-    createCylinder(0.1, 0.1, 5, 50, 50,textureCreator->woodIndex);
+    createCylinder(0.1, 0.1, 5, 50, 50, textureCreator->woodIndex);
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -1610,7 +1623,7 @@ void ShapeCreator::createPopulatedDesk() {
     glPushMatrix();
     glTranslatef(0, -1, 0);
     glRotatef(turnTableRotation, 0, 1, 0);
-    createEdgeCylinder(2.5, 0.5, 10, 10,  textureCreator->textures[textureCreator->woodIndex]);
+    createEdgeCylinder(2.5, 0.5, 10, 10, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
     glTranslatef(0, 0.5, 0);
     glScalef(0.2, 0.2, 0.2);
@@ -1618,9 +1631,9 @@ void ShapeCreator::createPopulatedDesk() {
     glRotatef(turnTableRotation, 0, 1, 0);
     glTranslatef(0, 0, 7);
 //    glEnable(GL_COLOR_MATERIAL);
-    glColor3f(1,0,0);
+    glColor3f(1, 0, 0);
     createGyro();
-    glColor3f(1,1,1);
+    glColor3f(1, 1, 1);
 //    glDisable(GL_COLOR_MATERIAL);
     glPopMatrix();
     glPopMatrix();
@@ -1734,13 +1747,13 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
             glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
             glNormal3fv(glm::value_ptr(normal));
             glBegin(GL_POLYGON);
-            glTexCoord2f(0,0);
+            glTexCoord2f(0, 0);
             glVertex3f(v1.x, v1.y, v1.z);
-            glTexCoord2f(0,1);
+            glTexCoord2f(0, 1);
             glVertex3f(v2.x, v2.y, v2.z);
-            glTexCoord2f(1,1);
+            glTexCoord2f(1, 1);
             glVertex3f(v3.x, v3.y, v3.z);
-            glTexCoord2f(1,1);
+            glTexCoord2f(1, 1);
             glVertex3f(v4.x, v4.y, v4.z);
             glEnd();
         }
