@@ -68,7 +68,10 @@ public:
             "./textureinternet/PaintedPlaster010_1K_Color.jpg",                       //32
             "./textureinternet/PaintedPlaster015_1K_Color.jpg",                       //33
             "./textureinternet/PaintedPlaster016_1K_Color.jpg",                       //34
-            "./textureinternet/Wood047_1K_Color.jpg"                                  //35
+            "./textureinternet/Wood047_1K_Color.jpg",                                 //35
+            "./textureinternet/Linolafett_CC-0_RPv6ofy.jpg",                          //36
+            "./textureinternet/Tree_bark_seamless_07.png",                            //37
+            "./textureinternet/caststeel.jpg"                                         //38
     };
 
     GLuint skyBoxZPlusIndex = 0;  // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
@@ -107,6 +110,10 @@ public:
     GLuint floorIndex = 33;      // "./textureinternet/grass_rough2.png",
     GLuint wallIndex = 34;      // "./textureinternet/grass_rough2.png",
     GLuint woodIndex = 35;
+    GLuint treeIndex = 36;
+    GLuint barkIndex = 37;
+    GLuint metalIndex = 38;
+
 
     //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass , 3 walls //35
     static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1 + 3;

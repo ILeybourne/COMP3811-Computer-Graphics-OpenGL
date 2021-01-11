@@ -17,12 +17,12 @@ void ShapeCreator::createTree() {
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
     glColor3f(210.0 / 255.0, 105.0 / 255.0, 30.0 / 255.0); // Brown
-    createCylinder(0.5, 0.3, trunkHeight, 10, 10);
+    createCylinder(0.5, 0.3, trunkHeight, 10, 10, textureCreator->textures[textureCreator->barkIndex]);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0, trunkHeight + bushRadius - 1, 0);
     glColor3f(0, 1, 0.1);
-    createSphere(bushRadius, 10, 10);
+    createSphere(bushRadius, 10, 10,  textureCreator->textures[textureCreator->treeIndex]);
     glPopMatrix();
     glPopMatrix();
     glColor3f(1, 1, 1);
@@ -565,7 +565,7 @@ void ShapeCreator::createTorch(unsigned long long frame) {
     glTranslatef(0, 1.3, 0);
     glRotatef(-45, 1, 0, 0);
     glColor3f(165.0 / 255.0, 42.0 / 255.0, 42.0 / 255.0);
-    createCylinder(0, 0.5, 2, 10, 10);
+    createCylinder(0, 0.5, 2, 10, 10 ,  textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
 
     glDisable(GL_LIGHTING);
@@ -964,75 +964,75 @@ void ShapeCreator::createTexturedPlane(float x, float y, float width, float heig
 }
 
 ////TODO Scrap?
-void ShapeCreator::createFigurine() {
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glColor3f(1.0, 1.0, 0);
-    glPushMatrix();
-    glScaled(0.5, 0.7, 0.5);
-    createSphere(1, 20, 20);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0, -1.0 / 0.7 / 4, 0);
-    glPushMatrix();
-    glScaled(0.2, 0.4, 0.2);
-    glRotatef(90, 1, 0, 0);
-    createCylinder(1, 1, 1, 20, 20);
-//            createSphere(1, 20, 20);
-
-    glPopMatrix();
-//        glScaled(2,1,1);
-    glTranslatef(0, -0.4, 0);
-
-    glPushMatrix();
-    for (float i = 0; i < 18; i++) {
-        int ittDown = 4;
-        int neg = 1;
-        float offset = 0;
-        if (i >= ittDown) {
-            neg = -1;
-            offset = 0.4;
-        }
-        glTranslatef(0, -0.05, 0);
-        createCube(1. + ((i + 1) * (0.05 * neg)) + offset, 0.1, 1 + ((i + 1) * (0.05 * neg)) + offset, 0, 0, 0, 0, 0);
-    }
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef((1 + 0.25) / 2, -0.2, 0);
-    glPushMatrix();
-    glScaled(0.2, 0.2, 0.2);
-    createSphere(1, 20, 20);
-
-    glPopMatrix();
-    glPopMatrix();
-//        glTranslatef(0,-0.5,0);
-//        createCube(1.5,0.1,1,0,0,0,0);
-//        glTranslatef(0,-0.1,0);
-//
-//        createCube(1.6,0.1,1,0,0,0,0);
-
-//        createCube(2,1,1,0,0,0,0);
-
-
-    glPopMatrix();
-
+//void ShapeCreator::createFigurine() {
+//    glBindTexture(GL_TEXTURE_2D, 0);
+//    glColor3f(1.0, 1.0, 0);
 //    glPushMatrix();
-//    glm::vec3 v1 = {-1, 0, 0};
-//    glm::vec3 v2 = {0, 0, -1};
-//    glm::vec3 v3 = {0, -1.5, -1};
-//    glm::vec3 v4 = {-1, -1.5, 0};
-//    //Normal of rect
-//    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
-//    glNormal3fv(glm::value_ptr(normal));
-//    glBegin(GL_POLYGON);
-//    glVertex3f(v1[0],v1[1],v1[2]);
-//    glVertex3f(v2[0],v2[1],v2[2]);
-//    glVertex3f(v3[0],v3[1],v3[2]);
-//    glVertex3f(v4[0],v4[1],v4[2]);
-//    glEnd();
+//    glScaled(0.5, 0.7, 0.5);
+//    createSphere(1, 20, 20);
 //    glPopMatrix();
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-}
+//    glPushMatrix();
+//    glTranslatef(0, -1.0 / 0.7 / 4, 0);
+//    glPushMatrix();
+//    glScaled(0.2, 0.4, 0.2);
+//    glRotatef(90, 1, 0, 0);
+//    createCylinder(1, 1, 1, 20, 20);
+////            createSphere(1, 20, 20);
+//
+//    glPopMatrix();
+////        glScaled(2,1,1);
+//    glTranslatef(0, -0.4, 0);
+//
+//    glPushMatrix();
+//    for (float i = 0; i < 18; i++) {
+//        int ittDown = 4;
+//        int neg = 1;
+//        float offset = 0;
+//        if (i >= ittDown) {
+//            neg = -1;
+//            offset = 0.4;
+//        }
+//        glTranslatef(0, -0.05, 0);
+//        createCube(1. + ((i + 1) * (0.05 * neg)) + offset, 0.1, 1 + ((i + 1) * (0.05 * neg)) + offset, 0, 0, 0, 0, 0);
+//    }
+//    glPopMatrix();
+//    glPushMatrix();
+//    glTranslatef((1 + 0.25) / 2, -0.2, 0);
+//    glPushMatrix();
+//    glScaled(0.2, 0.2, 0.2);
+//    createSphere(1, 20, 20);
+//
+//    glPopMatrix();
+//    glPopMatrix();
+////        glTranslatef(0,-0.5,0);
+////        createCube(1.5,0.1,1,0,0,0,0);
+////        glTranslatef(0,-0.1,0);
+////
+////        createCube(1.6,0.1,1,0,0,0,0);
+//
+////        createCube(2,1,1,0,0,0,0);
+//
+//
+//    glPopMatrix();
+//
+////    glPushMatrix();
+////    glm::vec3 v1 = {-1, 0, 0};
+////    glm::vec3 v2 = {0, 0, -1};
+////    glm::vec3 v3 = {0, -1.5, -1};
+////    glm::vec3 v4 = {-1, -1.5, 0};
+////    //Normal of rect
+////    glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
+////    glNormal3fv(glm::value_ptr(normal));
+////    glBegin(GL_POLYGON);
+////    glVertex3f(v1[0],v1[1],v1[2]);
+////    glVertex3f(v2[0],v2[1],v2[2]);
+////    glVertex3f(v3[0],v3[1],v3[2]);
+////    glVertex3f(v4[0],v4[1],v4[2]);
+////    glEnd();
+////    glPopMatrix();
+//    glBindTexture(GL_TEXTURE_2D, 0);
+//
+//}
 
 
 void ShapeCreator::createCube(float w, float h, float d, float x, float y, float z, bool shadow, GLuint texture) {
@@ -1257,34 +1257,38 @@ void ShapeCreator::createSemiCylinder2(float rad, float length, int tessX, int t
 //     glBindTexture(GL_TEXTURE_2D, 0);
 // }
 
-void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks) {
+void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture) {
 //    glEnable(GL_COLOR_MATERIAL);
     GLUquadric *quadric = gluNewQuadric();
+    gluQuadricTexture(quadric,GL_TRUE);
+    glBindTexture(GL_TEXTURE_2D, texture);
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluCylinder(quadric, base, top, height, slices, stacks);
-//    glColor3f(1,1,1);
-
-//    glDisable(GL_COLOR_MATERIAL);
+    gluDeleteQuadric(quadric);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops) {
-//    glEnable(GL_COLOR_MATERIAL);
+void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
+    gluQuadricTexture(quadric,GL_TRUE);
+    glBindTexture(GL_TEXTURE_2D, texture);
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluDisk(quadric, inner, outer, slices, loops);
-//    glColor3f(1,1,1);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks) {
-    glBindTexture(GL_TEXTURE_2D, 0);
+void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
+    gluQuadricTexture(quadric,GL_TRUE);
+    glBindTexture(GL_TEXTURE_2D, texture);
     gluQuadricDrawStyle(quadric, GLU_FILL);
     gluQuadricNormals(quadric, GLU_SMOOTH);
     gluSphere(quadric, radius, slices, stacks);
+    gluDeleteQuadric(quadric);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
@@ -1415,52 +1419,54 @@ void ShapeCreator::createGyro() {
 
     glPushMatrix();
     glRotatef(90, 0, 1, 0);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mHighSpec);
+
     ////Frame
-    createTorus(frameRad, frameWidth, 50, 50);
+    createTorus(frameRad, frameWidth, 50, 50 , textureCreator->textures[(textureCreator->metalIndex)]);
 
     ////Bearing 1 Outer
     glPushMatrix();
     glTranslatef(frameRad - frameWidth - 0.2, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     ////Bearing 2 Outer
     glPushMatrix();
     glTranslatef(-frameRad + frameWidth, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
 
     ////Gimbal1
     glPushMatrix();
     float gimbal1Rad = frameRad - (frameWidth) * 2 - 0.1;
     glRotatef(gimbal1Turning, 1, 0, 0);
-    createTorus(gimbal1Rad, 0.2, 50, 50);
+    createTorus(gimbal1Rad, 0.2, 50, 50, textureCreator->textures[(textureCreator->metalIndex)]);
 
     ////Bearing 3 Inner
     glPushMatrix();
     glTranslatef(0, gimbal1Rad - frameWidth, 0);
     glRotatef(90, 1, 0, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
 
     ////Bearing 4 Inner
     glPushMatrix();
     glTranslatef(0, -gimbal1Rad + frameWidth + 0.2, 0);
     glRotatef(90, 1, 0, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10);
+    createCylinder(0.1, 0.1, 0.3, 10, 10 , textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     glPushMatrix();
     float gimbal2Rad = gimbal1Rad - (frameWidth) * 2 - 0.1;
     glRotatef(gimbal1Turning, 0, 1, 0);
-    createTorus(gimbal2Rad, 0.2, 50, 50);
+    createTorus(gimbal2Rad, 0.2, 50, 50, textureCreator->textures[(textureCreator->metalIndex)]);
     glPushMatrix();
 
     ////Axle
     glPushMatrix();
     glTranslatef(-gimbal2Rad + frameWidth - 0.1, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, gimbal2Rad * 2, 10, 10);
+    createCylinder(0.1, 0.1, gimbal2Rad * 2, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     glPushMatrix();
 
@@ -1471,17 +1477,19 @@ void ShapeCreator::createGyro() {
     int gyroSlices = 10;
     glTranslatef(0, 0, -gyroHeight / 2);
     glRotatef(180, 0, 1, 0);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->metalIndex]);
     glRotatef(180, 0, 1, 0);
     glTranslatef(0, 0, gyroHeight);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10,textureCreator->textures[textureCreator->metalIndex]);
     glTranslatef(0, 0, -gyroHeight);
-    createCylinder(gimbal2Rad - 0.5, gimbal2Rad - 0.5, gyroHeight, gyroSlices, gyroSlices);
+    createCylinder(gimbal2Rad - 0.5, gimbal2Rad - 0.5, gyroHeight, gyroSlices, gyroSlices, textureCreator->textures[textureCreator->metalIndex]);
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpec);
+
 
     ////Stand
     glPushMatrix();
@@ -1489,11 +1497,11 @@ void ShapeCreator::createGyro() {
     glRotatef(90, 1, 0, 0);
     glPushMatrix();
     glRotatef(180, 1, 0, 0);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10,textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
-    createCylinder(gimbal2Rad - 0.5, frameRad - 0.5, gyroHeight, gyroSlices, gyroSlices);
+    createCylinder(gimbal2Rad - 0.5, frameRad - 0.5, gyroHeight, gyroSlices, gyroSlices, textureCreator->textures[textureCreator->woodIndex]);
     glTranslatef(0, 0, gyroHeight);
-    createDisk(0, frameRad - 0.5, gyroSlices, 10);
+    createDisk(0, frameRad - 0.5, gyroSlices, 10,textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -1526,17 +1534,17 @@ void ShapeCreator::createDesk() {
 
 }
 
-void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks) {
+void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks , GLuint texture) {
     glPushMatrix();
     glTranslatef(0, height, 0);
     glRotatef(90, 1, 0, 0);
     glPushMatrix();
     glRotatef(180, 1, 0, 0);
-    createDisk(0, rad, slices, stacks);
+    createDisk(0, rad, slices, stacks , texture);
     glPopMatrix();
-    createCylinder(rad, rad, height, slices, stacks);
+    createCylinder(rad, rad, height, slices, stacks ,texture);
     glTranslatef(0, 0, height);
-    createDisk(0, rad, slices, stacks);
+    createDisk(0, rad, slices, stacks, texture);
     glPopMatrix();
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -1578,7 +1586,7 @@ void ShapeCreator::createStickGeisha(bool black) {
     glPushMatrix();
     glRotatef(90, 1, 0, 0);
     glTranslatef(0.1, 0, -2);
-    createCylinder(0.1, 0.1, 5, 50, 50);
+    createCylinder(0.1, 0.1, 5, 50, 50,textureCreator->woodIndex);
     glPopMatrix();
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -1597,7 +1605,7 @@ void ShapeCreator::createPopulatedDesk() {
     glPushMatrix();
     glTranslatef(0, -1, 0);
     glRotatef(turnTableRotation, 0, 1, 0);
-    createEdgeCylinder(2.5, 0.5, 10, 10);
+    createEdgeCylinder(2.5, 0.5, 10, 10,  textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
     glTranslatef(0, 0.5, 0);
     glScalef(0.2, 0.2, 0.2);
@@ -1656,8 +1664,8 @@ void ShapeCreator::drawPC() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, int rings) {
-    glBindTexture(GL_TEXTURE_2D, 0);
+void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, int rings, GLuint texture) {
+    glBindTexture(GL_TEXTURE_2D, texture);
 //    glColor3f(1, 0, 0);
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
@@ -1721,19 +1729,15 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
             glm::vec3 normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
             glNormal3fv(glm::value_ptr(normal));
             glBegin(GL_POLYGON);
+            glTexCoord2f(0,0);
             glVertex3f(v1.x, v1.y, v1.z);
+            glTexCoord2f(0,1);
             glVertex3f(v2.x, v2.y, v2.z);
+            glTexCoord2f(1,1);
             glVertex3f(v3.x, v3.y, v3.z);
+            glTexCoord2f(1,1);
             glVertex3f(v4.x, v4.y, v4.z);
             glEnd();
-
-//            //x
-//            vertexBuffer2[(i * sides * 3) + j * 3 + 0] = cos(theta) * (outerRadius + cos(eta) * innerRadius);
-//            //y
-//            vertexBuffer2[(i * sides * 3) + j * 3 + 1] = sin(theta) * (outerRadius + cos(eta) * innerRadius);
-//            //z
-//            vertexBuffer2[(i * sides * 3) + j * 3 + 2] = sin(eta) * innerRadius;
-//
         }
     }
     glBindTexture(GL_TEXTURE_2D, 0);

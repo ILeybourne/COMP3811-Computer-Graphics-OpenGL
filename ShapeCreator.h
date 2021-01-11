@@ -32,6 +32,7 @@ public:
     GLfloat mDiff[4] = {0.5, 0.5, 0.5, 1.0};
     GLfloat mSpec[4] = {1, 1, 1, 1.0};
     GLfloat mShininess2[1] = {50};
+    GLfloat mHighSpec[4] = {4, 4, 4, 1.0};
     GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0};
 
@@ -45,9 +46,9 @@ public:
 
     void createCube(float w, float h, float d, float x, float y, float z, bool shadow, GLuint texture);
 
-    void createSphere(GLdouble radius, GLint slices, GLint stacks);
+    void createSphere(GLdouble radius, GLint slices, GLint stacks, GLuint texture);
 
-    void createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks);
+    void createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture);
 
     void createSemiCylinder(float rad, float length, int x, int y, int z);
 
@@ -108,7 +109,7 @@ public:
 
     TextureCreator *textureCreator;
 
-    void createTorus(float innerRadius, float width, int sides, int rings);
+    void createTorus(float innerRadius, float width, int sides, int rings, GLuint texture);
 
     float turnTableRotation = 0;
     float gimbal1Turning = 0;
@@ -117,7 +118,7 @@ public:
 
     void createGyro();
 
-    void createEdgeCylinder(float radius, float height, float slices, float stacks);
+    void createEdgeCylinder(float radius, float height, float slices, float stacks, GLuint texture);
 
     void drawPC();
 
@@ -138,7 +139,7 @@ public:
 protected:
 private:
 
-    void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops);
+    void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops, GLuint texture);
 
     void createDesk();
 
