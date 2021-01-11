@@ -7,9 +7,9 @@ ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
 }
 // constructor
 
-void ShapeCreator::createTree() {
-    float trunkHeight = 10;
-    float bushRadius = 7;
+void ShapeCreator::createTree(float height, float rad) {
+    float trunkHeight = 10 + height;
+    float bushRadius = 7 + rad;
 //    glEnable(GL_COLOR_MATERIAL);
     glDisable(GL_CULL_FACE);
     glPushMatrix();
@@ -842,6 +842,11 @@ void ShapeCreator::heightGenerator(int seedNumber) {
             //Place trees x, y, z coordinates in tree position buffer
             std::array<float, 3> treePosition = {(float) x, treeHeight, (float) z};
             treePositions.push_back(treePosition);
+
+            float additionHeight = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/10.0);
+            float additionRad = static_cast <float> (rand()) / static_cast <float> (RAND_MAX/4.0);
+            std::array<float, 2> treeVariables = {additionHeight,additionRad};
+            treeHeightRad.push_back(treeVariables);
         }
     }
 

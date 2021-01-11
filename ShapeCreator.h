@@ -105,6 +105,7 @@ public:
     int planeZTess = 20;
     float heightsGenerated[planeWidth + 1][planeDepth + 1];
     std::vector<std::array<float, 3>> treePositions;
+    std::vector<std::array<float, 2>> treeHeightRad;
     int numberOfTrees = 30;
 
     TextureCreator *textureCreator;
@@ -134,7 +135,7 @@ public:
 
     void createDoorway(float width, float height, float depth, int tessX, int tessY, int tessZ);
 
-    void createTree();
+    void createTree(float height, float rad);
 
 protected:
 private:

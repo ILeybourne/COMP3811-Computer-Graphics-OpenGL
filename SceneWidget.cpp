@@ -322,11 +322,15 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
     return shadowMatrix;
 }
 
+///Slot for changing terrain seed
 void SceneWidget::changeTerrainSeed(QString seed) {
+    //Despite validation all textChanged(QString) returns string with non-numerical values so all non-numeric characters must be removed
+    seed.remove(QRegExp("[\\D]"));
     int seedAsInt = seed.toInt();
     shapeCreator->heightGenerator(seedAsInt);
 }
 
+///Rendering scaled up version of terrain with trees added
 void SceneWidget::placeTerrain() {
     glPushMatrix();
     glScaled(1.0 / shapeCreator->planeWidth * 1000, 1.0, 1.0 / shapeCreator->planeDepth * 1000);
@@ -342,7 +346,9 @@ void SceneWidget::placeTerrain() {
         glScaled(1, treeHeightRatio, 1);
         //and then scale down by x5
         glScaled(1.0 / 5.0, 1.0 / 5.0, 1.0 / 5.0);
-        shapeCreator->createTree();
+        float additionHeight = shapeCreator->treeHeightRad[i][0];
+        float additionRad = shapeCreator->treeHeightRad[i][1];
+        shapeCreator->createTree(additionHeight , additionRad);
         glPopMatrix();
     }
     shapeCreator->createTessilatedTerrain(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
@@ -351,9 +357,6 @@ void SceneWidget::placeTerrain() {
 }
 
 void SceneWidget::updateFrameActions() {
-    ////Rotation variable of cubes
-//    rotateCube += 0.5;
-
     //Add to the rotation variables of the gyroscopes parts
     shapeCreator->gimbal1Turning += M_PI_2;
     shapeCreator->gimbal2Turning += 1;
