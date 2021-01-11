@@ -326,6 +326,9 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
 void SceneWidget::changeTerrainSeed(QString seed) {
     //Despite validation all textChanged(QString) returns string with non-numerical values so all non-numeric characters must be removed
     seed.remove(QRegExp("[\\D]"));
+    if (seed == "" || seed.isEmpty()){
+        seed = "1";
+    }
     int seedAsInt = seed.toInt();
     shapeCreator->heightGenerator(seedAsInt);
 }

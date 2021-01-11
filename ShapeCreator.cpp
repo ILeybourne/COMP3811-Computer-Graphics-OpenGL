@@ -834,30 +834,32 @@ void ShapeCreator::heightGenerator(int seedNumber) {
         //Get random X and Z coordinates
         int x = ((rand() % (planeWidth)));
         int z = ((rand() % (planeDepth)));
-            //If coordinates sit above room exit or at any edge regenerate coordinates or a tree is generated in the same place get new coords
-            if (z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2 || x == 0 || z == 0 ||
-                z == planeDepth) {
-                i--;
-            } else {
-                float treeHeight = heightsGenerated[x][z];
-                //Place trees x, y, z coordinates in tree position buffer
-                std::array<float, 3> treePosition = {(float) x, treeHeight, (float) z};
-                treePositions.push_back(treePosition);
+        //If coordinates sit above room exit or at any edge regenerate coordinates or a tree is generated in the same place get new coords
+        if (z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2 || x == 0 || z == 0 ||
+            z == planeDepth) {
+            i--;
+        } else {
+            float treeHeight = heightsGenerated[x][z];
+            //Place trees x, y, z coordinates in tree position buffer
+            std::array<float, 3> treePosition = {(float) x, treeHeight, (float) z};
+            treePositions.push_back(treePosition);
 
-                //Generate some random height and radius to add to the tree min height and rad and store it.
-                float additionHeight = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 10.0);
-                float additionRad = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 4.0);
-                std::array<float, 2> treeVariables = {additionHeight, additionRad};
-                treeHeightRad.push_back(treeVariables);
+            //Generate some random height and radius to add to the tree min height and rad and store it.
+            float additionHeight = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 10.0);
+            float additionRad = static_cast <float> (rand()) / static_cast <float> (RAND_MAX / 4.0);
+            std::array<float, 2> treeVariables = {additionHeight, additionRad};
+            treeHeightRad.push_back(treeVariables);
 
-                //No two trees overlap
-                for (int j = 0; j < i; j++) {
-                    if (treePositions[j][0] == x && treePositions[j][1] == z &&
-                        numberOfTrees < 0.5 * planeDepth * planeWidth) {
-                        treePositions.pop_back();
-                        treeHeightRad.pop_back();
+            //No two trees overlap unless there are more trees than spaces
+            for (int j = 0; j < i; j++) {
+                if (treePositions[j][0] == treePositions[i][0] && treePositions[j][2] == treePositions[i][2]  &&
+                    numberOfTrees < 0.5 * planeDepth * planeWidth) {
+                    treePositions.pop_back();
+                    treeHeightRad.pop_back();
+                    if (i != 0) {
                         i--;
-                        break;
+                    }
+                    break;
                 }
             }
         }
