@@ -1319,9 +1319,9 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     string cp = nPath;
 
     std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
-    std::vector<float> temp_vertices2;
-    std::vector<std::array<float, 2>> temp_uvs2;
-    std::vector<float> tempNormals;
+    std::vector<std::array<float, 3>> tempVertices;
+    std::vector<std::array<float, 2>> tempUvs;
+    std::vector<std::array<float, 3>> tempNormals;
 
     fp = cp.append(fp);
 
@@ -1347,18 +1347,16 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             float vertexZ;
             ///Get vertexs and add to temporary vertex array
             fscanf(file, "%f %f %f\n", &vertexX, &vertexY, &vertexZ);
-            temp_vertices2.push_back(vertexX);
-            temp_vertices2.push_back(vertexY);
-            temp_vertices2.push_back(vertexZ);
+            std::array<float, 3> vertices = {vertexX, vertexY,vertexZ};
+            tempVertices.push_back(vertices);
         }
             ////If vertex texture data is found add UV coordinates to temporary UV array
         else if (strcmp(lineHeader, "vt") == 0) {
             float uvU;
             float uvV;
             fscanf(file, "%f %f\n", &uvU, &uvV);
-            std::array<float, 2> temp = {uvU, uvV};
-            temp_uvs2.push_back(temp);
-
+            std::array<float, 2> uv = {uvU, uvV};
+            tempUvs.push_back(uv);
         }
             ////If vertex normal data is found add normal data to temporary normal array
         else if (strcmp(lineHeader, "vn") == 0) {
@@ -1366,9 +1364,8 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             float normalY;
             float normalZ;
             fscanf(file, "%f %f %f\n", &normalX, &normalY, &normalZ);
-            tempNormals.push_back(normalX);
-            tempNormals.push_back(normalY);
-            tempNormals.push_back(normalZ);
+            std::array<float, 3> normals = {normalX, normalY, normalZ};
+            tempNormals.push_back(normals);
         }
             ////If face data is found add the 3 vertex indices, 3 UV indices and 3 normal indices to correct arrays.
             ////A face is always made up of triangles as as OBJ file has been triangulated beforehand
@@ -1380,10 +1377,10 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                                  &normalIndex[2]);
 
             if (matches != 9) {
-                printf("File can't be read by our simple parser : ( Try exporting with other options\n");
+                qDebug() <<"Model is not triangulated";
                 return false;
             }
-            // -1 to 0 index
+            // 1 is subtracted to facilitate 0 index
             vertexIndices.push_back(vertexIndex[0] - 1);
             vertexIndices.push_back(vertexIndex[1] - 1);
             vertexIndices.push_back(vertexIndex[2] - 1);
@@ -1400,9 +1397,9 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     for (unsigned int i = 0; i < vertexIndices.size(); i++) {
         unsigned int vertexIndex = vertexIndices[i];
         float vertex2x, vertex2y, vertex2z;
-        vertex2x = temp_vertices2[vertexIndex * 3 + 0];
-        vertex2y = temp_vertices2[vertexIndex * 3 + 1];
-        vertex2z = temp_vertices2[vertexIndex * 3 + 2];
+        vertex2x = tempVertices[vertexIndex][0];
+        vertex2y = tempVertices[vertexIndex][1];
+        vertex2z = tempVertices[vertexIndex][2];
         out_vertices.push_back(vertex2x);
         out_vertices.push_back(vertex2y);
         out_vertices.push_back(vertex2z);
@@ -1410,24 +1407,23 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     for (unsigned int i = 0; i < uvIndices.size(); i++) {
         unsigned int uvIndex = uvIndices[i];
         float uv2U, uv2V;
-        uv2U = temp_uvs2[uvIndex][0];
-        uv2V = temp_uvs2[uvIndex][1];
+        uv2U = tempUvs[uvIndex][0];
+        uv2V = tempUvs[uvIndex][1];
         out_uvs.push_back(uv2U);
         out_uvs.push_back(uv2V);
     }
     for (unsigned int i = 0; i < normalIndices.size(); i++) {
         unsigned int normalIndex = normalIndices[i];
         float normal2x, normal2y, normal2z;
-        normal2x = tempNormals[normalIndex * 3 + 0];
-        normal2y = tempNormals[normalIndex * 3 + 1];
-        normal2z = tempNormals[normalIndex * 3 + 2];
+        normal2x = tempNormals[normalIndex][0];
+        normal2y = tempNormals[normalIndex][1];
+        normal2z = tempNormals[normalIndex][2];
         out_normals.push_back(normal2x);
         out_normals.push_back(normal2y);
         out_normals.push_back(normal2z);
     }
 
     glBindTexture(GL_TEXTURE_2D, 0);
-
     return true;
 }
 
@@ -1508,7 +1504,6 @@ void ShapeCreator::createGyro() {
     glPopMatrix();
     glPopMatrix();
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mSpec);
-
 
     ////Stand
     glPushMatrix();
