@@ -852,7 +852,7 @@ void ShapeCreator::heightGenerator(int seedNumber) {
 
             //No two trees overlap unless there are more trees than spaces
             for (int j = 0; j < i; j++) {
-                if (treePositions[j][0] == treePositions[i][0] && treePositions[j][2] == treePositions[i][2]  &&
+                if (treePositions[j][0] == treePositions[i][0] && treePositions[j][2] == treePositions[i][2] &&
                     numberOfTrees < 0.5 * planeDepth * planeWidth) {
                     treePositions.pop_back();
                     treeHeightRad.pop_back();
@@ -1313,17 +1313,17 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                               std::vector<float> &out_uvs,
                               std::vector<float> &out_normals) {
 
-    char nPath[512];
-    getcwd(nPath, 512);
-
-    string cp = nPath;
+//    char nPath[512];
+//    getcwd(nPath, 512);
+//
+//    string cp = nPath;
 
     std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
     std::vector<std::array<float, 3>> tempVertices;
     std::vector<std::array<float, 2>> tempUvs;
     std::vector<std::array<float, 3>> tempNormals;
 
-    fp = cp.append(fp);
+//    fp = cp.append(fp);
 
     const char *path = fp.c_str();
 
@@ -1347,7 +1347,7 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             float vertexZ;
             ///Get vertexs and add to temporary vertex array
             fscanf(file, "%f %f %f\n", &vertexX, &vertexY, &vertexZ);
-            std::array<float, 3> vertices = {vertexX, vertexY,vertexZ};
+            std::array<float, 3> vertices = {vertexX, vertexY, vertexZ};
             tempVertices.push_back(vertices);
         }
             ////If vertex texture data is found add UV coordinates to temporary UV array
@@ -1377,7 +1377,7 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                                  &normalIndex[2]);
 
             if (matches != 9) {
-                qDebug() <<"Model is not triangulated";
+                qDebug() << "Model is not triangulated";
                 return false;
             }
             // 1 is subtracted to facilitate 0 index
@@ -1391,11 +1391,12 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             normalIndices.push_back(normalIndex[1] - 1);
             normalIndices.push_back(normalIndex[2] - 1);
         }
-
     }
+
     ////Once all vertex, UV, normal and face data has been obtain sort each data in order stated by face indices
+    //Note that ( vertexIndices.size() == uvIndices.size() == normalIndices.size() ) is true
     for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-        unsigned int vertexIndex = vertexIndices[i];
+                unsigned int vertexIndex = vertexIndices[i];
         float vertex2x, vertex2y, vertex2z;
         vertex2x = tempVertices[vertexIndex][0];
         vertex2y = tempVertices[vertexIndex][1];
@@ -1403,16 +1404,14 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
         out_vertices.push_back(vertex2x);
         out_vertices.push_back(vertex2y);
         out_vertices.push_back(vertex2z);
-    }
-    for (unsigned int i = 0; i < uvIndices.size(); i++) {
+
         unsigned int uvIndex = uvIndices[i];
         float uv2U, uv2V;
         uv2U = tempUvs[uvIndex][0];
         uv2V = tempUvs[uvIndex][1];
         out_uvs.push_back(uv2U);
         out_uvs.push_back(uv2V);
-    }
-    for (unsigned int i = 0; i < normalIndices.size(); i++) {
+
         unsigned int normalIndex = normalIndices[i];
         float normal2x, normal2y, normal2z;
         normal2x = tempNormals[normalIndex][0];

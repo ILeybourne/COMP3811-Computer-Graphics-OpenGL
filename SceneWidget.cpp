@@ -108,10 +108,10 @@ void SceneWidget::initializeGL() { // initializeGL()
     glCullFace(GL_BACK);
 
     ////Load Apple pc info
-    bool loadedPC = shapeCreator->getOBJData("/AppleIIe4.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
+    bool loadedPC = shapeCreator->getOBJData("./AppleIIe4.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
                                              shapeCreator->normalsPC);
 
-    bool loadedGeisha = shapeCreator->getOBJData("/geisha2.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
+    bool loadedGeisha = shapeCreator->getOBJData("./geisha2.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
                                                  shapeCreator->normalsGeisha);
 
     if (!(loadedGeisha || loadedPC))
@@ -326,7 +326,7 @@ float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
 void SceneWidget::changeTerrainSeed(QString seed) {
     //Despite validation all textChanged(QString) returns string with non-numerical values so all non-numeric characters must be removed
     seed.remove(QRegExp("[\\D]"));
-    if (seed == "" || seed.isEmpty()){
+    if (seed == "" || seed.isEmpty()) {
         seed = "1";
     }
     int seedAsInt = seed.toInt();
@@ -351,7 +351,7 @@ void SceneWidget::placeTerrain() {
         glScaled(1.0 / 5.0, 1.0 / 5.0, 1.0 / 5.0);
         float additionHeight = shapeCreator->treeHeightRad[i][0];
         float additionRad = shapeCreator->treeHeightRad[i][1];
-        shapeCreator->createTree(additionHeight , additionRad);
+        shapeCreator->createTree(additionHeight, additionRad);
         glPopMatrix();
     }
     shapeCreator->createTessilatedTerrain(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
