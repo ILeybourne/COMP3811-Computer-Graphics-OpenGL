@@ -36,8 +36,6 @@ public:
     GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0};
 
-    void changeColour(float red, float green, float blue);
-
     void sky(float w, float h, float d);
 
     void walls(float w, float h, float d, int tX, int tY, int tZ);
@@ -50,9 +48,7 @@ public:
 
     void createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture);
 
-    void createSemiCylinder(float rad, float length, int x, int y, int z);
-
-    void createSemiCylinder2(float rad, float length, int x, int y, int z, GLuint texture);
+    void createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ, GLuint texture);
 
     void createTessilatedTerrain(float width, float depth, int tessX, int tessZ);
 
@@ -66,23 +62,12 @@ public:
 
     float interpolateAt(float x, float z);
 
-    void createFigurine();
-
-
     bool getOBJData(std::string fp,
                     std::vector<float> &out_vertices,
                     std::vector<float>
                     &out_uvs,
                     std::vector<float> &out_normals
     );
-
-//    std::vector <glm::vec3> temp_vertices;
-//    std::vector <glm::vec2> temp_uvs;
-//    std::vector <glm::vec3> temp_normals;
-//
-//    std::vector <std::array<float, 3>> vertices;
-//    std::vector <std::array<float, 2>> uvs;
-//    std::vector <std::array<float, 3>> normals;
 
     std::vector<GLfloat> verticesPC;
     std::vector<GLfloat> uvsPC;
@@ -91,9 +76,6 @@ public:
     std::vector<GLfloat> verticesGeisha;
     std::vector<GLfloat> uvsGeisha;
     std::vector<GLfloat> normalsGeisha;
-
-//    void drawTexture(float x, float y, float w, float h,
-//                              float tx, float ty, float tw, float th, bool blend ,GLuint texture);
 
     int seedNumber = 1;
 
@@ -139,11 +121,9 @@ public:
 
 protected:
 private:
-
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops, GLuint texture);
 
     void createDesk();
-
 };
 
 #endif //SCENE_STB_IMAGE_H
