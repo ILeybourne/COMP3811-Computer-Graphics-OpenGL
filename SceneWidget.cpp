@@ -538,7 +538,7 @@ void SceneWidget::paintGL() { // paintGL()
     ////Inside
     glPushMatrix();
     //Move room to underneath terrain
-    glTranslatef(0, -lowestTerrain - roomHeight - 0.1, 0);
+    glTranslatef(0, -lowestTerrain - roomHeight - 1, 0);
     glDisable(GL_LIGHT0);
     glDisable(GL_LIGHT2);
     glDisable(GL_LIGHT3);

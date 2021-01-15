@@ -41,26 +41,26 @@ public:
             "./Textures/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",  //5
             "./Textures/appleIIe.jpg",                                          //6
             "./Textures/pruebas_geisha.jpg",                                    //7
-            "./Textures/fire/fire_00076.png",                                   //8
-            "./Textures/fire/fire_00077.png",                                   //9
-            "./Textures/fire/fire_00078.png",                                  //10
-            "./Textures/fire/fire_00079.png",                                  //11
-            "./Textures/fire/fire_00080.png",                                  //12
-            "./Textures/fire/fire_00081.png",                                  //13
-            "./Textures/fire/fire_00082.png",                                  //14
-            "./Textures/fire/fire_00083.png",                                  //15
-            "./Textures/fire/fire_00084.png",                                  //16
-            "./Textures/fire/fire_00085.png",                                  //17
-            "./Textures/fire/fire_00086.png",                                  //18
-            "./Textures/fire/fire_00087.png",                                  //19
-            "./Textures/fire/fire_00088.png",                                  //20
-            "./Textures/fire/fire_00089.png",                                  //21
-            "./Textures/fire/fire_00090.png",                                  //22
-            "./Textures/fire/fire_00091.png",                                  //23
-            "./Textures/fire/fire_00092.png",                                  //24
-            "./Textures/fire/fire_00093.png",                                  //25
-            "./Textures/fire/fire_00094.png",                                  //26
-            "./Textures/fire/fire_00095.png",                                  //27
+            "./Textures/Fire/fire_00076.png",                                   //8
+            "./Textures/Fire/fire_00077.png",                                   //9
+            "./Textures/Fire/fire_00078.png",                                  //10
+            "./Textures/Fire/fire_00079.png",                                  //11
+            "./Textures/Fire/fire_00080.png",                                  //12
+            "./Textures/Fire/fire_00081.png",                                  //13
+            "./Textures/Fire/fire_00082.png",                                  //14
+            "./Textures/Fire/fire_00083.png",                                  //15
+            "./Textures/Fire/fire_00084.png",                                  //16
+            "./Textures/Fire/fire_00085.png",                                  //17
+            "./Textures/Fire/fire_00086.png",                                  //18
+            "./Textures/Fire/fire_00087.png",                                  //19
+            "./Textures/Fire/fire_00088.png",                                  //20
+            "./Textures/Fire/fire_00089.png",                                  //21
+            "./Textures/Fire/fire_00090.png",                                  //22
+            "./Textures/Fire/fire_00091.png",                                  //23
+            "./Textures/Fire/fire_00092.png",                                  //24
+            "./Textures/Fire/fire_00093.png",                                  //25
+            "./Textures/Fire/fire_00094.png",                                  //26
+            "./Textures/Fire/fire_00095.png",                                  //27
             "./Textures/Marc_Dekamps.ppm",                                     //28
             "./Textures/Mercator-projection.ppm",                              //29
             "./Textures/grass_rough2.png",                                     //30
