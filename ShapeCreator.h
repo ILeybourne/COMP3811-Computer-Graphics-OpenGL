@@ -35,6 +35,7 @@ public:
     GLfloat mHighSpec[4] = {4, 4, 4, 1.0};
     GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0};
+    GLuint fireNumber;
 
     void sky(float w, float h, float d);
 

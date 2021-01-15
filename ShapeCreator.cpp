@@ -4,13 +4,14 @@
 // constructor
 ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
     this->heightGenerator(seedNumber);
+    this->textureCreator = new TextureCreator(parent);
+     fireNumber = textureCreator->Fire1Index;
 }
 // constructor
 
 void ShapeCreator::createTree(float height, float rad) {
     float trunkHeight = 10 + height;
     float bushRadius = 7 + rad;
-//    glEnable(GL_COLOR_MATERIAL);
     glDisable(GL_CULL_FACE);
     glPushMatrix();
     glScalef(0.1, 0.1, 0.1);
@@ -26,9 +27,7 @@ void ShapeCreator::createTree(float height, float rad) {
     glPopMatrix();
     glPopMatrix();
     glColor3f(1, 1, 1);
-//    glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_CULL_FACE);
-//    glDisable(GL_COLOR_MATERIAL);
 
 }
 
@@ -451,7 +450,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
 
 void ShapeCreator::createTorch(unsigned long long frame) {
     glDisable(GL_CULL_FACE);
-    int fireNum = frame % 20 + (6 + 3);
+    int fireNum = frame % 20 + (6 + 2);
     float fireWidth = 4;
     float fireHeight = 5;
 
@@ -472,7 +471,7 @@ void ShapeCreator::createTorch(unsigned long long frame) {
     glPushMatrix();
     glTranslatef(-fireWidth / 2, 2, 2);
     createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
-                        textureCreator->textures[fireNum]);
+                        textureCreator->textures[fireNumber]);
     glPopMatrix();
     glPopMatrix();
 
@@ -1304,7 +1303,7 @@ void ShapeCreator::createGeisha(bool black) {
         glColor3f(0, 0, 0);
     } else {
         glColor3f(1, 1, 1);
-        glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 3]);
+        glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->geishaIndex]);
     }
 
     glDisable(GL_CULL_FACE);
@@ -1376,7 +1375,7 @@ void ShapeCreator::createPopulatedDesk() {
 }
 
 void ShapeCreator::drawPC() {
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[6 - 1 + 1]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->applePCIndex]);
     glColor3f(1.0, 1.0, 1.0);
     glColor4f(1.0, 1.0, 1.0, 1.0);
 

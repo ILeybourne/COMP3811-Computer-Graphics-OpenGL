@@ -7,7 +7,7 @@ SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
     window = parent;
     shapeCreator = new ShapeCreator(this);
-    shapeCreator->textureCreator = new TextureCreator(this);
+//    shapeCreator->textureCreator = new TextureCreator(this);
 } // constructor
 
 // called when OpenGL context is set up
@@ -108,21 +108,20 @@ void SceneWidget::initializeGL() { // initializeGL()
     glCullFace(GL_BACK);
 
     ////Load Apple pc info
-    bool loadedPC = shapeCreator->getOBJData("./AppleIIe4.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
+    bool loadedPC = shapeCreator->getOBJData("./Models/AppleIIe.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
                                              shapeCreator->normalsPC);
 
-    bool loadedGeisha = shapeCreator->getOBJData("./geisha2.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
+    bool loadedGeisha = shapeCreator->getOBJData("./Models/geisha.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
                                                  shapeCreator->normalsGeisha);
 
     if (!(loadedGeisha || loadedPC))
-        qDebug() << "There was a problem accessing an OBJ file";
+        qDebug() << "There was a error loading an OBJ file";
 
     glEnable(GL_TEXTURE_2D);
     ////Load textures
     shapeCreator->textureCreator->swapActiveTexture(0);
     shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings,
                                               shapeCreator->textureCreator->textures);
-//    shapeCreator->textureCreator = shapeCreator->textureCreator;
 
     //Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -365,6 +364,7 @@ void SceneWidget::updateFrameActions() {
     shapeCreator->gimbal2Turning += 1;
     shapeCreator->gyroTurning += 1.618033988749895 * 2;
     shapeCreator->turnTableRotation += turnTableRotationSpeed;
+    shapeCreator->fireNumber = frame % 20 + (6 + 2);
 
     //Add a sin wave to geishas height
     if (!(turningRight || turningLeft)) {
@@ -517,13 +517,12 @@ void SceneWidget::drawGeishas(bool black) {
 void SceneWidget::drawFire() {
     glDisable(GL_LIGHTING);
     glDisable(GL_CULL_FACE);
-    int fireNum = frame % 20 + (6 + 3);
     float fireWidth = 10;
     float fireHeight = 20;
     glPushMatrix();
     glTranslatef(light1Position[0] - fireWidth / 2, -fireHeight / 8, light1Position[2]);
     shapeCreator->createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
-                                      shapeCreator->textureCreator->textures[fireNum]);
+                                      shapeCreator->textureCreator->textures[shapeCreator->fireNumber]);
     glPopMatrix();
     glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
