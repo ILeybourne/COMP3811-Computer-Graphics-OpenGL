@@ -3,7 +3,19 @@ A scence based on plato's allegory of the cave rendered using Opengl.
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////Compiling///////////////////////////////
 /////////////////////////////////////////////////////////////////////
-To compile run:
+
+To compile on feng run:
+$ module add qt/5.3.1
+$ qmake
+$ make
+$ ./Scene
+
+//Note qt 5.12. was used on my personal machine. One method 
+//(inputRejected()) does not work using 5.3.1, however this
+//does not effect anything other than a validation slot 
+//from beening called by QTextEdit
+
+To compile on an Ubuntu machine with Qt 5.12 run:
 $ qmake
 $ make
 $ ./Scene

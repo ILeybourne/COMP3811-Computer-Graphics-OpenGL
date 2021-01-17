@@ -423,7 +423,7 @@ void SceneWidget::changeScreenTexture(int i) {
 
 void SceneWidget::changeGyroTexture(int i) {
     //Changes texture based on selected item from combo box
-    if (i == 0)
+if (i == 0)
         shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->steelIndex;
     if (i == 1)
         shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->ironIndex;
