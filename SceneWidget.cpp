@@ -427,8 +427,6 @@ void SceneWidget::changeGyroTexture(int i) {
         shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->steelIndex;
     if (i == 1)
         shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->ironIndex;
-
-    qDebug() << "you are connected" << shapeCreator->textureCreator->selectedGyroIndex;
 }
 
 ////Slot called by Qt connection to display framerate
