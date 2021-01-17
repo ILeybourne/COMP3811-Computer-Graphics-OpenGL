@@ -27,15 +27,25 @@ Window::Window(QWidget *parent)
     rotationSlider = new QSlider(Qt::Horizontal);
 
     screenTextureSelection = new QComboBox();
-    QList<QString> stringsList = {"Sky",
-                                  "Marc",
-                                  "Map"};
-    screenTextureSelection->addItems(stringsList);
+    QList<QString> screenStringsList = {"Sky",
+                                        "Marc",
+                                        "Map"};
+    screenTextureSelection->addItems(screenStringsList);
 
     screenTextureSelectionLabel = new QLabel(this);
     screenTextureSelectionLabel->setFixedHeight(20);
     screenTextureSelectionLabel->setText("Screen Image:");
     screenTextureSelectionLabel->setBuddy(screenTextureSelection);
+
+    gyroTextureSelection = new QComboBox();
+    QList<QString> gyroStringsList = {"Steel",
+                                      "Iron Stressed Iron"};
+    gyroTextureSelection->addItems(gyroStringsList);
+
+    gyroSelectionLabel = new QLabel(this);
+    gyroSelectionLabel->setFixedHeight(20);
+    gyroSelectionLabel->setText("Gyroscope Material:");
+    gyroSelectionLabel->setBuddy(screenTextureSelection);
 
     rotationSliderLabel = new QLabel(this);
     rotationSliderLabel->setFixedHeight(20);
@@ -61,11 +71,12 @@ Window::Window(QWidget *parent)
     rotationSlider->setFocusPolicy(Qt::NoFocus);
     screenTextureSelection->setFocusPolicy(Qt::NoFocus);
     screenTextureSelectionLabel->setFocusPolicy(Qt::NoFocus);
+    gyroTextureSelection->setFocusPolicy(Qt::NoFocus);
+    gyroSelectionLabel->setFocusPolicy(Qt::NoFocus);
     fpsLabel->setFocusPolicy(Qt::NoFocus);;
     rotationSliderLabel->setFocusPolicy(Qt::NoFocus);;
     resetCameraButton->setFocusPolicy(Qt::NoFocus);
     seedNumberLabel->setFocusPolicy(Qt::NoFocus);
-//    seedNumberLineEdit->setFocusPolicy(Qt::NoFocus);
 
     ////Set up layouts and widget in window order
     windowLayout->addWidget(sceneWidget);
@@ -76,9 +87,13 @@ Window::Window(QWidget *parent)
     sliderLayout->addWidget(rotationSliderLabel, 15);
     sliderLayout->addWidget(rotationSlider, 85);
 
-    QBoxLayout *selectionLayout = new QBoxLayout(QBoxLayout::LeftToRight);
-    selectionLayout->addWidget(screenTextureSelectionLabel, 15);
-    selectionLayout->addWidget(screenTextureSelection, 85);
+    QBoxLayout *screenSelectionLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    screenSelectionLayout->addWidget(screenTextureSelectionLabel, 15);
+    screenSelectionLayout->addWidget(screenTextureSelection, 85);
+
+    QBoxLayout *gyroSelectionLayout = new QBoxLayout(QBoxLayout::LeftToRight);
+    gyroSelectionLayout->addWidget(gyroSelectionLabel, 15);
+    gyroSelectionLayout->addWidget(gyroTextureSelection, 85);
 
     QBoxLayout *buttonLayout = new QBoxLayout(QBoxLayout::LeftToRight);
     buttonLayout->addWidget(resetCameraButton);
@@ -87,20 +102,20 @@ Window::Window(QWidget *parent)
     seedLayout->addWidget(seedNumberLabel, 15);
     seedLayout->addWidget(seedNumberLineEdit, 85);
 
-
     windowLayout->addLayout(sliderLayout);
-    windowLayout->addLayout(selectionLayout);
+    windowLayout->addLayout(screenSelectionLayout);
+    windowLayout->addLayout(gyroSelectionLayout);
     windowLayout->addLayout(seedLayout);
     windowLayout->addLayout(buttonLayout);
 
     ////Connections
     QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged(int)), sceneWidget,
                      SLOT(changeScreenTexture(int)));
-//    QObject::connect(screenTextureSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(resetFocus()));
+    QObject::connect(gyroTextureSelection, SIGNAL(currentIndexChanged(int)), sceneWidget,
+                     SLOT(changeGyroTexture(int)));
     QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(setRotationSpeed()));
     rotationSlider->setSliderPosition(10);
     QObject::connect(resetCameraButton, SIGNAL(released()), sceneWidget, SLOT(resetCamera()));
-//    QObject::connect(rotationSlider, SIGNAL(valueChanged(int)), this, SLOT(resetFocus()));
     QObject::connect(seedNumberLineEdit, SIGNAL(textChanged(const QString &)), sceneWidget,
                      SLOT(changeTerrainSeed(QString)));
     QObject::connect(seedNumberLineEdit, SIGNAL(inputRejected()), this, SLOT(resetFocus()));

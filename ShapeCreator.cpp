@@ -1169,52 +1169,52 @@ void ShapeCreator::createGyro() {
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mHighSpec);
 
     ////Frame
-    createTorus(frameRad, frameWidth, 50, 50, textureCreator->textures[(textureCreator->metalIndex)]);
+    createTorus(frameRad, frameWidth, 50, 50, textureCreator->textures[(textureCreator->selectedGyroIndex)]);
 
     ////Bearing 1 Outer
     glPushMatrix();
     glTranslatef(frameRad - frameWidth - 0.2, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
 
     ////Bearing 2 Outer
     glPushMatrix();
     glTranslatef(-frameRad + frameWidth, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
 
     ////Gimbal1
     glPushMatrix();
     float gimbal1Rad = frameRad - (frameWidth) * 2 - 0.1;
     glRotatef(gimbal1Turning, 1, 0, 0);
-    createTorus(gimbal1Rad, 0.2, 50, 50, textureCreator->textures[(textureCreator->metalIndex)]);
+    createTorus(gimbal1Rad, 0.2, 50, 50, textureCreator->textures[(textureCreator->selectedGyroIndex)]);
 
     ////Bearing 3 Inner
     glPushMatrix();
     glTranslatef(0, gimbal1Rad - frameWidth, 0);
     glRotatef(90, 1, 0, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
 
     ////Bearing 4 Inner
     glPushMatrix();
     glTranslatef(0, -gimbal1Rad + frameWidth + 0.2, 0);
     glRotatef(90, 1, 0, 0);
-    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
     glPushMatrix();
     float gimbal2Rad = gimbal1Rad - (frameWidth) * 2 - 0.1;
     glRotatef(gimbal1Turning, 0, 1, 0);
-    createTorus(gimbal2Rad, 0.2, 50, 50, textureCreator->textures[(textureCreator->metalIndex)]);
+    createTorus(gimbal2Rad, 0.2, 50, 50, textureCreator->textures[(textureCreator->selectedGyroIndex)]);
     glPushMatrix();
 
     ////Axle
     glPushMatrix();
     glTranslatef(-gimbal2Rad + frameWidth - 0.1, 0, 0);
     glRotatef(90, 0, 1, 0);
-    createCylinder(0.1, 0.1, gimbal2Rad * 2, 10, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createCylinder(0.1, 0.1, gimbal2Rad * 2, 10, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
     glPushMatrix();
 
@@ -1225,13 +1225,13 @@ void ShapeCreator::createGyro() {
     int gyroSlices = 10;
     glTranslatef(0, 0, -gyroHeight / 2);
     glRotatef(180, 0, 1, 0);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glRotatef(180, 0, 1, 0);
     glTranslatef(0, 0, gyroHeight);
-    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->metalIndex]);
+    createDisk(0, gimbal2Rad - 0.5, gyroSlices, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glTranslatef(0, 0, -gyroHeight);
     createCylinder(gimbal2Rad - 0.5, gimbal2Rad - 0.5, gyroHeight, gyroSlices, gyroSlices,
-                   textureCreator->textures[textureCreator->metalIndex]);
+                   textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
     glPopMatrix();
     glPopMatrix();
@@ -1396,7 +1396,7 @@ void ShapeCreator::drawPC() {
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33, -0.4, -0.62);
     glScalef(1.8, 1.2, 1);
-    createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, false, textureCreator->textures[textureCreator->selectedIndex]);
+    createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, false, textureCreator->textures[textureCreator->selectedScreenIndex]);
     glPopMatrix();
     glPopMatrix();
     glDisableClientState(GL_VERTEX_ARRAY); //disable the client states again

@@ -414,11 +414,21 @@ void SceneWidget::updateFrameActions() {
 void SceneWidget::changeScreenTexture(int i) {
     //Changes texture based on selected item from combo box
     if (i == 0)
-        shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->skyBoxZPlusIndex;
+        shapeCreator->textureCreator->selectedScreenIndex = shapeCreator->textureCreator->skyBoxZPlusIndex;
     if (i == 1)
-        shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->marcIndex;
+        shapeCreator->textureCreator->selectedScreenIndex = shapeCreator->textureCreator->marcIndex;
     if (i == 2)
-        shapeCreator->textureCreator->selectedIndex = shapeCreator->textureCreator->mapIndex;
+        shapeCreator->textureCreator->selectedScreenIndex = shapeCreator->textureCreator->mapIndex;
+}
+
+void SceneWidget::changeGyroTexture(int i) {
+    //Changes texture based on selected item from combo box
+    if (i == 0)
+        shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->steelIndex;
+    if (i == 1)
+        shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->ironIndex;
+
+    qDebug() << "you are connected" << shapeCreator->textureCreator->selectedGyroIndex;
 }
 
 ////Slot called by Qt connection to display framerate

@@ -27,18 +27,26 @@ public:
     QMenuBar *menuBar;
     QMenu *fileMenu;
     QAction *actionQuit;
+
     QBoxLayout *windowLayout;
     SceneWidget *sceneWidget;
-    QSlider *rotationSlider;
-    QComboBox *screenTextureSelection;
-    QPushButton *resetCameraButton;
-    QLabel *screenTextureSelectionLabel;
+
     QLabel *fpsLabel;
+    QString fps = "0";
+
     QLabel *rotationSliderLabel;
-    QString fps = 0;
+    QSlider *rotationSlider;
+
+    QLabel *screenTextureSelectionLabel;
+    QComboBox *screenTextureSelection;
+
+    QLabel *gyroSelectionLabel;
+    QComboBox *gyroTextureSelection;
+
     QLabel *seedNumberLabel;
     QLineEdit *seedNumberLineEdit;
     QIntValidator *intValid = new QIntValidator(0, INT_MAX, this);
+    QPushButton *resetCameraButton;
 
 public slots:
 

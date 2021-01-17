@@ -70,7 +70,8 @@ public:
             "./Textures/Wood047_1K_Color.jpg",                                 //34
             "./Textures/Linolafett_CC-0_RPv6ofy.jpg",                          //35
             "./Textures/Tree_bark_seamless_07.png",                            //36
-            "./Textures/caststeel.jpg"                                         //37
+            "./Textures/caststeel.jpg",                                      //37
+            "./Textures/heat_stressed.jpg"                                         //38
     };
 
     GLuint skyBoxZPlusIndex = 0;  // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
@@ -110,12 +111,14 @@ public:
     GLuint woodIndex   = 34;
     GLuint treeIndex   = 35;
     GLuint barkIndex   = 36;
-    GLuint metalIndex  = 37;
+    GLuint steelIndex  = 37;
+    GLuint ironIndex   = 38;
 
     //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass , 3 walls //35
     static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1 + 3;
 
-    int selectedIndex = 0;
+    int selectedScreenIndex = 0;
+    int selectedGyroIndex = steelIndex;
 
     int numberOfTextures;
 

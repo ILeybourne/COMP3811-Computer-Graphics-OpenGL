@@ -127,6 +127,8 @@ public slots:
 
     void changeScreenTexture(int i);
 
+    void changeGyroTexture(int i);
+
     void resetCamera();
 
     void changeTerrainSeed(QString seed);
