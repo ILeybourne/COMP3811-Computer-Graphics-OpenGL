@@ -47,7 +47,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     glNormal3fv(glm::value_ptr(normal));
 
     //Bind first skybox texture
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[0]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxZNegIndex]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -69,7 +69,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[2]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxXPlusIndex]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -90,7 +90,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[1]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyBoxZPlusIndex]);
 //    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
 //    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     glBegin(GL_POLYGON);
@@ -118,7 +118,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[3]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->SkyboxXNegIndex]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -142,7 +142,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[4]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxYPlusIndex]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -165,7 +165,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[5]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxYNegIndex]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
