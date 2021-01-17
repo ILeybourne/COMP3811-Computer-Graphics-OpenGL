@@ -1204,6 +1204,8 @@ void ShapeCreator::createGyro() {
     glRotatef(90, 1, 0, 0);
     createCylinder(0.1, 0.1, 0.3, 10, 10, textureCreator->textures[textureCreator->selectedGyroIndex]);
     glPopMatrix();
+
+    ////Gimbal 2
     glPushMatrix();
     float gimbal2Rad = gimbal1Rad - (frameWidth) * 2 - 0.1;
     glRotatef(gimbal1Turning, 0, 1, 0);
@@ -1219,8 +1221,8 @@ void ShapeCreator::createGyro() {
     glPushMatrix();
 
     ////Gyro
-    glRotatef(gyroTurning, 1, 0, 0);
     glRotatef(90, 0, 1, 0);
+    glRotatef(gyroTurning, 0, 0, 1);
     float gyroHeight = 0.8;
     int gyroSlices = 10;
     glTranslatef(0, 0, -gyroHeight / 2);
