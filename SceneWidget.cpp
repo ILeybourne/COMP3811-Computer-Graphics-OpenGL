@@ -111,7 +111,8 @@ void SceneWidget::initializeGL() { // initializeGL()
     bool loadedPC = shapeCreator->getOBJData("./Models/AppleIIe.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
                                              shapeCreator->normalsPC);
 
-    bool loadedGeisha = shapeCreator->getOBJData("./Models/geisha.obj", shapeCreator->verticesGeisha, shapeCreator->uvsGeisha,
+    bool loadedGeisha = shapeCreator->getOBJData("./Models/geisha.obj", shapeCreator->verticesGeisha,
+                                                 shapeCreator->uvsGeisha,
                                                  shapeCreator->normalsGeisha);
 
     if (!(loadedGeisha || loadedPC))
@@ -122,6 +123,11 @@ void SceneWidget::initializeGL() { // initializeGL()
     shapeCreator->textureCreator->swapActiveTexture(0);
     shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings,
                                               shapeCreator->textureCreator->textures);
+
+    ////Calculate shadow projection matrix for +Z wall and light 1
+    glm::vec4 wallAsPlane = {0, 0, -1, (roomDepth / 2) - 0.2};
+    glm::vec4 light1PositionAsVec4 = {light1Position[0], light1Position[1], light1Position[2], light1Position[3]};
+    shadowMatrix = getShadowMatrix(wallAsPlane, light1PositionAsVec4);
 
     //Wireframe mode
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -209,56 +215,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (key->key() == Qt::Key_G) {
         cameraDirection[1] += 0.02;
     }
-
-    if (jumping || falling) {
-        key->ignore();
-        return;
-    }
-//    if (key->key() == Qt::Key_Shift && !jumping && !falling && !key->isAutoRepeat()) {
-////        qDebug() << jumping;
-//        while (cameraPosition[1] < 6.5) {
-//
-//            cameraPosition[1] += 0.2;
-//            cameraDirection[1] += 0.2;
-//            cameraPosition[1] -= 1.0 / 16;
-//            cameraDirection[1] -= 1.0 / 16;
-////            updateGL();
-//            jumping = true;
-//        }
-//        while (cameraPosition[1] > 5) {
-//
-//            cameraPosition[1] -= 1.0 / 16;
-//            cameraDirection[1] -= 1.0 / 16;
-////            updateGL();
-//            falling = true;
-//        }
-//        cameraPosition[1] = 5;
-//        cameraDirection[1] = 5;
-//        jumping = false;
-//        falling = false;
-//    }
-    //    qDebug() << key;
-
-    //    qDebug() << camX;
-
-//    qDebug() << "pos" << cameraPosition[0] << cameraPosition[1] << cameraPosition[2];
-//    qDebug() << "dir" << cameraDirection[0] << cameraDirection[1] << cameraDirection[2] << camZ << camX;
-//    qDebug() << "yaw" << yaw << fmod((yaw / M_2_PI) * 360, 360);
-//    updateGL();
 }
-
-
-//void SceneWidget::keyReleaseEvent(QKeyEvent *key) {
-////    if (key->key() == Qt::Key_Control) {
-////        while (cameraPosition[1] < 5) {
-////            cameraPosition[1] += 0.02;
-////            cameraDirection[1] += 0.03;
-////            updateGL();
-////        }
-////        cameraPosition[1] = 5;
-////        cameraDirection[1] = 5;
-////    }
-//}
 
 ////Called by Qt button
 void SceneWidget::resetCamera() {
@@ -272,51 +229,31 @@ void SceneWidget::resetCamera() {
     }
 }
 
-//TODO if lights dont move call once
-float *SceneWidget::getShadowMatrix(float p[4], float l[4]) {
+float *SceneWidget::getShadowMatrix(glm::vec4 p, glm::vec4 l) {
     static float shadowMatrix[16];
+    //Calculate dot product between plane and light
+    float dot = glm::dot(p, l);
 
-    float wall[4] = {0, 0, 0, 0};
-    wall[0] = p[0];
-    wall[1] = p[1];
-    wall[2] = p[2];
-    wall[3] = p[3];
+    //Formula to calculate projection onto plane
+    shadowMatrix[0] = dot - l[0] * p[0];
+    shadowMatrix[4] = -l[0] * p[1];
+    shadowMatrix[8] = -l[0] * p[2];
+    shadowMatrix[12] = -l[0] * p[3];
 
-    float light[4] = {0, 0, 0, 0};
-    light[0] = l[0];
-    light[1] = l[1];
-    light[2] = l[2];
-    light[3] = l[3];
+    shadowMatrix[1] = -l[1] * p[0];
+    shadowMatrix[5] = dot - l[1] * p[1];
+    shadowMatrix[9] = -l[1] * p[2];
+    shadowMatrix[13] = -l[1] * p[3];
 
-    float dot = wall[0] * light[0] +
-                wall[1] * light[1] +
-                wall[2] * light[2] +
-                wall[3] * light[3];
+    shadowMatrix[2] = -l[2] * p[0];
+    shadowMatrix[6] = -l[2] * p[1];
+    shadowMatrix[10] = dot - l[2] * p[2];
+    shadowMatrix[14] = -l[2] * p[3];
 
-    shadowMatrix[0] = dot - light[0] * wall[0];
-    shadowMatrix[4] = 0.0 - light[0] * wall[1];
-    shadowMatrix[8] = 0.0 - light[0] * wall[2];
-    shadowMatrix[12] = 0.0 - light[0] * wall[3];
-
-    shadowMatrix[1] = 0.0 - light[1] * wall[0];
-    shadowMatrix[5] = dot - light[1] * wall[1];
-    shadowMatrix[9] = 0.0 - light[1] * wall[2];
-    shadowMatrix[13] = 0.0 - light[1] * wall[3];
-
-    shadowMatrix[2] = 0.0 - light[2] * wall[0];
-    shadowMatrix[6] = 0.0 - light[2] * wall[1];
-    shadowMatrix[10] = dot - light[2] * wall[2];
-    shadowMatrix[14] = 0.0 - light[2] * wall[3];
-
-    shadowMatrix[3] = 0.0 - light[3] * wall[0];
-    shadowMatrix[7] = 0.0 - light[3] * wall[1];
-    shadowMatrix[11] = 0.0 - light[3] * wall[2];
-    shadowMatrix[15] = dot - light[3] * wall[3];
-
-    shadowMatrix[3] = 0.0 - light[3] * wall[0];
-    shadowMatrix[7] = 0.0 - light[3] * wall[1];
-    shadowMatrix[11] = 0.0 - light[3] * wall[2];
-    shadowMatrix[15] = dot - light[3] * wall[3];
+    shadowMatrix[3] = -l[3] * p[0];
+    shadowMatrix[7] = -l[3] * p[1];
+    shadowMatrix[11] = -l[3] * p[2];
+    shadowMatrix[15] = dot - l[3] * p[3];
 
     return shadowMatrix;
 }
@@ -358,15 +295,8 @@ void SceneWidget::placeTerrain() {
     glPopMatrix();
 }
 
-void SceneWidget::updateFrameActions() {
-    //Add to the rotation variables of the gyroscopes parts
-    shapeCreator->gimbal1Turning += M_PI_2;
-    shapeCreator->gimbal2Turning += 1;
-    shapeCreator->gyroTurning += 1.618033988749895 * 2;
-    shapeCreator->turnTableRotation += turnTableRotationSpeed;
-    shapeCreator->fireNumber = frame % 20 + (6 + 2);
-
-    //Add a sin wave to geishas height
+void SceneWidget::updateGeishaPosition(){
+    //Add a sin wave to geishas height to simulate bopping while walking
     if (!(turningRight || turningLeft)) {
         geishaPosition[1] += sin(geishaBop) / 30.0;
         geishaBop += 0.5;
@@ -403,6 +333,16 @@ void SceneWidget::updateFrameActions() {
     if (turningLeft) {
         geishaRotation += 2;
     }
+}
+
+void SceneWidget::updateFrameActions() {
+    //Add to the rotation variables of the gyroscopes parts
+    shapeCreator->gimbal1Turning += M_PI_2;
+    shapeCreator->gimbal2Turning += 1;
+    shapeCreator->gyroTurning += 1.618033988749895 * 2;
+    shapeCreator->turnTableRotation += turnTableRotationSpeed;
+    shapeCreator->fireNumber = frame % 20 + (6 + 2);
+    updateGeishaPosition();
 
     //Update frame number
     frame++;
@@ -423,7 +363,7 @@ void SceneWidget::changeScreenTexture(int i) {
 
 void SceneWidget::changeGyroTexture(int i) {
     //Changes texture based on selected item from combo box
-if (i == 0)
+    if (i == 0)
         shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->steelIndex;
     if (i == 1)
         shapeCreator->textureCreator->selectedGyroIndex = shapeCreator->textureCreator->ironIndex;
@@ -481,7 +421,8 @@ void SceneWidget::testLight() {
 
 void SceneWidget::drawShadows() {
     //Define wall plane as ax+by+cz+d=0, defined by its norm and distance from origin. Offset to avoid Z-fighting
-    float wallAsPlane[4] = {0, 0, -1, (roomDepth / 2) - 0.2};
+
+
 
     //Shadows should not be lit and should be black
     glDisable(GL_LIGHTING);
@@ -490,7 +431,6 @@ void SceneWidget::drawShadows() {
 
     ////Geisha shadow
     glPushMatrix();
-    float *shadowMatrix = getShadowMatrix(wallAsPlane, light1Position);
     glMultMatrixf(shadowMatrix);
     drawGeishas(true);
     glPopMatrix();

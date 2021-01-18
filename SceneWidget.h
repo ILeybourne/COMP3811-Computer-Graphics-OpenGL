@@ -64,7 +64,7 @@ protected:
 //    void keyReleaseEvent(QKeyEvent *key);
 
 
-    float *getShadowMatrix(float p[4], float l[4]);
+    float *getShadowMatrix(glm::vec4 p, glm::vec4  l);
 
     unsigned long long frame = 0;
     unsigned long long lastFrameRecorded = 0;
@@ -84,8 +84,7 @@ protected:
     float cameraDirection[3] = {cameraPosition[0] - 0, cameraPosition[1], cameraPosition[2] - radius};
     float cameraStartDirection[3] = {cameraDirection[0], cameraDirection[1], cameraDirection[2]};
 
-    bool jumping = false;
-    bool falling = false;
+    float *shadowMatrix;
 
     static constexpr float roomDepth = 50.0;
     static constexpr float roomWidth = 70.0;
@@ -146,6 +145,7 @@ private:
 
     void drawFire();
 
+    void updateGeishaPosition();
 };
 
 #endif

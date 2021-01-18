@@ -818,15 +818,15 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
             for (float n = 0; n < 1; n += tessXSize) {
                 for (float m = 0; m < 1; m += tessZSize) {
 
-                    float heightAtn1m1 = interpolateAt(i + n, k + m);
                     float heightAtn0m0 = interpolateAt(i + n + tessXSize, k + m);
                     float heightAtn0m1 = interpolateAt(i + n + tessXSize, k + m + tessZSize);
+                    float heightAtn1m1 = interpolateAt(i + n, k + m);
                     float heightAtn1m0 = interpolateAt(i + n, k + m + tessZSize);
 
                     glm::vec3 vA = {i + n + tessXSize, heightAtn0m0, k + m};
-                    glm::vec3 vD = {i + n + tessXSize, heightAtn0m1, k + m + tessZSize};
-                    glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
                     glm::vec3 vB = {i + n, heightAtn1m1, k + m};
+                    glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
+                    glm::vec3 vD = {i + n + tessXSize, heightAtn0m1, k + m + tessZSize};
 
 
                     normal = glm::normalize(glm::cross(vB - vA, vC - vB));
@@ -1287,8 +1287,8 @@ void ShapeCreator::createDesk() {
     glTranslatef(0, 4, 0);
     createCube(10 + 2, 0.25, 4 + 2, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
-    glBindTexture(GL_TEXTURE_2D, 0);
 
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks, GLuint texture) {

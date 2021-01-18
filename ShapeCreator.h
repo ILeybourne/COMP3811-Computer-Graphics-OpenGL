@@ -78,6 +78,7 @@ public:
     std::vector<GLfloat> uvsGeisha;
     std::vector<GLfloat> normalsGeisha;
 
+
     int seedNumber = 1;
 
     static constexpr int planeWidth = 10;
