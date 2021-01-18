@@ -27,6 +27,7 @@ class ShapeCreator { //
 public:
     ShapeCreator(QWidget *parent);
 
+    ////Material Properties
     GLfloat mAmbient[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mDiff[4] = {0.5, 0.5, 0.5, 1.0};
     GLfloat mSpec[4] = {1, 1, 1, 1.0};
@@ -34,8 +35,42 @@ public:
     GLfloat mHighSpec[4] = {4, 4, 4, 1.0};
     GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mLowSpec[4] = {0.1, 0.2, 0.1, 1.0};
+
+    ////Frame of fire animation
     GLuint fireNumber;
 
+    ////Data for apple computer model
+    std::vector<GLfloat> verticesPC;
+    std::vector<GLfloat> uvsPC;
+    std::vector<GLfloat> normalsPC;
+
+    ////Data for geisha model
+    std::vector<GLfloat> verticesGeisha;
+    std::vector<GLfloat> uvsGeisha;
+    std::vector<GLfloat> normalsGeisha;
+
+    ////Terrain properties
+    int seedNumber = 1;
+    static constexpr int planeWidth = 10;
+    static constexpr int planeDepth = 10;
+    float amplitude = 100;
+    int planeXTess = 20;
+    int planeZTess = 20;
+    float heightsGenerated[planeWidth + 1][planeDepth + 1];
+    std::vector<std::array<float, 3>> treePositions;
+    std::vector<std::array<float, 2>> treeHeightRad;
+    int numberOfTrees = 30;
+
+    ////shapeCreator's Texture handler
+    TextureCreator *textureCreator;
+
+    ////Rotation variables
+    float turnTableRotation = 0;
+    float gimbal1Turning = 0;
+    float gimbal2Turning = 0;
+    float gyroTurning = 0;
+
+    ////Declare functions
     void sky(float w, float h, float d);
 
     void walls(float w, float h, float d, int tX, int tY, int tZ);
@@ -69,37 +104,6 @@ public:
                     std::vector<float> &out_normals
     );
 
-    std::vector<GLfloat> verticesPC;
-    std::vector<GLfloat> uvsPC;
-    std::vector<GLfloat> normalsPC;
-
-    std::vector<GLfloat> verticesGeisha;
-    std::vector<GLfloat> uvsGeisha;
-    std::vector<GLfloat> normalsGeisha;
-
-
-    int seedNumber = 1;
-
-    static constexpr int planeWidth = 10;
-    static constexpr int planeDepth = 10;
-
-    float amplitude = 100;
-    int planeXTess = 20;
-    int planeZTess = 20;
-    float heightsGenerated[planeWidth + 1][planeDepth + 1];
-    std::vector<std::array<float, 3>> treePositions;
-    std::vector<std::array<float, 2>> treeHeightRad;
-    int numberOfTrees = 30;
-
-    TextureCreator *textureCreator;
-
-    void createTorus(float innerRadius, float width, int sides, int rings, GLuint texture);
-
-    float turnTableRotation = 0;
-    float gimbal1Turning = 0;
-    float gimbal2Turning = 0;
-    float gyroTurning = 0;
-
     void createGyro();
 
     void createEdgeCylinder(float radius, float height, float slices, float stacks, GLuint texture);
@@ -120,6 +124,8 @@ public:
 
     void createTree(float height, float rad);
 
+    void createTorus(float innerRadius, float width, int sides, int rings, GLuint texture);
+
 protected:
 private:
     void createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops, GLuint texture);
@@ -127,4 +133,4 @@ private:
     void createDesk();
 };
 
-#endif //SCENE_STB_IMAGE_H
+#endif //SCENE_ShapeCreator_H
