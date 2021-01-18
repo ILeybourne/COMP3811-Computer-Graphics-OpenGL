@@ -414,7 +414,7 @@ void SceneWidget::updateFrameActions() {
 void SceneWidget::changeScreenTexture(int i) {
     //Changes texture based on selected item from combo box
     if (i == 0)
-        shapeCreator->textureCreator->selectedScreenIndex = shapeCreator->textureCreator->skyBoxZPlusIndex;
+        shapeCreator->textureCreator->selectedScreenIndex = shapeCreator->textureCreator->skyboxZPlusIndex;
     if (i == 1)
         shapeCreator->textureCreator->selectedScreenIndex = shapeCreator->textureCreator->marcIndex;
     if (i == 2)

@@ -47,7 +47,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     glNormal3fv(glm::value_ptr(normal));
 
     //Bind first skybox texture
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxZNegIndex]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxZPlusIndex]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -69,7 +69,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxXPlusIndex]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxXNegIndex]);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -90,7 +90,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     //Normal of rect
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyBoxZPlusIndex]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxZNegIndex]);
 //    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
 //    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     glBegin(GL_POLYGON);
@@ -118,7 +118,7 @@ void ShapeCreator::sky(float width, float height, float depth) {
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
-    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->SkyboxXNegIndex]);
+    glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxXPlusIndex]);
     glColor3f(1.0, 1.0, 1.0);
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
@@ -763,8 +763,8 @@ void ShapeCreator::heightGenerator(int seedNumber) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-float ShapeCreator::interpolation(float x, float z, float c) {
-    float theta = (c) * M_PI;
+float ShapeCreator::interpolation(float x, float z, float f) {
+    float theta = (f) * M_PI;
     float cosNorm = (1.0 - cosf(theta)) * 0.5;
     float v = x * (1.0 - cosNorm) + z * cosNorm;
     return (x * (1.0 - cosNorm)) + (z * cosNorm);
@@ -774,18 +774,18 @@ float ShapeCreator::interpolateAt(float x, float z) {
     int i = floor(x);
     int k = floor(z);
 
-    float iFract = x - i;
-    float kFract = z - k;
+    float iFraction = x - i;
+    float kFraction = z - k;
 
     float heightAti0k0 = heightsGenerated[i][k];
     float heightAti0k1 = heightsGenerated[i][k + 1];
     float heightAti1k0 = heightsGenerated[i + 1][k];
     float heightAti1k1 = heightsGenerated[i + 1][k + 1];
 
-    float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFract);
-    float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFract);
+    float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFraction);
+    float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFraction);
 
-    return interpolation(interpolX1, interpolX2, kFract);
+    return interpolation(interpolX1, interpolX2, kFraction);
 }
 
 
@@ -795,6 +795,8 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
     float thetaSpeed = 2.0;
     float theta = thetaSpeed * M_PI;
     float x = (1.0 - cosf(theta)) * 0.5;
+    float scaleFactor = 2;
+
     glm::vec3 normal;
 
     glColor3f(1, 1, 1);
@@ -819,7 +821,6 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
                     glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
                     glm::vec3 vB = {i + n, heightAtn1m1, k + m};
 
-                    float scaleFactor = 2;
 
                     normal = glm::normalize(glm::cross(vB - vA, vC - vB));
                     glNormal3fv(glm::value_ptr(normal));
@@ -1414,7 +1415,6 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
     float diffTheta = (M_PI * 2) / rings;
-    float vertexBuffer2[sides * rings * 3];
     int count = 0;
     for (int i = 0; i < rings; i++) {
         theta = diffTheta * i;

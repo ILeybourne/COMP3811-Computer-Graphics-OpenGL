@@ -59,7 +59,7 @@ public:
     createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth, float tHeight,
                         bool blend, GLuint texture);
 
-    float interpolation(float x, float z, float c);
+    float interpolation(float x, float z, float f);
 
     float interpolateAt(float x, float z);
 
