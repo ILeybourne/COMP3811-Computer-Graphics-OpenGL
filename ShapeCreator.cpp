@@ -765,26 +765,33 @@ void ShapeCreator::heightGenerator(int seedNumber) {
 
 float ShapeCreator::interpolation(float x, float z, float f) {
     float theta = (f) * M_PI;
+    //returns a value between 0 and 1
     float cosNorm = (1.0 - cosf(theta)) * 0.5;
+    //
     float v = x * (1.0 - cosNorm) + z * cosNorm;
     return (x * (1.0 - cosNorm)) + (z * cosNorm);
 }
 
 float ShapeCreator::interpolateAt(float x, float z) {
+    //Whole part of number
     int i = floor(x);
     int k = floor(z);
 
+    //Fraction of number
     float iFraction = x - i;
     float kFraction = z - k;
 
+    //Get heights of the four points
     float heightAti0k0 = heightsGenerated[i][k];
     float heightAti0k1 = heightsGenerated[i][k + 1];
     float heightAti1k0 = heightsGenerated[i + 1][k];
     float heightAti1k1 = heightsGenerated[i + 1][k + 1];
 
+    //interpolate between point i0,k0 and i1,k0 i.e interopolation across x axis
     float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFraction);
+    //interopolation across x axis for the next z column
     float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFraction);
-
+    //return interpolation between the two interpolated points i.e interpolate in z axis
     return interpolation(interpolX1, interpolX2, kFraction);
 }
 
