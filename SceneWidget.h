@@ -116,6 +116,8 @@ protected:
     int geishaRotation = 270;
     float geishaBop = 0;
 
+    QWidget *window;
+
 public slots:
     unsigned long long getFrameRate();
 

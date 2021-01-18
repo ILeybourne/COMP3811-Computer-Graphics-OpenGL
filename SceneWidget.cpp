@@ -7,10 +7,9 @@ SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
     window = parent;
     shapeCreator = new ShapeCreator(this);
-//    shapeCreator->textureCreator = new TextureCreator(this);
-} // constructor
+}
 
-// called when OpenGL context is set up
+//// called when OpenGL is started
 void SceneWidget::initializeGL() { // initializeGL()
     //Enable anti-alias
     glEnable(GL_MULTISAMPLE);
@@ -22,6 +21,12 @@ void SceneWidget::initializeGL() { // initializeGL()
     glClearColor(1, 1, 1, 1);
     //Disable coloured material as all objects are textured
     glDisable(GL_COLOR_MATERIAL);
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT,   shapeCreator->mAmbient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE,   shapeCreator->mDiff);
+    glMaterialfv(GL_FRONT, GL_SPECULAR,  shapeCreator->mSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, shapeCreator->mShininess2);
+
 
     ////Light parameters
     //Light 0

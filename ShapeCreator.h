@@ -27,7 +27,6 @@ class ShapeCreator { //
 public:
     ShapeCreator(QWidget *parent);
 
-//    GLfloat mAmbient[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     GLfloat mAmbient[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mDiff[4] = {0.5, 0.5, 0.5, 1.0};
     GLfloat mSpec[4] = {1, 1, 1, 1.0};
