@@ -28,10 +28,11 @@ using namespace std;
 
 class TextureCreator {
 public:
-    TextureCreator(QWidget *parent);
+    TextureCreator();
 
     void imageLoader(QStringList sImage, GLuint texture[]);
 
+    //Texture relative file names
     QStringList textureStrings = {
             "./Textures/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg", //0
             "./Textures/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",  //1
@@ -74,6 +75,7 @@ public:
             "./Textures/heat_stressed.jpg"                                         //38
     };
 
+    //Index of each image
     GLuint skyboxZPlusIndex = 0;  // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_0_Front+Z.jpg",
     GLuint skyboxZNegIndex = 1;   // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_1_Back-Z.jpg",
     GLuint skyboxXNegIndex = 2;   // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_2_Left+X.jpg",
@@ -81,16 +83,16 @@ public:
     GLuint skyboxYPlusIndex = 4;  // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_4_Up+Y.jpg",
     GLuint skyboxYNegIndex = 5;   // "./textureinternet/Epic_BlueSunset/jpg/Epic_BlueSunset_Cam_5_Down-Y.jpg",
     GLuint applePCIndex = 6;      // "./textureinternet/appleIIe.jpg",
-    GLuint geishaIndex  = 7;     // "./textureinternet/pruebas_geisha.jpg",
-    GLuint Fire1Index  = 8;        // "./textureinternet/fire/fire_00076.png",
-    GLuint Fire2Index  = 9;        // "./textureinternet/fire/fire_00077.png",
-    GLuint Fire3Index  = 10;       // "./textureinternet/fire/fire_00078.png",
-    GLuint Fire4Index  = 11;       // "./textureinternet/fire/fire_00079.png",
-    GLuint Fire5Index  = 12;       // "./textureinternet/fire/fire_00080.png",
-    GLuint Fire6Index  = 13;       // "./textureinternet/fire/fire_00081.png",
-    GLuint Fire7Index  = 14;       // "./textureinternet/fire/fire_00082.png",
-    GLuint Fire8Index  = 15;       // "./textureinternet/fire/fire_00083.png",
-    GLuint Fire9Index  = 16;       // "./textureinternet/fire/fire_00084.png",
+    GLuint geishaIndex = 7;     // "./textureinternet/pruebas_geisha.jpg",
+    GLuint Fire1Index = 8;        // "./textureinternet/fire/fire_00076.png",
+    GLuint Fire2Index = 9;        // "./textureinternet/fire/fire_00077.png",
+    GLuint Fire3Index = 10;       // "./textureinternet/fire/fire_00078.png",
+    GLuint Fire4Index = 11;       // "./textureinternet/fire/fire_00079.png",
+    GLuint Fire5Index = 12;       // "./textureinternet/fire/fire_00080.png",
+    GLuint Fire6Index = 13;       // "./textureinternet/fire/fire_00081.png",
+    GLuint Fire7Index = 14;       // "./textureinternet/fire/fire_00082.png",
+    GLuint Fire8Index = 15;       // "./textureinternet/fire/fire_00083.png",
+    GLuint Fire9Index = 16;       // "./textureinternet/fire/fire_00084.png",
     GLuint Fire10Index = 17;      // "./textureinternet/fire/fire_00085.png",
     GLuint Fire11Index = 18;      // "./textureinternet/fire/fire_00086.png",
     GLuint Fire12Index = 19;      // "./textureinternet/fire/fire_00087.png",
@@ -102,20 +104,20 @@ public:
     GLuint Fire18Index = 25;      // "./textureinternet/fire/fire_00093.png",
     GLuint Fire19Index = 26;      // "./textureinternet/fire/fire_00094.png",
     GLuint Fire20Index = 27;      // "./textureinternet/fire/fire_00095.png",
-    GLuint marcIndex   = 28;      // "./textureinternet/fire/fire_00095.png",
-    GLuint mapIndex    = 29;      // "./textureinternet/fire/fire_00095.png",
-    GLuint grassIndex  = 30;      // "./textureinternet/grass_rough2.png",
-    GLuint ceilingIndex= 31;      // "./textureinternet/grass_rough2.png",
-    GLuint floorIndex  = 32;      // "./textureinternet/grass_rough2.png",
-    GLuint wallIndex   = 33;      // "./textureinternet/grass_rough2.png",
-    GLuint woodIndex   = 34;
-    GLuint treeIndex   = 35;
-    GLuint barkIndex   = 36;
-    GLuint steelIndex  = 37;
-    GLuint ironIndex   = 38;
+    GLuint marcIndex = 28;      // "./textureinternet/fire/fire_00095.png",
+    GLuint mapIndex = 29;      // "./textureinternet/fire/fire_00095.png",
+    GLuint grassIndex = 30;      // "./textureinternet/grass_rough2.png",
+    GLuint ceilingIndex = 31;      // "./textureinternet/grass_rough2.png",
+    GLuint floorIndex = 32;      // "./textureinternet/grass_rough2.png",
+    GLuint wallIndex = 33;      // "./textureinternet/grass_rough2.png",
+    GLuint woodIndex = 34;
+    GLuint treeIndex = 35;
+    GLuint barkIndex = 36;
+    GLuint steelIndex = 37;
+    GLuint ironIndex = 38;
 
-    //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass , 3 walls //35
-    static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1 + 3;
+    //6 skybox, 3 objects, 20 fire, 2 marc, grass, 3 walls, 2 trees, 2 metal//35
+    static constexpr int constNumberOfTextures = 6 + 2 + 20 + 2 + 1 + 3 + 2 + 2;
 
     int selectedScreenIndex = skyboxZPlusIndex;
 
@@ -126,10 +128,8 @@ public:
     QList<QImage> pQImage;
 
     GLuint textures[constNumberOfTextures];
-
-    void swapActiveTexture(int textureNumber);
-
 protected:
 private:
 };
+
 #endif //SCENE_TextureCreator_H

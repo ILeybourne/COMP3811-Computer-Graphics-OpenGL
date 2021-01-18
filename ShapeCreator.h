@@ -25,7 +25,7 @@ using namespace std;
 
 class ShapeCreator { //
 public:
-    ShapeCreator(QWidget *parent);
+    ShapeCreator();
 
     ////Material Properties
     GLfloat mAmbient[4] = {0.4, 0.4, 0.4, 1.0};
@@ -86,7 +86,7 @@ public:
 
     void createSemiCylinder(float rad, float length, GLuint texture);
 
-    void createTessilatedTerrain(float width, float depth, int tessX, int tessZ);
+    void createTessellatedTerrain(float width, float depth, int tessX, int tessZ);
 
     void heightGenerator(int seedNumber);
 

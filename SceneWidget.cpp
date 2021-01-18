@@ -1,12 +1,10 @@
-//#define GL_GLEXT_PROTOTYPES
-
 #include "SceneWidget.h"
 
 // constructor
 SceneWidget::SceneWidget(QWidget *parent)
         : QGLWidget(parent) { // constructor
     window = parent;
-    shapeCreator = new ShapeCreator(this);
+    shapeCreator = new ShapeCreator();
 }
 
 //// called when OpenGL is started
@@ -270,8 +268,8 @@ void SceneWidget::placeTerrain() {
         shapeCreator->createTree(additionHeight, additionRad);
         glPopMatrix();
     }
-    shapeCreator->createTessilatedTerrain(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
-                                          shapeCreator->planeZTess);
+    shapeCreator->createTessellatedTerrain(shapeCreator->planeWidth, shapeCreator->planeDepth, shapeCreator->planeXTess,
+                                           shapeCreator->planeZTess);
     glPopMatrix();
 }
 

@@ -2,11 +2,11 @@
 
 
 // constructor
-ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
+ShapeCreator::ShapeCreator() {// constructor
     //Generate heights based on seed number
     this->heightGenerator(seedNumber);
     //Create a textureCreator to access textures
-    this->textureCreator = new TextureCreator(parent);
+    this->textureCreator = new TextureCreator();
     //Set fire number to index of first frame of fire
     fireNumber = textureCreator->Fire1Index;
 }
@@ -433,7 +433,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         }
     }
 
-    ////Reset paremeters for drawing other objects
+    ////Reset parameters for drawing other objects
     glMaterialfv(GL_FRONT, GL_SPECULAR, mSpec);
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -472,7 +472,7 @@ void ShapeCreator::createTorch() {
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
-};
+}
 
 void ShapeCreator::createTunnel(float width, float height, float depth, int tessX, int tessZ) {
     glPushMatrix();
@@ -669,7 +669,7 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
     glEnable(GL_CULL_FACE);
 }
 
-////Generates terrian and tree heights
+////Generates terrain and tree heights
 void ShapeCreator::heightGenerator(int seedNumber) {
     int width = int(planeWidth);
     int depth = int(planeDepth);
@@ -690,7 +690,7 @@ void ShapeCreator::heightGenerator(int seedNumber) {
         }
     }
 
-    //Smooth heights by taking a weigthed average of the surrounding heights
+    //Smooth heights by taking a weighted average of the surrounding heights
     for (int i = 0; i < width + 1; i++) {
         for (int k = 0; k < depth + 1; k++) {
             int n1 = i - 1;
@@ -778,7 +778,7 @@ float ShapeCreator::interpolateAt(float x, float z) {
     float heightAti1k0 = heightsGenerated[i + 1][k];
     float heightAti1k1 = heightsGenerated[i + 1][k + 1];
 
-    //interpolate between point i0,k0 and i1,k0 i.e interopolation across x axis
+    //interpolate between point i0,k0 and i1,k0 i.e interpolation across x axis
     float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFraction);
     //interpolation across x axis for the next z column
     float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFraction);
@@ -787,7 +787,7 @@ float ShapeCreator::interpolateAt(float x, float z) {
 }
 
 
-void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, int tessZ) {
+void ShapeCreator::createTessellatedTerrain(float width, float depth, int tessX, int tessZ) {
     float tessXSize = 1.0 / (tessX);
     float tessZSize = 1.0 / (tessZ);
     float thetaSpeed = 2.0;
@@ -1094,7 +1094,7 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
             float vertexX;
             float vertexY;
             float vertexZ;
-            ///Get vertexs and add to temporary vertex array
+            ///Get vertices and add to temporary vertex array
             fscanf(file, "%f %f %f\n", &vertexX, &vertexY, &vertexZ);
             std::array<float, 3> vertices = {vertexX, vertexY, vertexZ};
             tempVertices.push_back(vertices);
@@ -1462,7 +1462,7 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
             theta2 = diffTheta * i2;
             eta2 = diffEta * j2;
 
-            ////Calcate parameterised equation of a torus for this vertex and adjacent ones on next ring and side
+            ////Calculate parameterised equation of a torus for this vertex and adjacent ones on next ring and side
             v1.x = cos(theta) * (outerRadius + cos(eta) * innerRadius);
             v1.y = sin(theta) * (outerRadius + cos(eta) * innerRadius);
             v1.z = sin(eta) * innerRadius;
