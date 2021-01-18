@@ -42,7 +42,6 @@ class SceneWidget : public QGLWidget, protected QGLFunctions { //
 Q_OBJECT
 public:
     SceneWidget(QWidget *parent);
-
     unsigned long long frameDifference = 0;
     ShapeCreator *shapeCreator;
     float turnTableRotationSpeed = 1;
@@ -61,10 +60,7 @@ protected:
 
     void keyPressEvent(QKeyEvent *key);
 
-//    void keyReleaseEvent(QKeyEvent *key);
-
-
-    float *getShadowMatrix(glm::vec4 p, glm::vec4  l);
+    float *getShadowMatrix(glm::vec4 p, glm::vec4 l);
 
     unsigned long long frame = 0;
     unsigned long long lastFrameRecorded = 0;
@@ -84,21 +80,21 @@ protected:
     float cameraDirection[3] = {cameraPosition[0] - 0, cameraPosition[1], cameraPosition[2] - radius};
     float cameraStartDirection[3] = {cameraDirection[0], cameraDirection[1], cameraDirection[2]};
 
-    float *shadowMatrix;
-
     static constexpr float roomDepth = 50.0;
     static constexpr float roomWidth = 70.0;
     static constexpr float roomHeight = 30.0;
 
-    ////Right of tunnel
+    ////Light Positions
+    float light0Position[4] = {0, 15, -500, 1};
+    float light1Position[4] = {0, 3 - lowestTerrain - roomHeight, -roomDepth / 2 + 5, 1};
+
+    //Right of tunnel
     float cosPiOver3 = cos(M_PI / 3);
     float sinPiOver3 = sin(M_PI / 3);
-    ////Left of tunnel
+    //Left of tunnel
     float negCosPiOver3 = cos(-M_PI / 3);
     float negSinPiOver3 = sin(-M_PI / 3);
 
-    float light0Position[4] = {0, 15, -500, 1};
-    float light1Position[4] = {0, 3 - lowestTerrain - roomHeight, -roomDepth / 2 + 5, 1};
     float light2Position[4] = {roomWidth - roomWidth / 3,
                                roomDepth / 2 * negCosPiOver3 - roomDepth / 10 - lowestTerrain - roomHeight,
                                roomDepth / 2 * negSinPiOver3, 1};
@@ -108,6 +104,10 @@ protected:
                                roomDepth / 2 * negCosPiOver3 - roomDepth / 10 - lowestTerrain - roomHeight,
                                roomDepth / 2 * negSinPiOver3, 1};
 
+    ////Shadow projection matrix
+    float *shadowMatrix;
+
+    ////Geisha Positions
     float geishaPosition[3] = {5, 2.5, -3};
     bool moveLeft = true;
     bool moveRight = false;
@@ -116,12 +116,7 @@ protected:
     int geishaRotation = 270;
     float geishaBop = 0;
 
-    float rotateCube = 0;
-
-    QWidget *window;
-
 public slots:
-
     unsigned long long getFrameRate();
 
     void changeScreenTexture(int i);
@@ -133,11 +128,7 @@ public slots:
     void changeTerrainSeed(QString seed);
 
 private:
-    void walls();
-
     void placeTerrain();
-
-    void testLight();
 
     void drawShadows();
 
