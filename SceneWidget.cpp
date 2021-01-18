@@ -12,50 +12,23 @@ SceneWidget::SceneWidget(QWidget *parent)
 
 // called when OpenGL context is set up
 void SceneWidget::initializeGL() { // initializeGL()
-    ////Enable anti-alias
+    //Enable anti-alias
     glEnable(GL_MULTISAMPLE);
-    ////Normalize normals upon transformations (especially scaling)
+    //Normalize normals upon transformations (especially scaling)
     glEnable(GL_NORMALIZE);
-    ////Set Identitity matrix
+    //Set Identity matrix
     glLoadIdentity();
-    ////Set Background colour
+    //Set Background colour to white
     glClearColor(1, 1, 1, 1);
-    ////Access some more GL Functions via QT //TODO ?
-    initializeGLFunctions();
-
-    ////Fog
-//    float fog_colour[4] = {1, 1, 1, 1};
-//    glEnable(GL_FOG);
-//    glFogf(GL_FOG_MODE,GL_EXP2);
-//    glFogfv(GL_FOG_COLOR,fog_colour);
-//    glFogf(GL_FOG_DENSITY,0.0005);
-//    glHint(GL_FOG_HINT,GL_NICEST);
-//    glFogf(GL_FOG_START,700);
-//    glFogf(GL_FOG_END,1000);
-
-    ////Material parameters
-//    glColorMaterial(	GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-//    glColorMaterial(	GL_FRONT_AND_BACK, GL_DIFFUSE);
-//    glColorMaterial(	GL_FRONT_AND_BACK, GL_SPECULAR);
-//                     , , GL_SPECULAR, );
-
-//    glEnable(GL_COLOR_MATERIAL);
-//    glColor3f(1,1,1);
+    //Disable coloured material as all objects are textured
     glDisable(GL_COLOR_MATERIAL);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, shapeCreator->mAmbient);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, shapeCreator->mDiff);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, shapeCreator->mSpec);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shapeCreator->mShininess2);
-
 
     ////Light parameters
-    ////Light 0
+    //Light 0
     GLfloat light0Ambient[] = {0.3, 0.2, 0.25, 0.0};
     GLfloat light0Diffuse[] = {2.0, 2.0, 2.0, 0.0};
     GLfloat light0Specular[] = {0.2, 0.2, 0.2, 0.0};
     GLfloat light0Shininess[] = {5.0};
-
-
     glLightfv(GL_LIGHT0, GL_AMBIENT, light0Ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light0Specular);
@@ -63,12 +36,11 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
     glEnable(GL_LIGHT0);
 
-    ////Light 1 inside
+    //Light 1 inside (Fire)
     GLfloat light1Ambient[] = {0.1, 0.1, 0.1, 0.0};
     GLfloat light1Diffuse[] = {1, 1, 1, 0.0};
     GLfloat light1Specular[] = {0.8, 0.7, 0.7, 0.0};
     GLfloat light1Shininess[] = {100.0};
-
     glLightfv(GL_LIGHT1, GL_AMBIENT, light1Ambient);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, light1Diffuse);
     glLightfv(GL_LIGHT1, GL_SPECULAR, light1Specular);
@@ -76,7 +48,7 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
     glEnable(GL_LIGHT1);
 
-    ////Light 2 Tunnel
+    //Light 2 Tunnel
     GLfloat light2Ambient[] = {0.1, 0.1, 0.1, 0.0};
     GLfloat light2Diffuse[] = {1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0, 0.0};
     GLfloat light2Specular[] = {0.8 / 3.0, 0.7 / 3.0, 0.7 / 3.0, 0.0};
@@ -86,31 +58,33 @@ void SceneWidget::initializeGL() { // initializeGL()
     glLightfv(GL_LIGHT2, GL_POSITION, light2Position);
     glEnable(GL_LIGHT2);
 
-    ////Light 3 Tunnel
+    //Light 3 Tunnel
     glLightfv(GL_LIGHT3, GL_AMBIENT, light2Ambient);
     glLightfv(GL_LIGHT3, GL_DIFFUSE, light2Diffuse);
     glLightfv(GL_LIGHT3, GL_SPECULAR, light2Specular);
     glLightfv(GL_LIGHT3, GL_POSITION, light3Position);
     glEnable(GL_LIGHT3);
 
-    ////Light 4 Tunnel
+    //Light 4 Tunnel
     glLightfv(GL_LIGHT4, GL_AMBIENT, light2Ambient);
     glLightfv(GL_LIGHT4, GL_DIFFUSE, light2Diffuse);
     glLightfv(GL_LIGHT4, GL_SPECULAR, light2Specular);
     glLightfv(GL_LIGHT4, GL_POSITION, light4Position);
     glEnable(GL_LIGHT4);
 
+    //Enable smooth shading and lighting
     glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
 
-    ////Cull back of faces
+    //Cull back of faces so unseen faces are not rendered
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    ////Load Apple pc info
+    //Load Apple computer model vertex, UV, and normal info
     bool loadedPC = shapeCreator->getOBJData("./Models/AppleIIe.obj", shapeCreator->verticesPC, shapeCreator->uvsPC,
                                              shapeCreator->normalsPC);
 
+    //Load geisha model vertex, UV, and normal info
     bool loadedGeisha = shapeCreator->getOBJData("./Models/geisha.obj", shapeCreator->verticesGeisha,
                                                  shapeCreator->uvsGeisha,
                                                  shapeCreator->normalsGeisha);
@@ -118,20 +92,17 @@ void SceneWidget::initializeGL() { // initializeGL()
     if (!(loadedGeisha || loadedPC))
         qDebug() << "There was a error loading an OBJ file";
 
-    glEnable(GL_TEXTURE_2D);
     ////Load textures
-    shapeCreator->textureCreator->swapActiveTexture(0);
+    glEnable(GL_TEXTURE_2D);
     shapeCreator->textureCreator->imageLoader(shapeCreator->textureCreator->textureStrings,
                                               shapeCreator->textureCreator->textures);
 
     ////Calculate shadow projection matrix for +Z wall and light 1
+    //Define wall plane as ax+by+cz+d=0, defined by its norm and distance from origin. Offset to avoid Z-fighting
     glm::vec4 wallAsPlane = {0, 0, -1, (roomDepth / 2) - 0.2};
     glm::vec4 light1PositionAsVec4 = {light1Position[0], light1Position[1], light1Position[2], light1Position[3]};
     shadowMatrix = getShadowMatrix(wallAsPlane, light1PositionAsVec4);
-
-    //Wireframe mode
-//    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-} // initializeGL()
+}
 
 // called every time the widget is resized
 void SceneWidget::resizeGL(int w, int h) { // resizeGL()
@@ -152,6 +123,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (camX < 0) {
         yaw = (M_PI + yaw);
     }
+
     //Strife Left
     if (key->key() == Qt::Key_Q) {
         float newYaw = yaw - M_PI / 2;
@@ -190,6 +162,8 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (key->key() == Qt::Key_D) {
         turningNumber -= turningSpeed;
     }
+
+    //Update new direction of camera
     camX = sin(turningNumber) * radius;
     camZ = cos(turningNumber) * radius;
     cameraDirection[0] = cameraPosition[0] - camX;
@@ -197,6 +171,7 @@ void SceneWidget::keyPressEvent(QKeyEvent *key) {
     if (camX != 0) {
         yaw = atan(camZ / camX);
     }
+
     //Pan up
     if (key->key() == Qt::Key_R) {
         cameraPosition[1] += 0.2;
@@ -376,60 +351,14 @@ unsigned long long SceneWidget::getFrameRate() {
     return frameDifference;
 }
 
-void SceneWidget::testLight() {
-    ////Lighting testcubes
-    glEnable(GL_LIGHT1);
-    glDisable(GL_LIGHT0);
-    glPushMatrix();
-    glTranslatef(0, 9, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0, 11, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(3, 9, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-3, 9, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 9, 3);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-    glPushMatrix();
-    glTranslatef(0, 9, -3);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 5, 0);
-    shapeCreator->createTessCube(1, 1, 1, 10, 10, 10);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(0, 2, 0);
-    shapeCreator->createTessCube(100, 1, 1, 10, 10, 10);
-    glPopMatrix();
-}
-
 void SceneWidget::drawShadows() {
-    //Define wall plane as ax+by+cz+d=0, defined by its norm and distance from origin. Offset to avoid Z-fighting
-
-
-
     //Shadows should not be lit and should be black
     glDisable(GL_LIGHTING);
     glColor4f(0, 0, 0, 1);
     glEnable(GL_CULL_FACE);
 
-    ////Geisha shadow
+    //Geishas shadow is position is set using matrix multiplication of the shadow matrix to show were shadow would land
+    //on plane from the lights perspective
     glPushMatrix();
     glMultMatrixf(shadowMatrix);
     drawGeishas(true);
@@ -480,10 +409,14 @@ void SceneWidget::paintGL() { // paintGL()
     ////Clear screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
+
     ////Z Depth test
     glEnable(GL_DEPTH_TEST);
+
+    ////Enable Lighting
     glEnable(GL_LIGHTING);
-    ////Inside
+
+    ////Inside cave
     glPushMatrix();
     //Move room to underneath terrain
     glTranslatef(0, -lowestTerrain - roomHeight - 1, 0);
@@ -509,19 +442,23 @@ void SceneWidget::paintGL() { // paintGL()
     glEnable(GL_LIGHT2);
     glEnable(GL_LIGHT3);
     glEnable(GL_LIGHT4);
+
     //Move over to edge of wall +X
     glPushMatrix();
     glTranslatef(roomWidth / 2, 0, 0);
+
     //Draw desk
     glPushMatrix();
     glTranslatef(20, 0, 20);
     glRotatef(180, 0, 1, 0);
     shapeCreator->createPopulatedDesk();
     glPopMatrix();
+
     //Draw Tunnel
     shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50, 50);
-    glPushMatrix();
+
     //Create Fireplace
+    glPushMatrix();
     glPushMatrix();
     glDisable(GL_CULL_FACE);
     glTranslatef(-roomWidth / 2, 0, 0);
@@ -530,6 +467,7 @@ void SceneWidget::paintGL() { // paintGL()
     glScalef(1, 1, roomWidth / roomDepth);
     shapeCreator->createDoorway(roomWidth, roomHeight, roomDepth, 50, 50, 50);
     glPopMatrix();
+
     //Draw Doorway at end of tunnel
     glTranslatef(roomWidth + 2, 0, 0);
     glPushMatrix();
@@ -579,13 +517,12 @@ void SceneWidget::paintGL() { // paintGL()
 
 
     ////Inside
-    ////Shadows are immune to translations and should be projected separately
+    //Shadows are immune to translations and should be projected separately
     //Draw shadows onto +Z wall
     drawShadows();
 
     //// Draw torches and fire (Drawn last as they are blended objects)
     // Draw torches
-
     glPushMatrix();
     glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
     shapeCreator->createTorch(frame);
@@ -616,11 +553,8 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
     glPopMatrix();
 
-    ////Draw image pixels
-    //glDrawPixels(shapeCreator->textureCreator->pQImage[30].width(),shapeCreator->textureCreator->pQImage[30].height(),GL_RGB, GL_UNSIGNED_BYTE, shapeCreator->textureCreator->pQImage[30].bits());
-
-    glLoadIdentity();
     //Place Camera
+    glLoadIdentity();
     gluLookAt(cameraDirection[0], cameraDirection[1], cameraDirection[2], cameraPosition[0], cameraPosition[1],
               cameraPosition[2], cameraUp[0], cameraUp[1] + 10000000000000, cameraUp[2]);
 
