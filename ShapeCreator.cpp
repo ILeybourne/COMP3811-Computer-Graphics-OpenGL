@@ -1437,19 +1437,16 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
     float diffTheta = (M_PI * 2) / rings;
-
     for (int i = 0; i < rings; i++) {
         theta = diffTheta * i;
         for (int j = 0; j < sides; j++) {
             eta = diffEta * j;
-            //main vertex
-            glm::vec3 v1;
-            //vertex adjacent on next ring
-            glm::vec3 v2;
-            //vertex on next ring and next side
-            glm::vec3 v3;
-            //vertex on main ring and next side
-            glm::vec3 v4;
+            //v1 - main vertex
+            //v2 - vertex adjacent on next ring
+            //v3 - vertex on next ring and next side
+            //v4 - vertex on main ring and next side
+            glm::vec3 v1,v2,v3,v4;
+
             //The four vertices can be used to draw a plane
             int i2 = i + 1;
             int j2 = j + 1;

@@ -20,9 +20,9 @@ void SceneWidget::initializeGL() { // initializeGL()
     //Disable coloured material as all objects are textured
     glDisable(GL_COLOR_MATERIAL);
 
-    glMaterialfv(GL_FRONT, GL_AMBIENT,   shapeCreator->mAmbient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE,   shapeCreator->mDiff);
-    glMaterialfv(GL_FRONT, GL_SPECULAR,  shapeCreator->mSpec);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, shapeCreator->mAmbient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, shapeCreator->mDiff);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, shapeCreator->mSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, shapeCreator->mShininess2);
 
 
@@ -207,31 +207,31 @@ void SceneWidget::resetCamera() {
     }
 }
 
-float *SceneWidget::getShadowMatrix(glm::vec4 p, glm::vec4 l) {
+float *SceneWidget::getShadowMatrix(glm::vec4 plane, glm::vec4 light) {
     static float shadowMatrix[16];
     //Calculate dot product between plane and light
-    float dot = glm::dot(p, l);
+    float dot = glm::dot(plane, light);
 
     //Formula to calculate projection onto plane
-    shadowMatrix[0] = dot - l[0] * p[0];
-    shadowMatrix[4] = -l[0] * p[1];
-    shadowMatrix[8] = -l[0] * p[2];
-    shadowMatrix[12] = -l[0] * p[3];
+    shadowMatrix[0] = dot - light[0] * plane[0];
+    shadowMatrix[4] = -light[0] * plane[1];
+    shadowMatrix[8] = -light[0] * plane[2];
+    shadowMatrix[12] = -light[0] * plane[3];
 
-    shadowMatrix[1] = -l[1] * p[0];
-    shadowMatrix[5] = dot - l[1] * p[1];
-    shadowMatrix[9] = -l[1] * p[2];
-    shadowMatrix[13] = -l[1] * p[3];
+    shadowMatrix[1] = -light[1] * plane[0];
+    shadowMatrix[5] = dot - light[1] * plane[1];
+    shadowMatrix[9] = -light[1] * plane[2];
+    shadowMatrix[13] = -light[1] * plane[3];
 
-    shadowMatrix[2] = -l[2] * p[0];
-    shadowMatrix[6] = -l[2] * p[1];
-    shadowMatrix[10] = dot - l[2] * p[2];
-    shadowMatrix[14] = -l[2] * p[3];
+    shadowMatrix[2] = -light[2] * plane[0];
+    shadowMatrix[6] = -light[2] * plane[1];
+    shadowMatrix[10] = dot - light[2] * plane[2];
+    shadowMatrix[14] = -light[2] * plane[3];
 
-    shadowMatrix[3] = -l[3] * p[0];
-    shadowMatrix[7] = -l[3] * p[1];
-    shadowMatrix[11] = -l[3] * p[2];
-    shadowMatrix[15] = dot - l[3] * p[3];
+    shadowMatrix[3] = -light[3] * plane[0];
+    shadowMatrix[7] = -light[3] * plane[1];
+    shadowMatrix[11] = -light[3] * plane[2];
+    shadowMatrix[15] = dot - light[3] * plane[3];
 
     return shadowMatrix;
 }
@@ -273,7 +273,7 @@ void SceneWidget::placeTerrain() {
     glPopMatrix();
 }
 
-void SceneWidget::updateGeishaPosition(){
+void SceneWidget::updateGeishaPosition() {
     //Add a sin wave to geishas height to simulate bopping while walking
     if (!(turningRight || turningLeft)) {
         geishaPosition[1] += sin(geishaBop) / 30.0;

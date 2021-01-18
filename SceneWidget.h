@@ -60,7 +60,7 @@ protected:
 
     void keyPressEvent(QKeyEvent *key);
 
-    float *getShadowMatrix(glm::vec4 p, glm::vec4 l);
+    float *getShadowMatrix(glm::vec4 p, glm::vec4 light);
 
     unsigned long long frame = 0;
     unsigned long long lastFrameRecorded = 0;
