@@ -31,6 +31,7 @@ public:
     GLfloat mAmbient[4] = {0.4, 0.4, 0.4, 1.0};
     GLfloat mDiff[4] = {0.5, 0.5, 0.5, 1.0};
     GLfloat mSpec[4] = {1, 1, 1, 1.0};
+    GLfloat mShininess0[1] = {0};
     GLfloat mShininess2[1] = {50};
     GLfloat mHighSpec[4] = {4, 4, 4, 1.0};
     GLfloat mMidSpec[4] = {0.4, 0.4, 0.4, 1.0};
@@ -83,7 +84,7 @@ public:
 
     void createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture);
 
-    void createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ, GLuint texture);
+    void createSemiCylinder(float rad, float length, GLuint texture);
 
     void createTessilatedTerrain(float width, float depth, int tessX, int tessZ);
 
@@ -116,9 +117,9 @@ public:
 
     void createStickGeisha(bool black);
 
-    void createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ);
+    void createTunnel(float width, float height, float depth, int tessX, int tessZ);
 
-    void createTorch(unsigned long long frame);
+    void createTorch();
 
     void createDoorway(float width, float height, float depth, int tessX, int tessY, int tessZ);
 

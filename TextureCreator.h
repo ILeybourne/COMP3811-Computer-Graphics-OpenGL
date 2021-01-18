@@ -117,7 +117,7 @@ public:
     //6 skybox, 3 object (with mario), 20 fire, 2 marc, grass , 3 walls //35
     static constexpr int constNumberOfTextures = 6 + 3 + 20 + 2 + 1 + 3;
 
-    int selectedScreenIndex = skyboxZNegIndex;
+    int selectedScreenIndex = skyboxZPlusIndex;
 
     int selectedGyroIndex = steelIndex;
 

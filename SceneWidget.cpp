@@ -460,7 +460,7 @@ void SceneWidget::paintGL() { // paintGL()
     glPopMatrix();
 
     //Draw Tunnel
-    shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50, 50);
+    shapeCreator->createTunnel(roomWidth, roomHeight, roomDepth, 50, 50);
 
     //Create Fireplace
     glPushMatrix();
@@ -530,18 +530,18 @@ void SceneWidget::paintGL() { // paintGL()
     // Draw torches
     glPushMatrix();
     glTranslatef(light2Position[0], light2Position[1], light2Position[2]);
-    shapeCreator->createTorch(frame);
+    shapeCreator->createTorch();
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light3Position[0], light3Position[1], light3Position[2]);
     glRotatef(180, 0, 1, 0);
-    shapeCreator->createTorch(frame);
+    shapeCreator->createTorch();
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light4Position[0], light4Position[1], light4Position[2]);
-    shapeCreator->createTorch(frame);
+    shapeCreator->createTorch();
     glPopMatrix();
 
     glPushMatrix();

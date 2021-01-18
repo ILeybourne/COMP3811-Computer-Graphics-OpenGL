@@ -3,13 +3,16 @@
 
 // constructor
 ShapeCreator::ShapeCreator(QWidget *parent) {// constructor
+    //Generate heights based on seed number
     this->heightGenerator(seedNumber);
+    //Create a textureCreator to access textures
     this->textureCreator = new TextureCreator(parent);
-     fireNumber = textureCreator->Fire1Index;
+    //Set fire number to index of first frame of fire
+    fireNumber = textureCreator->Fire1Index;
 }
-// constructor
 
 void ShapeCreator::createTree(float height, float rad) {
+    //Set trunk height and bush radius
     float trunkHeight = 10 + height;
     float bushRadius = 7 + rad;
     glDisable(GL_CULL_FACE);
@@ -17,24 +20,22 @@ void ShapeCreator::createTree(float height, float rad) {
     glScalef(0.1, 0.1, 0.1);
     glPushMatrix();
     glRotatef(-90, 1, 0, 0);
-    glColor3f(210.0 / 255.0, 105.0 / 255.0, 30.0 / 255.0); // Brown
+    //Draw trunk
     createCylinder(0.5, 0.3, trunkHeight, 10, 10, textureCreator->textures[textureCreator->barkIndex]);
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0, trunkHeight + bushRadius - 1, 0);
-    glColor3f(0, 1, 0.1);
+    //Draw bush
     createSphere(bushRadius, 10, 10, textureCreator->textures[textureCreator->treeIndex]);
     glPopMatrix();
     glPopMatrix();
     glColor3f(1, 1, 1);
     glEnable(GL_CULL_FACE);
-
 }
 
 void ShapeCreator::sky(float width, float height, float depth) {
     //Set colour to white as textures will be drawn
     glColor3f(1.0, 1.0, 1.0);
-
 ////  North Wall (-Z)
     //Coordinates
     glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
@@ -82,17 +83,15 @@ void ShapeCreator::sky(float width, float height, float depth) {
     glEnd();
 
 ////    South Wall (+Z)
-    //Coordinates
     v3 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v4 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    //Normal of rect
+
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxZNegIndex]);
-//    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
-//    float tessYSize = abs(v1[1] - v3[1]) / (tessY);
+
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -105,16 +104,13 @@ void ShapeCreator::sky(float width, float height, float depth) {
 
     glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
-////
 
-
-    //West Wall Blue
-    //Coordinates
+    ////West Wall
     v2 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
-    //Normal of rect
+
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
@@ -124,21 +120,19 @@ void ShapeCreator::sky(float width, float height, float depth) {
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
     glTexCoord2f(1.0f, 0.0f);
-
     glVertex3f(v2[0], v2[1], v2[2]);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(v3[0], v3[1], v3[2]);
     glTexCoord2f(0.0f, 1.0f);
-
     glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
-    //Purple Ceil
+    ////Ceiling
     v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v1 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     v2 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     v3 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
-    //Normal of rect
+
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
 
@@ -148,24 +142,23 @@ void ShapeCreator::sky(float width, float height, float depth) {
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
     glTexCoord2f(1.0f, 0.0f);
-
     glVertex3f(v2[0], v2[1], v2[2]);
     glTexCoord2f(1.0f, 1.0f);
     glVertex3f(v3[0], v3[1], v3[2]);
     glTexCoord2f(0.0f, 1.0f);
-
     glVertex3f(v4[0], v4[1], v4[2]);
     glEnd();
 
-    //Yellow floor
+    ////floor
     v4 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
     v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v2 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v3 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
-    //Normal of rect
+
     normal = glm::normalize(glm::cross(v2 - v1, v3 - v2));
     glNormal3fv(glm::value_ptr(normal));
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->skyboxYNegIndex]);
+
     glBegin(GL_POLYGON);
     glTexCoord2f(0.0f, 0.0f);
     glVertex3f(v1[0], v1[1], v1[2]);
@@ -180,15 +173,15 @@ void ShapeCreator::sky(float width, float height, float depth) {
 }
 
 void ShapeCreator::createDoorway(float width, float height, float depth, int tessX, int tessY, int tessZ) {
-    glColor3f(1.0, 1.0, 1.0);
     //Coordinates
     glm::vec3 v1;
     glm::vec3 v2;
     glm::vec3 v3;
     glm::vec3 v4;
-    //Normal of rect
+
     glm::vec3 normal;
 
+    //How much texture should be scaled by
     float scaleFactor = width / tessX / 50;
 
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
@@ -201,7 +194,6 @@ void ShapeCreator::createDoorway(float width, float height, float depth, int tes
     v3 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
     v4 = {1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
 
-    float tessXSize = abs(v1[0] - v3[0]) / (tessX);
     float tessYSize = abs(v1[1] - v3[1]) / (tessY);
     float tessZSize = abs(v1[2] - v3[2]) / (tessZ);
 
@@ -210,7 +202,6 @@ void ShapeCreator::createDoorway(float width, float height, float depth, int tes
     glNormal3fv(glm::value_ptr(normal));
     float offset = 0.55;
 
-//    tessZSize = abs(v1[1] - v3[1]) / (tessZ);
     float doorOuter = 0 + 10 * (tessZSize);
     float doorInner = 0 - 10 * (tessZSize);
     float doorwayWidth = 2;
@@ -251,6 +242,7 @@ void ShapeCreator::createDoorway(float width, float height, float depth, int tes
     glDisable(GL_LIGHT3);
     glDisable(GL_LIGHT4);
 
+    ////Fill in doorway between two walls
     glPushMatrix();
     glTranslatef(0, 0, doorInner);
     createTexturedPlane(width / 2, 0, doorwayWidth, height / 2, 0, 0, doorwayWidth / 10, height / 2 / 10, false,
@@ -275,7 +267,6 @@ void ShapeCreator::createDoorway(float width, float height, float depth, int tes
     glPopMatrix();
 
     float inner = (v3[2] / 10) * 4;
-    float outer = (v3[2] / 10) * 4;
 
     v1 = {0, height / 2, inner};
     v2 = {0, height / 2, inner};
@@ -293,8 +284,7 @@ void ShapeCreator::createDoorway(float width, float height, float depth, int tes
 
 void ShapeCreator::walls(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glDisable(GL_CULL_FACE);
-
-//   North Wall (-Z)
+    ////North Wall (-Z)
     glColor3f(1.0, 1.0, 1.0);
     //Coordinates
     glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
@@ -326,10 +316,10 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         }
     }
 
-    //East all with door way (+X)
+    ////East all with door way (+X)
     createDoorway(width, height, depth, tessX, tessY, tessZ);
 
-//    South Wall (+Z)
+    ////South Wall (+Z)
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->wallIndex]);
     v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v4 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -358,7 +348,8 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
             glEnd();
         }
     }
-    //West Wall (-X)
+
+    ////West Wall (-X)
     v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v4 = {-1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v3 = {-1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
@@ -382,7 +373,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         }
     }
 
-    //Ceiling
+    ////Ceiling
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->ceilingIndex]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -411,7 +402,7 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
         }
     }
 
-    //Floor
+    ////Floor
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->floorIndex]);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -441,6 +432,8 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
             glEnd();
         }
     }
+
+    ////Reset paremeters for drawing other objects
     glMaterialfv(GL_FRONT, GL_SPECULAR, mSpec);
     glEnable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -448,9 +441,8 @@ void ShapeCreator::walls(float width, float height, float depth, int tessX, int 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 }
 
-void ShapeCreator::createTorch(unsigned long long frame) {
+void ShapeCreator::createTorch() {
     glDisable(GL_CULL_FACE);
-    int fireNum = frame % 20 + (6 + 2);
     float fireWidth = 4;
     float fireHeight = 5;
 
@@ -460,6 +452,7 @@ void ShapeCreator::createTorch(unsigned long long frame) {
     glTranslatef(0, 1.3, 0);
     glRotatef(-45, 1, 0, 0);
     glColor3f(165.0 / 255.0, 42.0 / 255.0, 42.0 / 255.0);
+    //Draw cone
     createCylinder(0, 0.5, 2, 10, 10, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
 
@@ -470,6 +463,7 @@ void ShapeCreator::createTorch(unsigned long long frame) {
 
     glPushMatrix();
     glTranslatef(-fireWidth / 2, 2, 2);
+    //Draw fire
     createTexturedPlane(0, 0, fireWidth, fireHeight, 0, 0, 1, 1, true,
                         textureCreator->textures[fireNumber]);
     glPopMatrix();
@@ -480,14 +474,12 @@ void ShapeCreator::createTorch(unsigned long long frame) {
     glEnable(GL_LIGHTING);
 };
 
-
-////TODO DISABLE LIGHT 1
-void ShapeCreator::createTunnel(float width, float height, float depth, int tessX, int tessY, int tessZ) {
+void ShapeCreator::createTunnel(float width, float height, float depth, int tessX, int tessZ) {
     glPushMatrix();
     glPushMatrix();
     glTranslatef(0, -depth / 10, 0);
     glScalef(1, 1.1, 1);
-    createSemiCylinder(depth / 2, width - 1, tessX, tessY, tessZ, textureCreator->textures[textureCreator->wallIndex]);
+    createSemiCylinder(depth / 2, width - 1, textureCreator->textures[textureCreator->wallIndex]);
     glPopMatrix();
     glDisable(GL_CULL_FACE);
 
@@ -507,7 +499,7 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
 
     glBindTexture(GL_TEXTURE_2D, textureCreator->textures[textureCreator->floorIndex]);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mMidSpec);
-    //Tesselate floor
+    //Tessellated floor
     for (float i = v3[0]; i < v1[0]; i += tessXSize) {
         for (float k = v3[2]; k < v1[2] - tessZSize; k += tessZSize) {
             glBegin(GL_POLYGON);
@@ -529,10 +521,8 @@ void ShapeCreator::createTunnel(float width, float height, float depth, int tess
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
 void ShapeCreator::createTessCube(float width, float height, float depth, int tessX, int tessY, int tessZ) {
     glBindTexture(GL_TEXTURE_2D, 0);
-
 ////   North Wall White
     //Coordinates
     glm::vec3 v1 = {-1.0 * width / 2, 0.0 * height, -1.0 * depth / 2};
@@ -581,7 +571,8 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
             glEnd();
         }
     }
-    //South Wall Green
+
+    ////South Wall Green
     glColor3f(0.0, 1.0, 0.0);
     //Coordinates
     v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -605,7 +596,7 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         }
     }
 
-    //West Wall Blue
+    ////West Wall Blue
     glColor3f(0.0, 0.0, 1.0);
     //Coordinates
     v1 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -630,7 +621,7 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         }
     }
 
-    //Purple Ceil
+    ////Purple Ceil
     glColor3f(1.0, 0.0, 1.0);
     v1 = {1.0 * width / 2, 1.0 * height, 1.0 * depth / 2};
     v2 = {1.0 * width / 2, 1.0 * height, -1.0 * depth / 2};
@@ -653,7 +644,7 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
         }
     }
 
-    //Yellow floor
+    ////Yellow floor
     glColor3f(1.0, 1.0, 0.0);
     v1 = {1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
     v2 = {-1.0 * width / 2, 0.0 * height, 1.0 * depth / 2};
@@ -678,9 +669,8 @@ void ShapeCreator::createTessCube(float width, float height, float depth, int te
     glEnable(GL_CULL_FACE);
 }
 
+////Generates terrian and tree heights
 void ShapeCreator::heightGenerator(int seedNumber) {
-    float amp = 2;
-    float height = 1;
     int width = int(planeWidth);
     int depth = int(planeDepth);
     float tempHeightsGenerated[planeWidth + 1][planeDepth + 1];
@@ -688,7 +678,7 @@ void ShapeCreator::heightGenerator(int seedNumber) {
     for (int i = 0; i < width + 1; i++) {
         for (int k = 0; k < depth + 1; k++) {
             srand(seedNumber + i * 10 + k * 3);
-            ////Generate random number between 0 and amplitude
+            //Generate random number between 0 and amplitude
             float randomNumber = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / amplitude));
             tempHeightsGenerated[i][k] = randomNumber;
         }
@@ -700,7 +690,7 @@ void ShapeCreator::heightGenerator(int seedNumber) {
         }
     }
 
-    //smooth heights
+    //Smooth heights by taking a weigthed average of the surrounding heights
     for (int i = 0; i < width + 1; i++) {
         for (int k = 0; k < depth + 1; k++) {
             int n1 = i - 1;
@@ -712,9 +702,9 @@ void ShapeCreator::heightGenerator(int seedNumber) {
             if (i == width)
                 n2 = 0;
             if (k == 0)
-                n1 = depth;
+                m1 = depth;
             if (k == depth)
-                n2 = 0;
+                m2 = 0;
 
             float corners = (tempHeightsGenerated[n1][m1] + tempHeightsGenerated[n1][m2] +
                              tempHeightsGenerated[n2][m1] + tempHeightsGenerated[n2][m2]) / (4.0 * 6.0);
@@ -724,14 +714,17 @@ void ShapeCreator::heightGenerator(int seedNumber) {
             heightsGenerated[i][k] = corners + consecutive + center;
         }
     }
+
+    ////Reset the vector of tree positions
     treePositions.clear();
+
     ////Procedure Tree Generation
     for (int i = 0; i < numberOfTrees; i++) {
         //Get random X and Z coordinates
         int x = ((rand() % (planeWidth)));
         int z = ((rand() % (planeDepth)));
         //If coordinates sit above room exit or at any edge regenerate coordinates or a tree is generated in the same place get new coords
-        if (z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2 || x == 0 || z == 0 ||
+        if ((z >= planeDepth / 2 - 1 && z <= planeDepth / 2 + 1 && x >= planeWidth / 2) || x == 0 || z == 0 ||
             z == planeDepth) {
             i--;
         } else {
@@ -765,10 +758,9 @@ void ShapeCreator::heightGenerator(int seedNumber) {
 
 float ShapeCreator::interpolation(float x, float z, float f) {
     float theta = (f) * M_PI;
-    //returns a value between 0 and 1
+    //cosNorm used cos to obtain a value between 0 and 1 a value between 0 and 1
     float cosNorm = (1.0 - cosf(theta)) * 0.5;
-    //
-    float v = x * (1.0 - cosNorm) + z * cosNorm;
+    //Return the interpolated value between x and z
     return (x * (1.0 - cosNorm)) + (z * cosNorm);
 }
 
@@ -776,12 +768,11 @@ float ShapeCreator::interpolateAt(float x, float z) {
     //Whole part of number
     int i = floor(x);
     int k = floor(z);
-
     //Fraction of number
     float iFraction = x - i;
     float kFraction = z - k;
 
-    //Get heights of the four points
+    //Get heights of the four adjacent points
     float heightAti0k0 = heightsGenerated[i][k];
     float heightAti0k1 = heightsGenerated[i][k + 1];
     float heightAti1k0 = heightsGenerated[i + 1][k];
@@ -789,7 +780,7 @@ float ShapeCreator::interpolateAt(float x, float z) {
 
     //interpolate between point i0,k0 and i1,k0 i.e interopolation across x axis
     float interpolX1 = interpolation(heightAti0k0, heightAti1k0, iFraction);
-    //interopolation across x axis for the next z column
+    //interpolation across x axis for the next z column
     float interpolX2 = interpolation(heightAti0k1, heightAti1k1, iFraction);
     //return interpolation between the two interpolated points i.e interpolate in z axis
     return interpolation(interpolX1, interpolX2, kFraction);
@@ -801,7 +792,6 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
     float tessZSize = 1.0 / (tessZ);
     float thetaSpeed = 2.0;
     float theta = thetaSpeed * M_PI;
-    float x = (1.0 - cosf(theta)) * 0.5;
     float scaleFactor = 2;
 
     glm::vec3 normal;
@@ -812,23 +802,28 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glMaterialfv(GL_FRONT, GL_SPECULAR, mLowSpec);
+    glMaterialfv(GL_FRONT, GL_SHININESS, mShininess0);
 
+
+    ///Iterate through heights generated
     for (int i = 0; i < width; i++) {
         for (int k = 0; k < depth; k++) {
+            ///Iterate through tiles between heights generated
             for (float n = 0; n < 1; n += tessXSize) {
                 for (float m = 0; m < 1; m += tessZSize) {
-
+                    //Get heights of the 4 tile edges
                     float heightAtn0m0 = interpolateAt(i + n + tessXSize, k + m);
                     float heightAtn0m1 = interpolateAt(i + n + tessXSize, k + m + tessZSize);
                     float heightAtn1m1 = interpolateAt(i + n, k + m);
                     float heightAtn1m0 = interpolateAt(i + n, k + m + tessZSize);
 
+                    //Create vertices
                     glm::vec3 vA = {i + n + tessXSize, heightAtn0m0, k + m};
                     glm::vec3 vB = {i + n, heightAtn1m1, k + m};
                     glm::vec3 vC = {i + n, heightAtn1m0, k + m + tessZSize};
                     glm::vec3 vD = {i + n + tessXSize, heightAtn0m1, k + m + tessZSize};
 
-
+                    //and draw two triangles from the vertices
                     normal = glm::normalize(glm::cross(vB - vA, vC - vB));
                     glNormal3fv(glm::value_ptr(normal));
                     glBegin(GL_POLYGON);
@@ -854,6 +849,7 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
             }
         }
     }
+
     glMaterialfv(GL_FRONT, GL_SPECULAR, mSpec);
     glMaterialfv(GL_FRONT, GL_SHININESS, mShininess2);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -861,6 +857,7 @@ void ShapeCreator::createTessilatedTerrain(float width, float depth, int tessX, 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+////Draws a rectangle with texture applied based on uv coordinates supplied
 void ShapeCreator::createTexturedPlane(float x, float y, float width, float height, float tu, float tv, float tWidth,
                                        float tHeight, bool blend, GLuint texture) {
     if (blend) {
@@ -886,10 +883,12 @@ void ShapeCreator::createTexturedPlane(float x, float y, float width, float heig
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+////Draws a normal cube
 void ShapeCreator::createCube(float w, float h, float d, float x, float y, float z, bool shadow, GLuint texture) {
     glColor3f(1.0, 1.0, 1.0);
     if (shadow) glColor4f(0, 0, 0, 0.5);
 
+    //North wall
     glBindTexture(GL_TEXTURE_2D, texture);
     glBegin(GL_POLYGON);
     glNormal3f(0, 0, 1);
@@ -986,16 +985,19 @@ void ShapeCreator::createCube(float w, float h, float d, float x, float y, float
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
-void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int tessY, int tessZ, GLuint texture) {
+void ShapeCreator::createSemiCylinder(float rad, float length, GLuint texture) {
     glPushMatrix();
     glDisable(GL_CULL_FACE);
+    //Scale factor of texture
     float scaleFactor = 0.1;
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //Number of segments that are used to create the arch
     int numberOfSides = 100;
+    //Extrude by iterating over length
     for (int x = 0; x < length; x++) {
+        //traces parameterised equation of a circle from 0<= t <= Pi to trace half a circle
         for (float t = 0; t < M_PI; t += M_PI / numberOfSides) {
             float z = rad * cos(t);
             float y = rad * sin(t);
@@ -1026,7 +1028,9 @@ void ShapeCreator::createSemiCylinder(float rad, float length, int tessX, int te
     glPopMatrix();
 }
 
-void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture) {
+///Draws gluCylinder
+void
+ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices, GLint stacks, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricTexture(quadric, GL_TRUE);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -1037,6 +1041,7 @@ void ShapeCreator::createCylinder(GLdouble base, GLdouble top, GLdouble height, 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+///Draws gluDisk
 void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLint loops, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricTexture(quadric, GL_TRUE);
@@ -1047,6 +1052,7 @@ void ShapeCreator::createDisk(GLdouble inner, GLdouble outer, GLint slices, GLin
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+///Draws gluSphere
 void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks, GLuint texture) {
     GLUquadric *quadric = gluNewQuadric();
     gluQuadricTexture(quadric, GL_TRUE);
@@ -1059,10 +1065,10 @@ void ShapeCreator::createSphere(GLdouble radius, GLint slices, GLint stacks, GLu
 
 }
 
+////Get data from object file and stores it in memory.
 bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
                               std::vector<float> &out_uvs,
                               std::vector<float> &out_normals) {
-
     std::vector<GLuint> vertexIndices, uvIndices, normalIndices;
     std::vector<std::array<float, 3>> tempVertices;
     std::vector<std::array<float, 2>> tempUvs;
@@ -1169,6 +1175,7 @@ bool ShapeCreator::getOBJData(std::string fp, std::vector<float> &out_vertices,
     return true;
 }
 
+///Draw a gyroscope
 void ShapeCreator::createGyro() {
     float frameRad = 4;
     float frameWidth = 0.2;
@@ -1266,7 +1273,9 @@ void ShapeCreator::createGyro() {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+///Draws a table composed of cubes
 void ShapeCreator::createDesk() {
+    //Legs
     glPushMatrix();
     glTranslatef(5, 0, 2);
     createCube(0.5, 4, 0.5, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
@@ -1285,12 +1294,13 @@ void ShapeCreator::createDesk() {
     glPopMatrix();
     glPushMatrix();
     glTranslatef(0, 4, 0);
+    //Tabletop
     createCube(10 + 2, 0.25, 4 + 2, 0, 0, 0, 0, textureCreator->textures[textureCreator->woodIndex]);
     glPopMatrix();
-
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+///Draws gluCylinder with top and base applied
 void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, float stacks, GLuint texture) {
     glPushMatrix();
     glTranslatef(0, height, 0);
@@ -1303,12 +1313,12 @@ void ShapeCreator::createEdgeCylinder(float rad, float height, float slices, flo
     glTranslatef(0, 0, height);
     createDisk(0, rad, slices, stacks, texture);
     glPopMatrix();
-
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+////Draw geisha
 void ShapeCreator::createGeisha(bool black) {
-    ////Draw geisha
+    //Determines if geisha is a shadow object
     if (black) {
         glColor3f(0, 0, 0);
     } else {
@@ -1326,6 +1336,7 @@ void ShapeCreator::createGeisha(bool black) {
     glPushMatrix();
     glScalef(0.1, 0.1, 0.1);
     glTranslatef(0, 7, 0);
+    //Draws geisha using model data from obtained from getOBJData()
     glVertexPointer(3, GL_FLOAT, 0, verticesGeisha.data());
     glNormalPointer(GL_FLOAT, 0, normalsGeisha.data());
     glDrawArrays(GL_TRIANGLES, 0, verticesGeisha.size() / 3);
@@ -1338,6 +1349,7 @@ void ShapeCreator::createGeisha(bool black) {
     glEnable(GL_CULL_FACE);
 }
 
+////Adds pole to geisha model
 void ShapeCreator::createStickGeisha(bool black) {
     createGeisha(black);
     glPushMatrix();
@@ -1348,7 +1360,7 @@ void ShapeCreator::createStickGeisha(bool black) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-
+////Draws a desk with objects on top
 void ShapeCreator::createPopulatedDesk() {
     ////Desk
     glPushMatrix();
@@ -1395,6 +1407,7 @@ void ShapeCreator::drawPC() {
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY); //enable normal array
     glPushMatrix();
+    ////Draw pc using data obtain from getOBJData()
     glVertexPointer(3, GL_FLOAT, 0, verticesPC.data());
     glTexCoordPointer(2, GL_FLOAT, 0, uvsPC.data());
     glNormalPointer(GL_FLOAT, 0, normalsPC.data());
@@ -1406,9 +1419,11 @@ void ShapeCreator::drawPC() {
     glRotatef(-2, 1, 0, 0);
     glTranslatef(-1.33, -0.4, -0.62);
     glScalef(1.8, 1.2, 1);
+    //Use textured plane as screen
     createTexturedPlane(0, 0, 2, 2, 0, 0, 1, 1, false, textureCreator->textures[textureCreator->selectedScreenIndex]);
     glPopMatrix();
     glPopMatrix();
+
     glDisableClientState(GL_VERTEX_ARRAY); //disable the client states again
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -1422,7 +1437,7 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
     float eta, theta, eta2, theta2;
     float diffEta = (M_PI * 2) / sides;
     float diffTheta = (M_PI * 2) / rings;
-    int count = 0;
+
     for (int i = 0; i < rings; i++) {
         theta = diffTheta * i;
         for (int j = 0; j < sides; j++) {
@@ -1447,6 +1462,7 @@ void ShapeCreator::createTorus(float outerRadius, float innerRadius, int sides, 
             theta2 = diffTheta * i2;
             eta2 = diffEta * j2;
 
+            ////Calcate parameterised equation of a torus for this vertex and adjacent ones on next ring and side
             v1.x = cos(theta) * (outerRadius + cos(eta) * innerRadius);
             v1.y = sin(theta) * (outerRadius + cos(eta) * innerRadius);
             v1.z = sin(eta) * innerRadius;
